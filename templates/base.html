@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="{{ get_url(path="style.css") | safe }}">
+</head>
+
+<body>
+  <header>
+    {% block nav -%}
+    <nav>
+      <a class="logo">Viz.rs</a>
+    </nav>
+    {% endblock nav -%}
+  </header>
+
+  <main>
+    {% block content %}
+    {% endblock content %}
+  </main>
+
+  <footer>
+    <span>Powered by </span><a href="https://www.getzola.org">Zola</a>
+  </footer>
+</body>
+
+</html>
