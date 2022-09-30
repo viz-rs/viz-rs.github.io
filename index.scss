@@ -1,0 +1,24 @@
+html {
+  scrollbar-gutter: auto;
+}
+
+flex-240 {
+  flex: 0 0 150rem;
+}
+
+.sidebar {
+  opacity: 0;
+  transform: translate(-100%);
+}
+
+@media (min-width: 960px) {
+  .sidebar {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    box-shadow: none;
+    transform: translate(0);
+    transition: background-color 0.5s, opacity 0.25s,
+      transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+}
