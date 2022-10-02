@@ -3,7 +3,6 @@ use sycamore::prelude::*;
 #[component]
 pub fn Header<'a, G: Html>(cx: Scope<'a>, dark_mode: &'a RcSignal<bool>) -> View<G> {
     let window = web_sys::window().unwrap();
-    // let DarkMode(dark_mode) = use_context::<DarkMode>(cx);
     let toggle = move |_| {
         let value = !*dark_mode.get();
         dark_mode.set(value);

@@ -1,8 +1,8 @@
 use sycamore::prelude::*;
 use sycamore_router::{HistoryIntegration, Route, Router};
 
-mod pages;
 mod components;
+mod pages;
 
 #[derive(Clone)]
 pub struct DarkMode(RcSignal<bool>);
@@ -67,14 +67,7 @@ fn App<G: Html>(cx: Scope) -> View<G> {
             .unwrap()
             .document()
             .and_then(|doc| doc.document_element())
-            .and_then(|html| {
-                if value {
-                    html.class_list().add_1("dark")
-                } else {
-                    html.class_list().remove_1("dark")
-                }
-                .ok()
-            });
+            .map(|html| html.class_list().toggle_with_force("dark", value));
     });
 
     view! {
