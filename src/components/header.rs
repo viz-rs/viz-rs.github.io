@@ -30,6 +30,8 @@ pub fn Header<'a, G: Html>(cx: Scope<'a>, dark_mode: &'a RcSignal<bool>) -> View
                 }
                 a(class="transition-colors op75 hover:op100 i-carbon-logo-github", href="https://github.com/viz-rs/viz", target="_blank", rel="noreferrer") {
                 }
+                a(class="transition-colors op75 hover:op100 cursor-pointer i-lucide-languages") {
+                }
                 button(
                     class="hover:bg-gray5:2 hover:op100",
                     on:click=toggle,

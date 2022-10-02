@@ -25,7 +25,7 @@ pub fn Doc<G: Html>(cx: Scope) -> View<G> {
                 }
                 section() {
                     h3(class="py-1 text-4 font-medium") {
-                        "Core Concepts"
+                        "Concepts"
                     }
                     ul() {
                         li() {
@@ -57,17 +57,17 @@ pub fn Doc<G: Html>(cx: Scope) -> View<G> {
                 }
                 section() {
                     h3(class="py-1 text-4 font-medium") {
-                        "Advanced Concepts"
+                        "Built-in"
                     }
                     ul() {
                         li() {
-                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/concepts/handler") {
-                                "Built-in Extractors"
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/handler") {
+                                "Extractors"
                             }
                         }
                         li() {
-                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/concepts/handler") {
-                                "Built-in Middleware"
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/handler") {
+                                "Middleware"
                             }
                         }
                     }
