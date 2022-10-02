@@ -44,12 +44,17 @@ pub fn Doc<G: Html>(cx: Scope) -> View<G> {
                             }
                         }
                         li() {
-                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/concepts/handler") {
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/concepts/extractors") {
                                 "Extractors"
                             }
                         }
                         li() {
-                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/concepts/handler") {
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/concepts/server") {
+                                "Server"
+                            }
+                        }
+                        li() {
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/concepts/error-handling") {
                                 "Error Handling"
                             }
                         }
@@ -61,13 +66,23 @@ pub fn Doc<G: Html>(cx: Scope) -> View<G> {
                     }
                     ul() {
                         li() {
-                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/handler") {
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/handlers") {
+                                "Handlers"
+                            }
+                        }
+                        li() {
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/middleware") {
+                                "Middleware"
+                            }
+                        }
+                        li() {
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/extractors") {
                                 "Extractors"
                             }
                         }
                         li() {
-                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/handler") {
-                                "Middleware"
+                            a(class="block py-1 font-normal transition-colors op61.8 hover:op100", href="/docs/built-in/tls") {
+                                "TLS"
                             }
                         }
                     }
