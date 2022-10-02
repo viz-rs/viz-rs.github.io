@@ -3,8 +3,7 @@ stage = "build"
 command = "node"
 command_arguments = [
   "node_modules/.bin/unocss",
-  "src/*.rs",
+  "src/**/*.rs",
   "-o",
   "dist/.stage/uno.css"
-  # "--watch"
 ]
