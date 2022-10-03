@@ -6,6 +6,19 @@ flex-240 {
   flex: 0 0 150rem;
 }
 
+#get-started {
+  &:after {
+    content: "\00a0→";
+    position: relative;
+    display: inline-block;
+    transition: transform .3s ease;
+  }
+
+  &:hover:after {
+    transform: translateX(3px);
+  }
+}
+
 .sidebar {
   opacity: 0;
   transform: translate(-100%);
