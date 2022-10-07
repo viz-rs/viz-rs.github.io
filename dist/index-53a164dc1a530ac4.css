@@ -7,13 +7,13 @@ flex-240 {
   flex: 0 0 150rem;
 }
 
-#get-started:after {
+.get-started:after {
   content: " →";
   position: relative;
   display: inline-block;
   transition: transform 0.3s ease;
 }
-#get-started:hover:after {
+.get-started:hover:after {
   transform: translateX(3px);
 }
 

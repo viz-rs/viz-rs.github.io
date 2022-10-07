@@ -20,6 +20,7 @@
 .inline-block{display:inline-block;}
 .hidden{display:none;}
 .h-10{height:2.5rem;}
+.w-full{width:100%;}
 .w-screen{width:100vw;}
 .flex{display:flex;}
 .flex-\[0_0_15rem\]{flex:0 0 15rem;}
@@ -45,13 +46,13 @@
 .dark .dark\:bg-neutral-100{--un-bg-opacity:1;background-color:rgba(245,245,245,var(--un-bg-opacity));}
 .hover\:bg-gray5\:2:hover{background-color:rgba(107,114,128,0.02);}
 .p-5{padding:1.25rem;}
+.px-3{padding-left:0.75rem;padding-right:0.75rem;}
 .px-4\.5{padding-left:1.125rem;padding-right:1.125rem;}
 .px-5{padding-left:1.25rem;padding-right:1.25rem;}
-.px-8{padding-left:2rem;padding-right:2rem;}
 .py-1{padding-top:0.25rem;padding-bottom:0.25rem;}
 .py-2{padding-top:0.5rem;padding-bottom:0.5rem;}
+.py-3{padding-top:0.75rem;padding-bottom:0.75rem;}
 .py-3\.75{padding-top:0.9375rem;padding-bottom:0.9375rem;}
-.py-8{padding-top:2rem;padding-bottom:2rem;}
 .text-center{text-align:center;}
 .text-3{font-size:0.75rem;}
 .text-3\.5{font-size:0.875rem;}
@@ -62,7 +63,9 @@
 .font-normal{font-weight:400;}
 .dark .dark\:text-neutral-900{--un-text-opacity:1;color:rgba(23,23,23,var(--un-text-opacity));}
 .text-neutral-100{--un-text-opacity:1;color:rgba(245,245,245,var(--un-text-opacity));}
-.hover\:op100:hover{opacity:1;}
+.text-yellow-600{--un-text-opacity:1;color:rgba(202,138,4,var(--un-text-opacity));}
+.hover\:op100:hover,
+.op100{opacity:1;}
 .op-61\.8,
 .op61\.8{opacity:0.618;}
 .op75{opacity:0.75;}
@@ -71,7 +74,7 @@
 @media (min-width: 640px){
 .sm\:mb-8{margin-bottom:2rem;}
 .sm\:mt-6{margin-top:1.5rem;}
-.sm\:py-24{padding-top:6rem;padding-bottom:6rem;}
+.sm\:py-19{padding-top:4.75rem;padding-bottom:4.75rem;}
 .sm\:text-10{font-size:2.5rem;}
 .sm\:text-5{font-size:1.25rem;}
 }
