@@ -1,0 +1,12 @@
+{
+  "name": "viz-rs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/viz-rs/viz.rs",
+  "author": "Fangdun Tsai <cfddream@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@unocss/cli": "^0.45.26",
+    "unocss": "^0.45.26"
+  }
+}

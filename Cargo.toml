@@ -1,0 +1,20 @@
+[workspace]
+members = [
+  "tools",
+  "frontend",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["Fangdun Tsai <cfddream@gmail.com>"]
+homepage = "https://viz.rs"
+
+[profile.release]
+panic = 'abort'
+codegen-units = 1
+opt-level = 'z'
+lto = true
+
+[workspace.metadata.frontend]
