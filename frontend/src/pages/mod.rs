@@ -1,5 +1,5 @@
-mod home;
 mod document;
+mod home;
 
-pub use home::Home;
 pub use document::Document;
+pub use home::Home;

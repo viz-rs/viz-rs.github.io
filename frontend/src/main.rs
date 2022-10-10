@@ -1,7 +1,7 @@
 use std::rc::Rc;
 
 use wasm_bindgen::{prelude::*, JsCast};
-use web_sys::{MediaQueryList, MediaQueryListEvent};
+use web_sys::{HtmlElement, MediaQueryList, MediaQueryListEvent};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -27,9 +27,7 @@ fn switch(routes: Route) -> Html {
             html! { <pages::Home /> }
         }
         Route::Document { path } => {
-            html! {
-                <pages::Document path={path} />
-            }
+            html! { <pages::Document path={path} /> }
         }
         Route::NotFound => {
             html! { <div>{"Not Found!"}</div> }
@@ -41,7 +39,7 @@ fn switch(routes: Route) -> Html {
 pub struct Section {
     text: String,
     prefix: String,
-    items: Vec<(String, String)>
+    items: Vec<(String, String)>,
 }
 
 pub enum Msg {
@@ -56,7 +54,7 @@ struct App {
     dark: bool,
     sidebar: bool,
     mql: MediaQueryList,
-    sections: Rc<Vec<Section>>
+    sections: Rc<Vec<Section>>,
 }
 
 impl Component for App {
@@ -95,95 +93,44 @@ impl Component for App {
                     text: "Get Started".to_string(),
                     prefix: "guide/".to_string(),
                     items: vec![
-                        (
-                            "Introduction".to_string(),
-                            "introduction".to_string()
-                        ),
-                        (
-                            "Quick Start".to_string(),
-                            "quick-start".to_string()
-                        )
-                    ]
+                        ("Introduction".to_string(), "introduction".to_string()),
+                        ("Quick Start".to_string(), "quick-start".to_string()),
+                    ],
                 },
                 Section {
                     text: "Concepts".to_string(),
                     prefix: "concepts/".to_string(),
                     items: vec![
-                        (
-                            "Handler".to_string(),
-                            "handler".to_string()
-                        ),
-                        (
-                            "Middleware".to_string(),
-                            "middleware".to_string()
-                        ),
-                        (
-                            "Routing".to_string(),
-                            "routing".to_string()
-                        ),
-                        (
-                            "Extractors".to_string(),
-                            "extractors".to_string()
-                        ),
-                        (
-                            "Server".to_string(),
-                            "server".to_string()
-                        ),
-                        (
-                            "Error Handling".to_string(),
-                            "error-handling".to_string()
-                        ),
-                    ]
+                        ("Handler".to_string(), "handler".to_string()),
+                        ("Middleware".to_string(), "middleware".to_string()),
+                        ("Routing".to_string(), "routing".to_string()),
+                        ("Extractors".to_string(), "extractors".to_string()),
+                        ("Server".to_string(), "server".to_string()),
+                        ("Error Handling".to_string(), "error-handling".to_string()),
+                    ],
                 },
                 Section {
                     text: "Built-in".to_string(),
                     prefix: "built-in/".to_string(),
                     items: vec![
-                        (
-                            "Handlers".to_string(),
-                            "handlers".to_string()
-                        ),
-                        (
-                            "Middleware".to_string(),
-                            "middleware".to_string()
-                        ),
-                        (
-                            "Extractors".to_string(),
-                            "extractors".to_string()
-                        ),
-                        (
-                            "Server".to_string(),
-                            "server".to_string()
-                        ),
-                        (
-                            "TLS".to_string(),
-                            "tls".to_string()
-                        ),
-                    ]
+                        ("Handlers".to_string(), "handlers".to_string()),
+                        ("Middleware".to_string(), "middleware".to_string()),
+                        ("Extractors".to_string(), "extractors".to_string()),
+                        ("Server".to_string(), "server".to_string()),
+                        ("TLS".to_string(), "tls".to_string()),
+                    ],
                 },
                 Section {
                     text: "Extra Topics".to_string(),
                     prefix: "extra-topics/".to_string(),
                     items: vec![
-                        (
-                            "Benchmarks".to_string(),
-                            "benchmarks".to_string()
-                        ),
-                        (
-                            "Examples".to_string(),
-                            "examples".to_string()
-                        ),
-                        (
-                            "Extractors".to_string(),
-                            "extractors".to_string()
-                        ),
-                        (
-                            "Showcase".to_string(),
-                            "showcase".to_string()
-                        ),
-                    ]
+                        ("Benchmarks".to_string(), "benchmarks".to_string()),
+                        ("Examples".to_string(), "examples".to_string()),
+                        ("Extractors".to_string(), "extractors".to_string()),
+                        ("Showcase".to_string(), "showcase".to_string()),
+                    ],
                 },
-            ])
+            ]),
         }
     }
 
@@ -200,6 +147,7 @@ impl Component for App {
                 }
 
                 self.dark = dark;
+
                 utils::document_element()
                     .class_list()
                     .toggle_with_force("dark", self.dark)
@@ -217,8 +165,28 @@ impl Component for App {
                         "light"
                     },
                 );
-                utils::document_element()
-                    .class_list()
+
+                let root = utils::document_element();
+
+                if let Ok(nodes) = root.query_selector_all("article > pre") {
+                    for index in 0..nodes.length() {
+                        nodes
+                            .get(index)
+                            .as_ref()
+                            .and_then(|node| node.dyn_ref::<HtmlElement>())
+                            .and_then(|node| {
+                                if self.dark {
+                                    let _ = node.class_list().remove_1("latte");
+                                    node.class_list().add_1("macchiato").ok()
+                                } else {
+                                    let _ = node.class_list().remove_1("macchiato");
+                                    node.class_list().add_1("latte").ok()
+                                }
+                            });
+                    }
+                }
+
+                root.class_list()
                     .toggle_with_force("dark", self.dark)
                     .is_ok()
             }
@@ -247,18 +215,16 @@ impl Component for App {
 
         html! {
             <BrowserRouter>
-                <div class="w-screen fixed top-0">
-                    <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
+                <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
 
-                    <div class="flex-row">
-                        if self.sidebar {
-                            <components::Sidebar sections={self.sections.clone()} />
-                        }
+                <div class="flex-row">
+                    if self.sidebar {
+                        <components::Sidebar sections={self.sections.clone()} />
+                    }
 
-                        <main class="flex flex-row flex-1 p-5">
-                            <Switch<Route> render={switch} />
-                        </main>
-                    </div>
+                    <main id="page" class="flex flex-row flex-1 p-5">
+                        <Switch<Route> render={switch} />
+                    </main>
                 </div>
             </BrowserRouter>
         }

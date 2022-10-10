@@ -70,7 +70,7 @@ impl Component for Header {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         html! {
-            <header class="flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5">
+            <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
                 <div>
                     <Link<Route> classes="flex flex-row items-center gap-3 transition-colors op75 hover:op100" to={Route::Home}>
                         <img class="h-10 block b-neutral-100 dark:b-neutral-500 b mr-1" alt="Viz" src="/logo.svg" />

@@ -5,5 +5,5 @@ command_arguments = [
   "node_modules/.bin/unocss",
   "src/**/*.rs",
   "-o",
-  "dist/.stage/uno.css"
+  "../dist/.stage/uno.css"
 ]
