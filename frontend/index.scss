@@ -135,7 +135,7 @@ flex-240 {
 }
 
 .navbar {
-  background-color: rgba(255,255,255, 1)
+  background-color: rgba(255, 255, 255, 1);
 }
 
 .dark .navbar {
@@ -154,6 +154,11 @@ flex-240 {
     transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
+.sidebar + #page {
+  margin-top: 70px;
+  margin-left: 240px;
+}
+
 @media (min-width: 960px) {
   .sidebar {
     z-index: 1;
@@ -164,9 +169,10 @@ flex-240 {
   }
 }
 
-aside.sidebar + main#page {
-  margin-top: 70px;
-  margin-left: 240px;
+@media (max-width: 960px) {
+  .sidebar + #page {
+    margin-left: auto;
+  }
 }
 
 #page {
