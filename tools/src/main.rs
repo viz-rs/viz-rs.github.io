@@ -1,162 +1,117 @@
 extern crate anyhow;
 extern crate globset;
+extern crate highlighting;
 extern crate pulldown_cmark;
-extern crate tree_sitter_highlight;
 extern crate walkdir;
 
-use std::{collections::HashMap, fs, path::Path};
+use std::{fs, path::Path};
 
 use anyhow::Result;
 use globset::GlobBuilder;
+use highlighting::{HighlightConfiguration, Languages};
 use pulldown_cmark::{
     html::push_html, CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser, Tag,
 };
-use tree_sitter_highlight::{HighlightConfiguration, Highlighter, HtmlRenderer};
 use walkdir::WalkDir;
-
-pub const SCOPES: &[&str] = &[
-    "constant",
-    "type",
-    "type.builtin",
-    "property",
-    "comment",
-    "constructor",
-    "function",
-    "label",
-    "keyword",
-    "keyword.control",
-    "string",
-    "variable",
-    "variable.other.member",
-    "operator",
-    "attribute",
-    "escape",
-    "embedded",
-    "symbol",
-    "punctuation",
-    "punctuation.special",
-    "punctuation.delimiter",
-    "text",
-    "text.literal",
-    "text.title",
-    "text.uri",
-    "text.reference",
-    "string.escape",
-    "conceal",
-    "none",
-    "tag",
-];
 
 #[derive(Debug)]
 struct Document {
     html: String,
 }
 
-#[derive(Debug, PartialEq, Eq, Hash)]
-enum LanguageId {
-    Javascript,
-    Json,
-    Jsx,
-    Rust,
-    Toml,
-    Markdown,
-    MarkdownInline,
-}
-
-impl From<String> for LanguageId {
-    fn from(value: String) -> Self {
-        match value.as_str() {
-            "js" | "cjs" | "mjs" => LanguageId::Javascript,
-            "json" => LanguageId::Json,
-            "jsx" => LanguageId::Jsx,
-            "rust" | "rs" => LanguageId::Rust,
-            "toml" => LanguageId::Toml,
-            "md" => LanguageId::Markdown,
-            _ => LanguageId::MarkdownInline,
-        }
-    }
-}
-
 fn main() -> Result<()> {
-    let mut highlighters = HashMap::<LanguageId, HighlightConfiguration>::new();
+    let mut languages = Languages::new();
 
-    highlighters.insert(
-        LanguageId::Javascript,
+    languages.insert(
+        "javascript",
         HighlightConfiguration::new(
             tree_sitter_javascript::language(),
-            tree_sitter_javascript::HIGHLIGHT_QUERY,
-            tree_sitter_javascript::INJECTION_QUERY,
-            tree_sitter_javascript::LOCALS_QUERY,
+            include_str!("../queries/javascript/highlights.scm"),
+            include_str!("../queries/javascript/injections.scm"),
+            include_str!("../queries/javascript/locals.scm"),
         )?,
     );
-    highlighters.insert(
-        LanguageId::Json,
+    languages.insert(
+        "json",
         HighlightConfiguration::new(
             tree_sitter_json::language(),
-            tree_sitter_json::HIGHLIGHT_QUERY,
+            include_str!("../queries/json/highlights.scm"),
             "",
-            "",
+            include_str!("../queries/json/locals.scm"),
         )?,
     );
-    highlighters.insert(
-        LanguageId::Jsx,
+    languages.insert(
+        "jsx",
         HighlightConfiguration::new(
             tree_sitter_javascript::language(),
-            tree_sitter_javascript::JSX_HIGHLIGHT_QUERY,
-            tree_sitter_javascript::INJECTION_QUERY,
-            tree_sitter_javascript::LOCALS_QUERY,
+            include_str!("../queries/jsx/highlights.scm"),
+            include_str!("../queries/jsx/injections.scm"),
+            include_str!("../queries/jsx/locals.scm"),
         )?,
     );
-    highlighters.insert(
-        LanguageId::Rust,
-        HighlightConfiguration::new(
-            tree_sitter_rust::language(),
-            tree_sitter_rust::HIGHLIGHT_QUERY,
-            "",
-            "",
-        )?,
-    );
-    highlighters.insert(
-        LanguageId::Toml,
+    languages.insert(
+        "toml",
         HighlightConfiguration::new(
             tree_sitter_toml::language(),
-            tree_sitter_toml::HIGHLIGHT_QUERY,
-            "",
-            "",
+            include_str!("../queries/toml/highlights.scm"),
+            include_str!("../queries/toml/injections.scm"),
+            include_str!("../queries/toml/locals.scm"),
         )?,
     );
-    highlighters.insert(
-        LanguageId::Markdown,
+    languages.insert(
+        "markdown",
         HighlightConfiguration::new(
             tree_sitter_md::language(),
-            tree_sitter_md::HIGHLIGHT_QUERY_BLOCK,
-            tree_sitter_md::INJECTION_QUERY_BLOCK,
+            include_str!("../queries/markdown/highlights.scm"),
+            include_str!("../queries/markdown/injections.scm"),
             "",
         )?,
     );
-    highlighters.insert(
-        LanguageId::MarkdownInline,
+    languages.insert(
+        "markdown_inline",
         HighlightConfiguration::new(
             tree_sitter_md::inline_language(),
-            tree_sitter_md::HIGHLIGHT_QUERY_INLINE,
-            tree_sitter_md::INJECTION_QUERY_INLINE,
-            tree_sitter_md::INLINE_INJECTION_QUERY,
+            include_str!("../queries/markdown_inline/highlights.scm"),
+            include_str!("../queries/markdown_inline/injections.scm"),
+            "",
         )?,
     );
-
-    for (_, hc) in &mut highlighters {
-        hc.configure(SCOPES);
-    }
-
-    // let mut loader = Loader::new()?;
-    // loader.configure_highlights(
-    //     &SCOPES
-    //         .into_iter()
-    //         .map(|s| s.to_string())
-    //         .collect::<Vec<_>>(),
+    languages.insert(
+        "rust",
+        HighlightConfiguration::new(
+            tree_sitter_rust::language(),
+            include_str!("../queries/rust/highlights.scm"),
+            include_str!("../queries/rust/injections.scm"),
+            include_str!("../queries/rust/locals.scm"),
+        )?,
+    );
+    // languages.insert(
+    //     "html",
+    //     HighlightConfiguration::new(
+    //         tree_sitter_html::language(),
+    //         include_str!("../queries/html/highlights.scm"),
+    //         include_str!("../queries/html/injections.scm"),
+    //         include_str!("../queries/html/locals.scm"),
+    //     )?,
     // );
-
-    let classes: Vec<String> = SCOPES.iter().map(|s| format!(r#"class="{s}""#)).collect();
+    languages.insert(
+        "c",
+        HighlightConfiguration::new(
+            tree_sitter_c::language(),
+            include_str!("../queries/c/highlights.scm"),
+            include_str!("../queries/c/injections.scm"),
+            "",
+        )?,
+    );
+    languages.insert(
+        "zig",
+        HighlightConfiguration::new(
+            tree_sitter_zig::language(),
+            include_str!("../queries/zig/highlights.scm"),
+            include_str!("../queries/zig/injections.scm"),
+            "",
+        )?,
+    );
 
     let glob = GlobBuilder::new("**/*.md")
         .literal_separator(true)
@@ -175,7 +130,7 @@ fn main() -> Result<()> {
             if !dir.exists() {
                 fs::create_dir_all(&dir)?;
             }
-            let doc = parse(&classes, &highlighters, entry.path())?;
+            let doc = parse(&languages, entry.path())?;
             let mut file = dir.join(file.file_stem().unwrap().to_ascii_lowercase());
             file.set_extension("html");
             fs::write(&file, minify_html::minify(doc.html.as_bytes(), &minify_cfg))?;
@@ -186,12 +141,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn parse(
-    // loader: &Loader,
-    classes: &Vec<String>,
-    highlighters: &HashMap<LanguageId, HighlightConfiguration>,
-    path: &Path,
-) -> Result<Document> {
+fn parse(languages: &Languages, path: &Path) -> Result<Document> {
     let raw = fs::read_to_string(path)?;
     let options = Options::all();
     let mut toc = Vec::new();
@@ -231,47 +181,16 @@ fn parse(
             None
         }
         Event::End(Tag::CodeBlock(CodeBlockKind::Fenced(ref lang))) => {
-            let language_id: LanguageId = lang.to_string().into();
-
-            if let Some(config) = highlighters.get(&language_id) {
-                let code = code.take().unwrap();
-                let buf = code.as_bytes();
-                let mut highlighter = Highlighter::new();
-                let x = if let Ok(highlightes) = highlighter.highlight(config, buf, None, |_| None)
-                {
-                    let mut renderer = HtmlRenderer::new();
-                    let _ = renderer.render(highlightes, buf, &|h| {
-                        if let Some(class) = classes.get(h.0) {
-                            class.as_bytes()
-                        } else {
-                            b""
-                        }
-                    });
-
-                    let mut html = String::new();
-
-                    html.push_str("<table>\n");
-                    for (i, line) in renderer.lines().enumerate() {
-                        html.push_str(&format!(
-                            "<tr><td class=line-number>{}</td><td class=line>{}</td></tr>\n",
-                            i + 1,
-                            line
-                        ));
-                    }
-                    html.push_str("</table>\n");
-
-                    Some(Event::Html(CowStr::from(format!(
-                        "<pre class=language-{}><code>{}</code></pre>",
-                        lang, html
-                    ))))
-                } else {
-                    Some(event)
-                };
-
-                x
-            } else {
-                Some(event)
-            }
+            let lang = lang.as_ref();
+            let code = code.take().unwrap();
+            languages
+                .render(lang, code.as_bytes())
+                .map(|html| {
+                    Event::Html(CowStr::from(format!(
+                        "<pre class=language-{lang}><code>{html}</code></pre>"
+                    )))
+                })
+                .or(Some(event))
         }
         Event::Text(ref text) => {
             if heading.is_some() {
@@ -306,10 +225,3 @@ fn parse(
 
     Ok(Document { html })
 }
-
-// https://github.com/helix-editor/helix
-// https://github.com/lapce/lapce
-// https://github.com/lapce/lapce/blob/master/lapce-core/src/syntax/highlight.rs
-// https://github.com/tree-sitter/tree-sitter
-// https://github.com/nvim-treesitter/nvim-treesitter
-// https://github.com/edg-l/treelight

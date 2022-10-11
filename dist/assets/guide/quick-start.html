@@ -1,75 +1,36 @@
-<article class="flex flex-col flex-1"><h1 id=quick-start>Quick Start</h1><h2 id=cargo>Cargo</h2><pre class=language-toml><code><table>
-<tr><td class=line-number>1</td><td class=line><span class=punctuation>[</span><span class=property>package</span><span class=punctuation>]</span>
-</td></tr>
-<tr><td class=line-number>2</td><td class=line><span class=property>name</span> <span class=operator>=</span> <span class=string>"hello-world"</span>
-</td></tr>
-<tr><td class=line-number>3</td><td class=line><span class=property>version</span> <span class=operator>=</span> <span class=string>"0.1.0"</span>
-</td></tr>
-<tr><td class=line-number>4</td><td class=line><span class=property>edition</span> <span class=operator>=</span> <span class=string>"2021"</span>
-</td></tr>
-<tr><td class=line-number>5</td><td class=line>
-</td></tr>
-<tr><td class=line-number>6</td><td class=line><span class=punctuation>[</span><span class=property>dependencies</span><span class=punctuation>]</span>
-</td></tr>
-<tr><td class=line-number>7</td><td class=line><span class=property>viz</span> <span class=operator>=</span> <span class=punctuation>{</span> <span class=property>version</span> <span class=operator>=</span> <span class=string>"0.4.2"</span> <span class=punctuation>}</span>
-</td></tr>
-<tr><td class=line-number>8</td><td class=line>
-</td></tr>
-<tr><td class=line-number>9</td><td class=line><span class=property>tokio</span> <span class=operator>=</span> <span class=punctuation>{</span> <span class=property>version</span> <span class=operator>=</span> <span class=string>"1.0"</span><span class=punctuation.delimiter>,</span> <span class=property>features</span> <span class=operator>=</span> <span class=punctuation>[</span>
-</td></tr>
-<tr><td class=line-number>10</td><td class=line>  <span class=string>"rt-multi-thread"</span><span class=punctuation.delimiter>,</span>
-</td></tr>
-<tr><td class=line-number>11</td><td class=line>  <span class=string>"macros"</span><span class=punctuation.delimiter>,</span>
-</td></tr>
-<tr><td class=line-number>12</td><td class=line><span class=punctuation>]</span> <span class=punctuation>}</span>
-</td></tr>
-</table>
-</code></pre><h2 id=main>Main</h2><pre class=language-rust><code><table>
-<tr><td class=line-number>1</td><td class=line><span class=keyword>use</span> std<span class=punctuation.delimiter>::</span>net<span class=punctuation.delimiter>::</span><span class=constructor>SocketAddr</span><span class=punctuation.delimiter>;</span>
-</td></tr>
-<tr><td class=line-number>2</td><td class=line><span class=keyword>use</span> viz<span class=punctuation.delimiter>::</span><span class=punctuation>{</span><span class=constructor>Request</span><span class=punctuation.delimiter>,</span> <span class=constructor>Result</span><span class=punctuation.delimiter>,</span> <span class=constructor>Router</span><span class=punctuation.delimiter>,</span> <span class=constructor>Server</span><span class=punctuation.delimiter>,</span> <span class=constructor>ServiceMaker</span><span class=punctuation>}</span><span class=punctuation.delimiter>;</span>
-</td></tr>
-<tr><td class=line-number>3</td><td class=line>
-</td></tr>
-<tr><td class=line-number>4</td><td class=line><span class=keyword>async</span> <span class=keyword>fn</span> <span class=function>index</span><span class=punctuation>(</span>_<span class=punctuation.delimiter>:</span> <span class=type>Request</span><span class=punctuation>)</span> -> <span class=type>Result</span><span class=punctuation><</span><span class=operator>&</span><span class=operator>'</span><span class=label>static</span> <span class=type.builtin>str</span><span class=punctuation>></span> <span class=punctuation>{</span>
-</td></tr>
-<tr><td class=line-number>5</td><td class=line>    <span class=constructor>Ok</span><span class=punctuation>(</span><span class=string>"Hello Viz"</span><span class=punctuation>)</span>
-</td></tr>
-<tr><td class=line-number>6</td><td class=line><span class=punctuation>}</span>
-</td></tr>
-<tr><td class=line-number>7</td><td class=line>
-</td></tr>
-<tr><td class=line-number>8</td><td class=line><span class=attribute>#<span class=punctuation>[</span>tokio<span class=punctuation.delimiter>::</span>main<span class=punctuation>]</span></span>
-</td></tr>
-<tr><td class=line-number>9</td><td class=line><span class=keyword>async</span> <span class=keyword>fn</span> <span class=function>main</span><span class=punctuation>(</span><span class=punctuation>)</span> -> <span class=type>Result</span><span class=punctuation><</span><span class=punctuation>(</span><span class=punctuation>)</span><span class=punctuation>></span> <span class=punctuation>{</span>
-</td></tr>
-<tr><td class=line-number>10</td><td class=line>    <span class=keyword>let</span> addr = <span class=type>SocketAddr</span><span class=punctuation.delimiter>::</span><span class=function>from</span><span class=punctuation>(</span><span class=punctuation>(</span><span class=punctuation>[</span><span class=constant>127</span><span class=punctuation.delimiter>,</span> <span class=constant>0</span><span class=punctuation.delimiter>,</span> <span class=constant>0</span><span class=punctuation.delimiter>,</span> <span class=constant>1</span><span class=punctuation>]</span><span class=punctuation.delimiter>,</span> <span class=constant>3000</span><span class=punctuation>)</span><span class=punctuation>)</span><span class=punctuation.delimiter>;</span>
-</td></tr>
-<tr><td class=line-number>11</td><td class=line>    <span class=function>println</span><span class=function>!</span><span class=punctuation>(</span><span class=string>"listening on {}"</span>, addr<span class=punctuation>)</span><span class=punctuation.delimiter>;</span>
-</td></tr>
-<tr><td class=line-number>12</td><td class=line>
-</td></tr>
-<tr><td class=line-number>13</td><td class=line>    <span class=keyword>let</span> app = <span class=type>Router</span><span class=punctuation.delimiter>::</span><span class=function>new</span><span class=punctuation>(</span><span class=punctuation>)</span><span class=punctuation.delimiter>.</span><span class=function>get</span><span class=punctuation>(</span><span class=string>"/"</span><span class=punctuation.delimiter>,</span> index<span class=punctuation>)</span><span class=punctuation.delimiter>;</span>
-</td></tr>
-<tr><td class=line-number>14</td><td class=line>
-</td></tr>
-<tr><td class=line-number>15</td><td class=line>    <span class=keyword>if</span> <span class=keyword>let</span> <span class=constructor>Err</span><span class=punctuation>(</span>err<span class=punctuation>)</span> = <span class=type>Server</span><span class=punctuation.delimiter>::</span><span class=function>bind</span><span class=punctuation>(</span><span class=operator>&</span>addr<span class=punctuation>)</span>
-</td></tr>
-<tr><td class=line-number>16</td><td class=line>        <span class=punctuation.delimiter>.</span><span class=function>serve</span><span class=punctuation>(</span><span class=type>ServiceMaker</span><span class=punctuation.delimiter>::</span><span class=function>from</span><span class=punctuation>(</span>app<span class=punctuation>)</span><span class=punctuation>)</span>
-</td></tr>
-<tr><td class=line-number>17</td><td class=line>        <span class=punctuation.delimiter>.</span><span class=keyword>await</span>
-</td></tr>
-<tr><td class=line-number>18</td><td class=line>    <span class=punctuation>{</span>
-</td></tr>
-<tr><td class=line-number>19</td><td class=line>        <span class=function>println</span><span class=function>!</span><span class=punctuation>(</span><span class=string>"{}"</span>, err<span class=punctuation>)</span><span class=punctuation.delimiter>;</span>
-</td></tr>
-<tr><td class=line-number>20</td><td class=line>    <span class=punctuation>}</span>
-</td></tr>
-<tr><td class=line-number>21</td><td class=line>
-</td></tr>
-<tr><td class=line-number>22</td><td class=line>    <span class=constructor>Ok</span><span class=punctuation>(</span><span class=punctuation>(</span><span class=punctuation>)</span><span class=punctuation>)</span>
-</td></tr>
-<tr><td class=line-number>23</td><td class=line><span class=punctuation>}</span>
-</td></tr>
-</table>
-</code></pre></article><nav class="flex-col gap-5 hidden lg:flex"><ul class=text-3><li><a class="block py-1 font-normal transition-colors op75 hover:op100"href=#cargo>Cargo</a></li><li><a class="block py-1 font-normal transition-colors op75 hover:op100"href=#main>Main</a></li></ul></nav>
+<article class="flex flex-col flex-1"><h1 id=quick-start>Quick Start</h1><h2 id=cargo>Cargo</h2><pre class=language-toml><code><pre class=language-toml><code><span class=line><span class=punctuation.bracket>[</span><span class=variable>package</span><span class=punctuation.bracket>]</span>
+</span><span class=line><span class=variable>name</span> <span class=operator>=</span> <span class=string>"hello-world"</span>
+</span><span class=line><span class=variable>version</span> <span class=operator>=</span> <span class=string>"0.1.0"</span>
+</span><span class=line><span class=variable>edition</span> <span class=operator>=</span> <span class=string>"2021"</span>
+</span><span class=line>
+</span><span class=line><span class=punctuation.bracket>[</span><span class=variable>dependencies</span><span class=punctuation.bracket>]</span>
+</span><span class=line><span class=variable>viz</span> <span class=operator>=</span> <span class=punctuation.bracket>{</span> <span class=variable>version</span> <span class=operator>=</span> <span class=string>"0.4.2"</span> <span class=punctuation.bracket>}</span>
+</span><span class=line>
+</span><span class=line><span class=variable>tokio</span> <span class=operator>=</span> <span class=punctuation.bracket>{</span> <span class=variable>version</span> <span class=operator>=</span> <span class=string>"1.0"</span><span class=punctuation.delimiter>,</span> <span class=variable>features</span> <span class=operator>=</span> <span class=punctuation.bracket>[</span>
+</span><span class=line>  <span class=string>"rt-multi-thread"</span><span class=punctuation.delimiter>,</span>
+</span><span class=line>  <span class=string>"macros"</span><span class=punctuation.delimiter>,</span>
+</span><span class=line><span class=punctuation.bracket>]</span> <span class=punctuation.bracket>}</span>
+</span></code></pre></code></pre><h2 id=main>Main</h2><pre class=language-rust><code><pre class=language-rust><code><span class=line><span class=keyword>use</span> <span class=namespace>std</span><span class=punctuation.delimiter>::</span><span class=namespace>net</span><span class=punctuation.delimiter>::</span><span class=type>SocketAddr</span><span class=punctuation.delimiter>;</span>
+</span><span class=line><span class=keyword>use</span> <span class=namespace>viz</span><span class=punctuation.delimiter>::</span><span class=punctuation.bracket>{</span><span class=type>Request</span><span class=punctuation.delimiter>,</span> <span class=type>Result</span><span class=punctuation.delimiter>,</span> <span class=type>Router</span><span class=punctuation.delimiter>,</span> <span class=type>Server</span><span class=punctuation.delimiter>,</span> <span class=type>ServiceMaker</span><span class=punctuation.bracket>}</span><span class=punctuation.delimiter>;</span>
+</span><span class=line>
+</span><span class=line><span class=keyword>async</span> <span class=keyword.function>fn</span> <span class=function>index</span><span class=punctuation.bracket>(</span>_: <span class=type>Request</span><span class=punctuation.bracket>)</span> <span class=operator>-></span> <span class=type>Result</span><span class=punctuation.bracket><</span><span class=keyword>&</span><span class=label>'</span><span class=label>static</span> <span class=type.builtin>str</span><span class=punctuation.bracket>></span> <span class=punctuation.bracket>{</span>
+</span><span class=line>    <span class=type>Ok</span><span class=punctuation.bracket>(</span><span class=string>"Hello Viz"</span><span class=punctuation.bracket>)</span>
+</span><span class=line><span class=punctuation.bracket>}</span>
+</span><span class=line>
+</span><span class=line><span class=punctuation.bracket>#</span><span class=punctuation.bracket>[</span><span class=namespace>tokio</span><span class=punctuation.delimiter>::</span><span class=namespace>main</span><span class=punctuation.bracket>]</span>
+</span><span class=line><span class=keyword>async</span> <span class=keyword.function>fn</span> <span class=function>main</span><span class=punctuation.bracket>(</span><span class=punctuation.bracket>)</span> <span class=operator>-></span> <span class=type>Result</span><span class=punctuation.bracket><</span><span class=punctuation.bracket>(</span><span class=punctuation.bracket>)</span><span class=punctuation.bracket>></span> <span class=punctuation.bracket>{</span>
+</span><span class=line>    <span class=keyword>let</span> <span class=variable>addr</span> <span class=operator>=</span> <span class=type>SocketAddr</span><span class=punctuation.delimiter>::</span><span class=function>from</span><span class=punctuation.bracket>(</span><span class=punctuation.bracket>(</span><span class=punctuation.bracket>[</span><span class=constant>127</span><span class=punctuation.delimiter>,</span> <span class=constant>0</span><span class=punctuation.delimiter>,</span> <span class=constant>0</span><span class=punctuation.delimiter>,</span> <span class=constant>1</span><span class=punctuation.bracket>]</span><span class=punctuation.delimiter>,</span> <span class=constant>3000</span><span class=punctuation.bracket>)</span><span class=punctuation.bracket>)</span><span class=punctuation.delimiter>;</span>
+</span><span class=line>    <span class=function.macro>println</span><span class=function.macro>!</span><span class=punctuation.bracket>(</span><span class=string>"listening on {}"</span>, <span class=variable>addr</span><span class=punctuation.bracket>)</span><span class=punctuation.delimiter>;</span>
+</span><span class=line>
+</span><span class=line>    <span class=keyword>let</span> <span class=variable>app</span> <span class=operator>=</span> <span class=type>Router</span><span class=punctuation.delimiter>::</span><span class=function>new</span><span class=punctuation.bracket>(</span><span class=punctuation.bracket>)</span><span class=punctuation.delimiter>.</span><span class=function>get</span><span class=punctuation.bracket>(</span><span class=string>"/"</span><span class=punctuation.delimiter>,</span> <span class=variable>index</span><span class=punctuation.bracket>)</span><span class=punctuation.delimiter>;</span>
+</span><span class=line>
+</span><span class=line>    <span class=keyword>if</span> <span class=keyword>let</span> <span class=constructor>Err</span><span class=punctuation.bracket>(</span><span class=variable>err</span><span class=punctuation.bracket>)</span> <span class=operator>=</span> <span class=type>Server</span><span class=punctuation.delimiter>::</span><span class=function>bind</span><span class=punctuation.bracket>(</span><span class=operator>&</span><span class=variable>addr</span><span class=punctuation.bracket>)</span>
+</span><span class=line>        <span class=punctuation.delimiter>.</span><span class=function>serve</span><span class=punctuation.bracket>(</span><span class=type>ServiceMaker</span><span class=punctuation.delimiter>::</span><span class=function>from</span><span class=punctuation.bracket>(</span><span class=variable>app</span><span class=punctuation.bracket>)</span><span class=punctuation.bracket>)</span>
+</span><span class=line>        <span class=punctuation.delimiter>.</span><span class=keyword>await</span>
+</span><span class=line>    <span class=punctuation.bracket>{</span>
+</span><span class=line>        <span class=function.macro>println</span><span class=function.macro>!</span><span class=punctuation.bracket>(</span><span class=string>"{}"</span>, <span class=variable>err</span><span class=punctuation.bracket>)</span><span class=punctuation.delimiter>;</span>
+</span><span class=line>    <span class=punctuation.bracket>}</span>
+</span><span class=line>
+</span><span class=line>    <span class=type>Ok</span><span class=punctuation.bracket>(</span><span class=punctuation.bracket>(</span><span class=punctuation.bracket>)</span><span class=punctuation.bracket>)</span>
+</span><span class=line><span class=punctuation.bracket>}</span>
+</span></code></pre></code></pre></article><nav class="flex-col gap-5 hidden lg:flex"><ul class=text-3><li><a class="block py-1 font-normal transition-colors op75 hover:op100"href=#cargo>Cargo</a></li><li><a class="block py-1 font-normal transition-colors op75 hover:op100"href=#main>Main</a></li></ul></nav>
