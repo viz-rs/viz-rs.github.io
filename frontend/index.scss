@@ -274,6 +274,10 @@ pre[class*="language"] {
         color: #{map-get($color, "mauve")};
       }
 
+      .keyword\.function {
+        color: #{map-get($color, "mauve")};
+      }
+
       .field {
         color: #{map-get($color, "teal")};
       }

@@ -131,6 +131,9 @@ pre[class*=language].mocha .keyword {
 pre[class*=language].mocha .keyword\.operator {
   color: #cba6f7;
 }
+pre[class*=language].mocha .keyword\.function {
+  color: #cba6f7;
+}
 pre[class*=language].mocha .field {
   color: #94e2d5;
 }
@@ -200,6 +203,9 @@ pre[class*=language].macchiato .keyword {
   color: #c6a0f6;
 }
 pre[class*=language].macchiato .keyword\.operator {
+  color: #c6a0f6;
+}
+pre[class*=language].macchiato .keyword\.function {
   color: #c6a0f6;
 }
 pre[class*=language].macchiato .field {
@@ -273,6 +279,9 @@ pre[class*=language].frappe .keyword {
 pre[class*=language].frappe .keyword\.operator {
   color: #ca9ee6;
 }
+pre[class*=language].frappe .keyword\.function {
+  color: #ca9ee6;
+}
 pre[class*=language].frappe .field {
   color: #81c8be;
 }
@@ -342,6 +351,9 @@ pre[class*=language].latte .keyword {
   color: #8839ef;
 }
 pre[class*=language].latte .keyword\.operator {
+  color: #8839ef;
+}
+pre[class*=language].latte .keyword\.function {
   color: #8839ef;
 }
 pre[class*=language].latte .field {

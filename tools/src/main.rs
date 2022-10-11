@@ -185,11 +185,7 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
             let code = code.take().unwrap();
             languages
                 .render(lang, code.as_bytes())
-                .map(|html| {
-                    Event::Html(CowStr::from(format!(
-                        "<pre class=language-{lang}><code>{html}</code></pre>"
-                    )))
-                })
+                .map(|html| Event::Html(CowStr::from(html)))
                 .or(Some(event))
         }
         Event::Text(ref text) => {
