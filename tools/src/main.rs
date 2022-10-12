@@ -161,17 +161,31 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
                 let c = heading.take().unwrap();
                 let name = c.trim();
                 let id = name.to_lowercase().replace(' ', "-");
-                let class_list = if classes.is_empty() {
-                    "".to_string()
-                } else {
-                    format!(" class={}", classes.to_vec().join(" "))
-                };
+                let mut heading = String::new();
+                heading.push('<');
+                heading.push_str(&level.to_string());
+                heading.push_str(" id=");
+                heading.push_str(&id);
+                if !classes.is_empty() {
+                    heading.push_str(" class='");
+                    heading.push_str(&classes.to_vec().join(" "));
+                    heading.push('\'');
+                }
+                heading.push('>');
+                heading.push_str(&name);
+                heading.push_str("<a class=header-anchor href=#");
+                heading.push_str(&id);
+                heading.push('>');
+                heading.push_str("#</a>");
+                heading.push_str("</");
+                heading.push_str(&level.to_string());
+                heading.push('>');
+
                 if level == HeadingLevel::H2 {
                     toc.push((name.to_owned(), id.to_owned()));
                 }
-                Some(Event::Html(CowStr::from(format!(
-                    "<{level} id={id}{class_list}>{name}</{level}>"
-                ))))
+
+                Some(Event::Html(CowStr::from(heading)))
             } else {
                 Some(event)
             }
@@ -203,15 +217,21 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
     });
 
     let mut html = String::new();
-    html.push_str(r#"<article class="flex flex-col flex-1">"#);
+    html.push_str("<article class='flex flex-col flex-1'>");
     push_html(&mut html, parser);
     html.push_str("</article>");
 
     if !toc.is_empty() {
-        html.push_str(r#"<nav class="flex-col gap-5 hidden lg:flex"><ul class="text-3">"#);
+        html.push_str("<nav class='flex-col gap-5 hidden lg:flex'>");
+        html.push_str("<div class='text-2 uppercase'>On this page</div>");
+        html.push_str("<ul class='text-3'>");
         for (name, anchor) in &toc {
             html.push_str("<li>");
-            html.push_str(&format!(r##"<a class="block py-1 font-normal transition-colors op75 hover:op100" href="#{}">"##, anchor));
+            html.push_str(
+                "<a class='block py-1 font-normal transition-colors op75 hover:op100' href='#",
+            );
+            html.push_str(&anchor);
+            html.push_str("'>");
             html.push_str(&name);
             html.push_str("</a></li>");
         }

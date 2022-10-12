@@ -1,19 +1,17 @@
 ; Properties
 ;-----------
 
-[
-  (bare_key)
-  (quoted_key)
-] @variable.other.member
+(bare_key) @property
+(quoted_key) @string
 
 ; Literals
 ;---------
 
-(boolean) @constant.builtin.boolean
-(comment) @comment
+(boolean) @boolean
+(comment) @comment @spell
 (string) @string
-(integer) @constant.numeric.integer
-(float) @constant.numeric.float
+(integer) @number
+(float) @float
 (offset_date_time) @string.special
 (local_date_time) @string.special
 (local_date) @string.special
@@ -33,3 +31,5 @@
 "]]" @punctuation.bracket
 "{" @punctuation.bracket
 "}" @punctuation.bracket
+
+(ERROR) @error

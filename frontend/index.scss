@@ -115,6 +115,7 @@ $palette: (
 
 html {
   scrollbar-gutter: auto;
+  scroll-behavior: smooth;
 }
 
 flex-240 {
@@ -143,8 +144,6 @@ flex-240 {
 }
 
 .sidebar {
-  top: 70px;
-  bottom: 20px;
   width: 240px;
   opacity: 0;
   overflow-x: hidden;
@@ -155,7 +154,6 @@ flex-240 {
 }
 
 .sidebar + #page {
-  margin-top: 70px;
   margin-left: 240px;
 }
 
@@ -201,8 +199,29 @@ flex-240 {
       font-size: 1.35rem;
     }
 
-    h1,h2,h3,h4,h5,h6 {
-      scroll-margin-top: 70px;
+    a.header-anchor {
+      float: left;
+      margin-top: 0.125em;
+      margin-left: -0.87em;
+      padding-right: 0.23em;
+      font-size: 0.85em;
+      opacity: 0;
+      text-decoration-style: dotted;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      scroll-margin-top: 90px;
+
+      &:hover .header-anchor,
+      &:focus .header-anchor {
+        color: rgba(202, 138, 4, 1);
+        opacity: 1;
+      }
     }
 
     p,
@@ -342,6 +361,10 @@ pre[class*="language"] {
         color: #{map-get($color, "blue")};
       }
 
+      .function\.macro {
+        color: #{map-get($color, "teal")};
+      }
+
       .type {
         color: #{map-get($color, "yellow")};
       }
@@ -352,6 +375,10 @@ pre[class*="language"] {
       .attribute {
         color: #{map-get($color, "teal")};
         font-style: italic;
+      }
+
+      .variable {
+        color: #{map-get($color, "text")};
       }
 
       .label {

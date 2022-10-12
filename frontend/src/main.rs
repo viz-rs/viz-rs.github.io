@@ -215,16 +215,18 @@ impl Component for App {
 
         html! {
             <BrowserRouter>
-                <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
+                <div id="app">
+                    <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
 
-                <div class="flex-row">
-                    if self.sidebar {
-                        <components::Sidebar sections={self.sections.clone()} />
-                    }
+                    <div class="flex-row pt-70px">
+                        if self.sidebar {
+                            <components::Sidebar sections={self.sections.clone()} />
+                        }
 
-                    <main id="page" class="flex flex-row flex-1 p-5">
-                        <Switch<Route> render={switch} />
-                    </main>
+                        <main id="page" class="flex flex-row flex-1 p-5">
+                            <Switch<Route> render={switch} />
+                        </main>
+                    </div>
                 </div>
             </BrowserRouter>
         }
