@@ -63,11 +63,11 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-
-      - name: Build
         run: |
           cargo install --locked trunk
           cargo install --locked just
+
+      - name: Build
           just build
 
       - name: Setup Pages
