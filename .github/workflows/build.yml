@@ -63,9 +63,13 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-        run: |
-          cargo install --locked trunk
-          cargo install --locked just
+      - run: |
+          if [ -z "~/.cargo/bin/trunk" ]; then
+            cargo install --locked trunk
+          fi
+          if [ -z "~/.cargo/bin/just" ]; then
+            cargo install --locked just
+          fi
 
       - name: Build
           just build
