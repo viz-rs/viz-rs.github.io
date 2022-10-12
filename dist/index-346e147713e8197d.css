@@ -111,12 +111,19 @@ flex-240 {
   line-height: 1.7;
 }
 #page nav {
+  display: none;
   position: sticky;
   top: 90px;
   align-self: flex-start;
   width: 240px;
 }
 
+@media (min-width: 1280px) {
+  #page nav {
+    display: block;
+    order: 2;
+  }
+}
 pre[class*=language] {
   text-align: left;
   white-space: pre;

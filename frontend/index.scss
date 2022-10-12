@@ -233,10 +233,18 @@ flex-240 {
   }
 
   nav {
+    display: none;
     position: sticky;
     top: 90px;
     align-self: flex-start;
     width: 240px;
+  }
+}
+
+@media (min-width: 1280px) {
+  #page nav {
+    display: block;
+    order: 2;
   }
 }
 
