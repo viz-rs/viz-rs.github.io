@@ -223,7 +223,7 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
 
     if !toc.is_empty() {
         html.push_str("<nav class='flex-col gap-5 hidden lg:flex'>");
-        html.push_str("<div class='text-2 uppercase'>On this page</div>");
+        html.push_str("<div class='py-1 text-2 uppercase'>On this page</div>");
         html.push_str("<ul class='text-3'>");
         for (name, anchor) in &toc {
             html.push_str("<li>");
