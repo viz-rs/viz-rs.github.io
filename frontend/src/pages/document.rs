@@ -24,7 +24,7 @@ fn content(props: &Props) -> HtmlResult {
         Ok(ref res) => {
             if !res.starts_with("<article") {
                 return Ok(html! {
-                    {"Not Found!"}
+                    <div class="flex items-center w-full op61.8">{"Not Found!"}</div>
                 });
             }
             let document = utils::document();
@@ -60,7 +60,11 @@ fn content(props: &Props) -> HtmlResult {
 
 #[function_component(Document)]
 pub fn doc(props: &Props) -> Html {
-    let fallback = html! {<div>{"Loading..."}</div>};
+    let fallback = html! {
+        <div class="flex items-center w-full op61.8">
+            <div class="i-carbon-circle-dash w-6 h-6 animate-spin" />
+        </div>
+    };
 
     html! {
         <Suspense {fallback}>
