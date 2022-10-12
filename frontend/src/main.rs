@@ -218,7 +218,7 @@ impl Component for App {
                 <div id="app">
                     <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
 
-                    <div class="flex-row pt-70px">
+                    <div class="flex-row pt-4.375rem">
                         if self.sidebar {
                             <components::Sidebar sections={self.sections.clone()} />
                         }

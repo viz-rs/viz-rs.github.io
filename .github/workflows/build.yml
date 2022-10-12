@@ -29,12 +29,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: dtolnay/rust-toolchain@v1  
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@v1  
         with:
           toolchain: nightly
           targets: wasm32-unknown-unknown
+
       - name: Build
         run: |
+          cd frontend && npm i
           cargo install --locked trunk
           cargo install --locked just
           just build
