@@ -173,6 +173,10 @@ flex-240 {
   }
 }
 
+.page-container {
+  min-height: calc(100vh - 4.375rem - 5rem);
+}
+
 #page {
   article {
     line-height: 1.4;
@@ -199,7 +203,7 @@ flex-240 {
       font-size: 1.35rem;
     }
 
-    a.header-anchor {
+    a.anchor {
       float: left;
       margin-top: 0.125em;
       margin-left: -0.87em;
@@ -217,8 +221,8 @@ flex-240 {
     h6 {
       scroll-margin-top: 90px;
 
-      &:hover .header-anchor,
-      &:focus .header-anchor {
+      &:hover .anchor,
+      &:focus .anchor {
         color: rgba(202, 138, 4, 1);
         opacity: 1;
       }

@@ -64,7 +64,7 @@ impl Component for App {
     fn create(ctx: &Context<Self>) -> Self {
         let changed_dark = ctx.link().callback(|m: Msg| m);
         let mql = utils::media_query("(prefers-color-scheme: dark)").unwrap();
-        let cb: Closure<dyn FnMut(MediaQueryListEvent)> =
+        let cb: Closure<dyn Fn(MediaQueryListEvent)> =
             Closure::new(move |e: MediaQueryListEvent| {
                 changed_dark.emit(Msg::ChangedDark(e.matches()));
             });
@@ -218,7 +218,7 @@ impl Component for App {
                 <div id="app">
                     <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
 
-                    <div class="flex-row pt-4.375rem">
+                    <div class="page-container flex-row pt-4.375rem">
                         if self.sidebar {
                             <components::Sidebar sections={self.sections.clone()} />
                         }
@@ -227,6 +227,16 @@ impl Component for App {
                             <Switch<Route> render={switch} />
                         </main>
                     </div>
+
+                    <footer class="footer text-center text-neutral-400 text-sm p-5">
+                        <p>
+                            {"Built with "}<a href="https://yew.rs/" target="_blank" class="text-neutral-500">{"Yew"}</a>
+                            {" · Deploys on "}<a href="https://www.cloudflare.com/" target="_blank" class="text-neutral-500">{"Cloudflare"}</a>
+                        </p>
+                        <p>
+                            {"MIT Licensed | Copyright © 2022-PRESENT Fangdun Tsai"}
+                        </p>
+                    </footer>
                 </div>
             </BrowserRouter>
         }

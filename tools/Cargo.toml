@@ -1,8 +1,9 @@
 [package]
 name = "viz-rs-tools"
-version.workspace = true
 authors.workspace = true
+edition.workspace = true
 homepage.workspace = true
+version.workspace = true
 
 [dependencies]
 anyhow = "1.0.65"
@@ -20,6 +21,7 @@ tree-sitter-zig = { git = "https://github.com/maxxnino/tree-sitter-zig.git", bra
 walkdir = { version = "2.3.2" }
 minify-html = "0.10.2"
 highlighting = "0.1.2"
+clap = { version = "4.0.14", features = ["derive"] }
 
 [build-dependencies]
 cc = "1.0"

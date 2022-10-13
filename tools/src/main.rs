@@ -1,18 +1,21 @@
-extern crate anyhow;
-extern crate globset;
-extern crate highlighting;
-extern crate pulldown_cmark;
-extern crate walkdir;
-
 use std::{fs, path::Path};
 
 use anyhow::Result;
+use clap::Parser;
 use globset::GlobBuilder;
 use highlighting::{HighlightConfiguration, Languages};
 use pulldown_cmark::{
-    html::push_html, CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser, Tag,
+    html::push_html, CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser as MarkParser, Tag,
 };
 use walkdir::WalkDir;
+
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Cli {
+    /// en,zh
+    #[arg(short, long, default_value = "en")]
+    i18n: String,
+}
 
 #[derive(Debug)]
 struct Document {
@@ -20,6 +23,10 @@ struct Document {
 }
 
 fn main() -> Result<()> {
+    let cli = Cli::parse();
+
+    let i18n = cli.i18n;
+
     let mut languages = Languages::new();
 
     languages.insert(
@@ -121,11 +128,13 @@ fn main() -> Result<()> {
     let mut minify_cfg = minify_html::Cfg::new();
     minify_cfg.keep_closing_tags = true;
 
-    let mut iter = WalkDir::new("../docs").into_iter();
+    let root = Path::new("..").join(i18n);
+
+    let mut iter = WalkDir::new(&root).into_iter();
     let dist_docs = Path::new("../dist/assets");
     while let Some(Ok(entry)) = iter.next() {
         if glob.is_match(entry.path()) {
-            let file = entry.path().strip_prefix("../docs")?;
+            let file = entry.path().strip_prefix(&root)?;
             let dir = dist_docs.join(file.parent().unwrap());
             if !dir.exists() {
                 fs::create_dir_all(&dir)?;
@@ -147,7 +156,7 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
     let mut toc = Vec::new();
     let mut heading = None;
     let mut code = None;
-    let parser = Parser::new_ext(&raw, options).filter_map(|event| match event {
+    let parser = MarkParser::new_ext(&raw, options).filter_map(|event| match event {
         Event::Start(Tag::Heading(level, id, ..)) => {
             if id.is_none() && level < HeadingLevel::H3 {
                 heading = Some(String::new());
@@ -173,7 +182,7 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
                 }
                 heading.push('>');
                 heading.push_str(&name);
-                heading.push_str("<a class=header-anchor href=#");
+                heading.push_str("<a class=anchor href=#");
                 heading.push_str(&id);
                 heading.push('>');
                 heading.push_str("#</a>");

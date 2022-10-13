@@ -1,9 +1,9 @@
 [package]
 name = "viz-rs-frontend"
-version.workspace = true
 authors.workspace = true
 edition.workspace = true
 homepage.workspace = true
+version.workspace = true
 
 [dependencies]
 yew = { git = "https://github.com/yewstack/yew.git", branch = "master", features = ["csr"] }
