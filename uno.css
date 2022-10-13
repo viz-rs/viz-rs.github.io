@@ -64,11 +64,14 @@
 .text-4{font-size:1rem;}
 .text-5{font-size:1.25rem;}
 .text-8{font-size:2rem;}
+.text-sm{font-size:0.875rem;line-height:1.25rem;}
 .font-medium{font-weight:500;}
 .font-normal{font-weight:400;}
 .uppercase{text-transform:uppercase;}
 .dark .dark\:text-neutral-900{--un-text-opacity:1;color:rgba(23,23,23,var(--un-text-opacity));}
 .text-neutral-100{--un-text-opacity:1;color:rgba(245,245,245,var(--un-text-opacity));}
+.text-neutral-400{--un-text-opacity:1;color:rgba(163,163,163,var(--un-text-opacity));}
+.text-neutral-500{--un-text-opacity:1;color:rgba(115,115,115,var(--un-text-opacity));}
 .text-yellow-600{--un-text-opacity:1;color:rgba(202,138,4,var(--un-text-opacity));}
 .hover\:op100:hover,
 .op100{opacity:1;}
