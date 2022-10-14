@@ -2,7 +2,7 @@
 
 ## What is Viz?
 
-Viz is a Rust framework for building Web services. It builts on top of [Tokio] and [Hyper],
+**Viz** is a Rust framework for building Web services. It builts on top of [Tokio] and [Hyper],
 provides a set of flexible routing, clean request processing, and a robust middleware model to 
 help you develop Web services efficiently.
 
