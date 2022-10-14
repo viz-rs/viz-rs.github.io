@@ -1045,7 +1045,7 @@ function initSync(module) {
 
 async function init(input) {
     if (typeof input === 'undefined') {
-        input = new URL('viz-rs-frontend-32f9937b60981ad_bg.wasm', import.meta.url);
+        input = new URL('viz-rs-frontend-4d185aae5e5a3985_bg.wasm', import.meta.url);
     }
     const imports = getImports();
 
