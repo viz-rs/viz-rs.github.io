@@ -1,5 +1,9 @@
+[build]
+target = "index.html"
+dist = "dist"
+
 [[hooks]]
-stage = "build"
+stage = "post_build"
 command = "node"
 command_arguments = [
   "node_modules/.bin/unocss",
@@ -7,4 +11,16 @@ command_arguments = [
   "../tools/src/*.rs",
   "-o",
   "../dist/.stage/uno.css"
+]
+[[hooks]]
+stage = "post_build"
+command = "just"
+command_arguments = [
+  "en",
+]
+
+[watch]
+paths = [
+  "en",
+  "zh"
 ]

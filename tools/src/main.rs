@@ -15,6 +15,9 @@ struct Cli {
     /// en,zh
     #[arg(short, long, default_value = "en")]
     i18n: String,
+    /// en,zh
+    #[arg(short, long)]
+    output: String,
 }
 
 #[derive(Debug)]
@@ -26,9 +29,19 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     let i18n = cli.i18n;
+    let output = cli.output;
 
     let mut languages = Languages::new();
 
+    languages.insert(
+        "bash",
+        HighlightConfiguration::new(
+            tree_sitter_bash::language(),
+            include_str!("../queries/bash/highlights.scm"),
+            "",
+            "",
+        )?,
+    );
     languages.insert(
         "javascript",
         HighlightConfiguration::new(
@@ -131,7 +144,7 @@ fn main() -> Result<()> {
     let root = Path::new("..").join(i18n);
 
     let mut iter = WalkDir::new(&root).into_iter();
-    let dist_docs = Path::new("../dist/assets");
+    let dist_docs = Path::new(&output);
     while let Some(Ok(entry)) = iter.next() {
         if glob.is_match(entry.path()) {
             let file = entry.path().strip_prefix(&root)?;
@@ -175,11 +188,12 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
                 heading.push_str(&level.to_string());
                 heading.push_str(" id=");
                 heading.push_str(&id);
+                heading.push_str(" class='");
                 if !classes.is_empty() {
-                    heading.push_str(" class='");
+                    heading.push(' ');
                     heading.push_str(&classes.to_vec().join(" "));
-                    heading.push('\'');
                 }
+                heading.push('\'');
                 heading.push('>');
                 heading.push_str(&name);
                 heading.push_str("<a class=anchor href=#");
@@ -204,12 +218,14 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
             None
         }
         Event::End(Tag::CodeBlock(CodeBlockKind::Fenced(ref lang))) => {
+            println!("processing {lang} language");
             let lang = lang.as_ref();
             let code = code.take().unwrap();
-            languages
-                .render(lang, code.as_bytes())
-                .map(|html| Event::Html(CowStr::from(html)))
-                .or(Some(event))
+            let mut div = String::new();
+            div.push_str("<div class='code'>");
+            div.push_str(&languages.render(lang, code.as_bytes()).unwrap_or(code));
+            div.push_str("</div>");
+            Some(Event::Html(CowStr::from(div)))
         }
         Event::Text(ref text) => {
             if heading.is_some() {

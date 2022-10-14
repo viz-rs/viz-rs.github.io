@@ -7,6 +7,7 @@
   "license": "MIT",
   "devDependencies": {
     "@unocss/cli": "^0.45.26",
+    "inter-ui": "^3.19.3",
     "unocss": "^0.45.26"
   }
 }

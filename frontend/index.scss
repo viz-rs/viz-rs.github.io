@@ -1,3 +1,14 @@
+@use "node_modules/inter-ui/default" with (
+  $inter-font-display: swap,
+  $inter-font-path: 'fonts'
+);
+@use "node_modules/inter-ui/variable" with (
+  $inter-font-display: swap,
+  $inter-font-path: 'fonts'
+);
+@include default.all;
+@include variable.all;
+
 $palette: (
   "mocha": (
     "rosewater": #f5e0dc,
@@ -116,6 +127,19 @@ $palette: (
 html {
   scrollbar-gutter: auto;
   scroll-behavior: smooth;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
+    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+    Noto Color Emoji;
+}
+
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: Inter var, Inter, ui-sans-serif, system-ui, -apple-system,
+      BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans,
+      sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol,
+      Noto Color Emoji;
+  }
 }
 
 flex-240 {
@@ -184,6 +208,7 @@ flex-240 {
     font-weight: 400;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    max-width: 100vw;
 
     h1 {
       font-size: 1.9rem;
@@ -201,6 +226,10 @@ flex-240 {
     h3 {
       margin-top: 2rem;
       font-size: 1.35rem;
+    }
+
+    a {
+      color: #ca8a04
     }
 
     a.anchor {
@@ -250,6 +279,10 @@ flex-240 {
     display: block;
     order: 2;
   }
+}
+
+.code {
+    position: relative;
 }
 
 pre[class*="language"] {
@@ -406,4 +439,8 @@ pre[class*="language"] code {
 
 .dark pre[class*="language"] code {
   background: #181818 !important;
+}
+
+.v-f-b {
+  font-family: "Inter Bold";
 }

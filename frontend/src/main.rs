@@ -223,7 +223,7 @@ impl Component for App {
                             <components::Sidebar sections={self.sections.clone()} />
                         }
 
-                        <main id="page" class="flex flex-row flex-1 p-5">
+                        <main id="page" class="flex flex-row flex-1 py-5">
                             <Switch<Route> render={switch} />
                         </main>
                     </div>

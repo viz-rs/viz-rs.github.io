@@ -8,8 +8,7 @@ import {
 export default defineConfig({
   rules: [
   ],
-  shortcuts: {
-  },
+  shortcuts: {},
   preflights: [
     {
       getCSS: ({ theme }) => `
