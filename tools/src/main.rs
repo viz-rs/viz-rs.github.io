@@ -223,6 +223,7 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
             let code = code.take().unwrap();
             let mut div = String::new();
             div.push_str("<div class='code'>");
+            div.push_str("<button class='i-carbon-copy transition w-4 h-4 select-none absolute top-4 right-2 op-20 hover:op-80'></button>");
             div.push_str(&languages.render(lang, code.as_bytes()).unwrap_or(code));
             div.push_str("</div>");
             Some(Event::Html(CowStr::from(div)))
@@ -242,7 +243,7 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
     });
 
     let mut html = String::new();
-    html.push_str("<article class='flex flex-col flex-1'>");
+    html.push_str("<article class='flex-1'>");
     push_html(&mut html, parser);
     html.push_str("</article>");
 

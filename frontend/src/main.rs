@@ -168,7 +168,7 @@ impl Component for App {
 
                 let root = utils::document_element();
 
-                if let Ok(nodes) = root.query_selector_all("article > pre") {
+                if let Ok(nodes) = root.query_selector_all("article > .code > pre") {
                     for index in 0..nodes.length() {
                         nodes
                             .get(index)
@@ -228,15 +228,7 @@ impl Component for App {
                         </main>
                     </div>
 
-                    <footer class="footer text-center text-neutral-400 text-sm p-5">
-                        <p>
-                            {"Built with "}<a href="https://yew.rs/" target="_blank" class="text-neutral-500">{"Yew"}</a>
-                            {" · Deploys on "}<a href="https://www.cloudflare.com/" target="_blank" class="text-neutral-500">{"Cloudflare"}</a>
-                        </p>
-                        <p>
-                            {"MIT Licensed | Copyright © 2022-PRESENT Fangdun Tsai"}
-                        </p>
-                    </footer>
+                    <components::Footer />
                 </div>
             </BrowserRouter>
         }

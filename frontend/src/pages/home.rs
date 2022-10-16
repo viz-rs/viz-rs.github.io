@@ -21,9 +21,9 @@ impl Component for Home {
                 <p class="text-4 sm:text-5 mt-4.5 mb-7.5 sm:mt-6 sm:mb-8 op-61.8 font-light">
                     <strong class="font-normal">{"Viz"}</strong>
                     {" builts on top of "}
-                    <a href="https://tokio.rs/" class="text-yellow-600 font-normal">{"Tokio"}</a>
+                    <a href="https://tokio.rs/" target="_bank" class="text-yellow-600 font-normal">{"Tokio"}</a>
                     {" and "}
-                    <a href="https://hyper.rs/" class="text-yellow-600 font-normal">{"Hyper"}</a>
+                    <a href="https://hyper.rs/" target="_bank" class="text-yellow-600 font-normal">{"Hyper"}</a>
                     {"."}
                 </p>
                 <Link<Route>

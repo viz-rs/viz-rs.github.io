@@ -25,8 +25,8 @@ impl Component for Sidebar {
         let location = ctx.link().location().expect_throw("Can't find location");
 
         html! {
-            <aside class="fixed flex flex-col p-5 gap-4 sidebar">
-            { self.view_sections(ctx.props().sections.to_vec(), location.path()) }
+            <aside class="fixed flex flex-col p-5 gap-4 sidebar top-4.375rem bottom-0">
+                { self.view_sections(ctx.props().sections.to_vec(), location.path()) }
             </aside>
         }
     }

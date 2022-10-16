@@ -58,3 +58,9 @@ pub fn media_query(key: &str) -> Option<web_sys::MediaQueryList> {
         .match_media(key)
         .expect_throw("Can't find media query")
 }
+
+pub async fn copy(text: &str) {
+    if let Some(c) = window().navigator().clipboard() {
+        let _ = wasm_bindgen_futures::JsFuture::from(c.write_text(text)).await;
+    }
+}

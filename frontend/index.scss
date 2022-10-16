@@ -133,6 +133,13 @@ html {
     Noto Color Emoji;
 }
 
+body {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 @supports (font-variation-settings: normal) {
   html {
     font-family: Inter var, Inter, ui-sans-serif, system-ui, -apple-system,
@@ -161,10 +168,6 @@ flex-240 {
 
 .navbar {
   background-color: rgba(255, 255, 255, 1);
-}
-
-.dark .navbar {
-  background-color: rgba(17, 17, 17, 1);
 }
 
 .sidebar {
@@ -229,7 +232,7 @@ flex-240 {
     }
 
     a {
-      color: #ca8a04
+      color: #ca8a04;
     }
 
     a.anchor {
@@ -248,6 +251,7 @@ flex-240 {
     h4,
     h5,
     h6 {
+      font-weight: 700;
       scroll-margin-top: 90px;
 
       &:hover .anchor,
@@ -282,7 +286,7 @@ flex-240 {
 }
 
 .code {
-    position: relative;
+  position: relative;
 }
 
 pre[class*="language"] {
@@ -294,7 +298,8 @@ pre[class*="language"] {
   tab-size: 4;
   hyphens: none;
   overflow-x: auto;
-  border-radius: 8px;
+  border-radius: 0.25rem;
+  border: 1px solid #e5e7eb;
   margin: 0.5em 0;
 
   code {
@@ -305,6 +310,7 @@ pre[class*="language"] {
     width: fit-content;
     min-width: 100%;
     padding: 14px 24px;
+    background: #fafafa !important;
   }
 
   .line-number {
@@ -433,14 +439,20 @@ pre[class*="language"] {
   }
 }
 
-pre[class*="language"] code {
-  background: #fafafa !important;
-}
+html.dark {
+  body {
+    background-color: #121212;
+  }
 
-.dark pre[class*="language"] code {
-  background: #181818 !important;
-}
+  .navbar {
+    background-color: rgba(17, 17, 17, 1);
+  }
 
-.v-f-b {
-  font-family: "Inter Bold";
+  pre[class*="language"] {
+    border: 1px solid #2d2d2d;
+
+    code {
+      background: #181818 !important;
+    }
+  }
 }

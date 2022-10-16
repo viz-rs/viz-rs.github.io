@@ -1,6 +1,8 @@
 use gloo_net::http::Request;
+use std::time::Duration;
 use wasm_bindgen::JsCast;
 use web_sys::HtmlElement;
+use yew::platform::time::sleep;
 use yew::prelude::*;
 use yew::suspense::{use_future_with_deps, Suspense};
 
@@ -13,48 +15,83 @@ pub struct Props {
 
 #[function_component(Content)]
 fn content(props: &Props) -> HtmlResult {
-    let res = use_future_with_deps(
-        |path| async move {
-            let url = format!("/assets/{}.html", path);
-            Request::new(&url).send().await?.text().await
-        },
-        props.path.to_owned(),
-    )?;
-    let result_html = match *res {
-        Ok(ref res) => {
-            if !res.starts_with("<article") {
-                return Ok(html! {
-                    <div class="flex items-center w-full op61.8">{"Not Found!"}</div>
-                });
-            }
-            let document = utils::document();
-            let dark = document
-                .document_element()
-                .unwrap()
-                .class_list()
-                .contains("dark");
-            let div = document.create_element("div").unwrap();
-            div.set_class_name("flex flex-row flex-1");
-            div.set_inner_html(res);
-            if let Ok(nodes) = div.query_selector_all("pre") {
-                for index in 0..nodes.length() {
-                    nodes
-                        .get(index)
-                        .as_ref()
-                        .and_then(|node| node.dyn_ref::<HtmlElement>())
-                        .and_then(|node| {
-                            node.class_list()
-                                .add_1(if dark { "macchiato" } else { "latte" })
-                                .ok()
-                        });
+    let node = use_node_ref();
+    let path = use_state_eq(|| None);
+
+    let onclick = Callback::from(|e: MouseEvent| {
+        if let Some(target) = e.target_dyn_into::<HtmlElement>() {
+            if target
+                .matches("button.i-carbon-copy:not(.text-lime-500)")
+                .unwrap_or(false)
+            {
+                if let Some(next) = target
+                    .next_element_sibling()
+                    .and_then(|node| node.dyn_into::<HtmlElement>().ok())
+                {
+                    wasm_bindgen_futures::spawn_local(async move {
+                        utils::copy(&next.inner_text()).await;
+                        let _ = target.class_list().add_1("text-lime-500");
+                        let _ = target.class_list().remove_1("op-20");
+                        sleep(Duration::from_secs(1)).await;
+                        let _ = target.class_list().add_1("op-20");
+                        let _ = target.class_list().remove_1("text-lime-500");
+                    });
                 }
             }
-            Html::VRef(div.into())
         }
-        Err(ref failure) => failure.to_string().into(),
-    };
+    });
+
+    {
+        let node = node.clone();
+        let path = path.clone();
+        use_effect_with_deps(
+            move |p| {
+                if node.get().is_some() {
+                    path.set(Some(p.to_string()));
+                }
+            },
+            props.path.to_owned(),
+        );
+    }
+
+    {
+        let node = node.clone();
+        let _ = use_future_with_deps(
+            |path| async move {
+                if let Some(p) = path.as_deref() {
+                    let mut url = String::new();
+                    url.push_str("/assets/");
+                    url.push_str(p);
+                    url.push_str(".html");
+                    let res = Request::new(&url).send().await?.text().await?;
+
+                    if let Some(div) = node.cast::<HtmlElement>() {
+                        div.set_inner_html(&res);
+                        if let Ok(nodes) = div.query_selector_all("pre") {
+                            let dark = utils::document_element().class_list().contains("dark");
+                            for index in 0..nodes.length() {
+                                nodes
+                                    .get(index)
+                                    .as_ref()
+                                    .and_then(|node| node.dyn_ref::<HtmlElement>())
+                                    .and_then(|node| {
+                                        node.class_list()
+                                            .add_1(if dark { "macchiato" } else { "latte" })
+                                            .ok()
+                                    });
+                            }
+                        }
+                    }
+                }
+
+                Ok::<(), gloo_net::Error>(())
+            },
+            path,
+        )?;
+    }
+
     Ok(html! {
-        {result_html}
+        <div class="flex flex-row flex-1" ref={node} {onclick}></div>
     })
 }
 

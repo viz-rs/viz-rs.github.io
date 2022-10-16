@@ -1,8 +1,8 @@
 serve:
-  cd frontend; trunk serve --dist ../dist
+  cd frontend; RUSTFLAGS=--cfg=web_sys_unstable_apis trunk serve --dist ../dist
 
 build:
-  cd frontend; trunk build --dist ../dist
+  cd frontend; RUSTFLAGS=--cfg=web_sys_unstable_apis trunk build --release --dist ../dist
 
 en:
   cd tools; cargo run --release --bin viz-rs-tools -- -i en -o ../dist/.stage/assets
