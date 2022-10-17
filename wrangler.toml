@@ -1,2 +1,0 @@
-[site]
-exclude = ["target", "dist"]
