@@ -170,6 +170,18 @@ flex-240 {
   background-color: rgba(255, 255, 255, 1);
 }
 
+.button-arrow {
+  transform: rotate(0);
+  display: inline-block;
+  margin-top: -1px;
+  margin-left: 5px;
+  border-top: 6px solid #ccc;
+  border-right: 4px solid transparent;
+  border-bottom: 0;
+  border-left: 4px solid transparent;
+  vertical-align: middle;
+}
+
 .sidebar {
   width: 240px;
   opacity: 0;
@@ -439,6 +451,26 @@ pre[class*="language"] {
   }
 }
 
+.dropdown-menu {
+  .dropdown-list {
+    display: none;
+    min-width: 8rem;
+    background-color: #ffffff;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #e5e7eb;
+    border-radius: 0.25rem;
+    padding: 12px;
+    line-height: 32px;
+  }
+
+  &:hover {
+    .dropdown-list {
+      display: block;
+    }
+  }
+}
+
 html.dark {
   body {
     background-color: #121212;
@@ -446,6 +478,13 @@ html.dark {
 
   .navbar {
     background-color: rgba(17, 17, 17, 1);
+  }
+
+  .dropdown-menu {
+    .dropdown-list {
+      background-color: rgba(17, 17, 17, 1);
+      border-color: #2d2d2d;
+    }
   }
 
   pre[class*="language"] {

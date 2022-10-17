@@ -64,3 +64,7 @@ pub async fn copy(text: &str) {
         let _ = wasm_bindgen_futures::JsFuture::from(c.write_text(text)).await;
     }
 }
+
+pub fn location() -> web_sys::Location {
+    window().location()
+}

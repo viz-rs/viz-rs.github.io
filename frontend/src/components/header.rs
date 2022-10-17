@@ -69,6 +69,11 @@ impl Component for Header {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
+        let location = utils::location();
+        let hostname = location.hostname().unwrap();
+        let parts = hostname.split('.').collect::<Vec<&str>>();
+        let lang = if parts.len() == 3 { parts[0] } else { "" };
+
         html! {
             <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
                 <div>
@@ -86,7 +91,38 @@ impl Component for Header {
                         {"API"}
                     </a>
                     <a class="transition-colors op75 hover:op100 i-carbon-logo-github" href="https://github.com/viz-rs/viz" target="_blank" rel="noreferrer" />
-                    <butrton class="transition-colors op75 hover:op100 cursor-pointer i-lucide-languages" />
+                    <div class="dropdown-menu op75 hover:op100 cursor-pointer h-7.5 flex justify-center items-center relative">
+                        <button class="flex items-center button">
+                            <span class="inline-block transition-colors i-lucide-languages" />
+                            <span class="button-arrow" />
+                        </button>
+                        <ul class="dropdown-list absolute top-7.5 right--2 text-3.5">
+                            <li>
+                                <a class={classes!(
+                                        "flex",
+                                        "hover:text-yellow-600",
+                                        (lang == "").then(|| Some("text-yellow-600"))
+                                    )}
+                                    data-lang="en"
+                                    href="https://viz.rs"
+                                >
+                                    {"English"}
+                                </a>
+                            </li>
+                            <li>
+                                <a class={classes!(
+                                        "flex",
+                                        "hover:text-yellow-600",
+                                        (lang == "zh-cn").then(|| Some("text-yellow-600"))
+                                    )}
+                                    data-lang="zh-cn"
+                                    href="https://zh-cn.viz.rs"
+                                >
+                                    {"简体中文"}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                     <button class="hover:bg-gray5:2 hover:op100" onclick={ctx.props().toggle_dark.clone()}>
                         <span class="dark:i-carbon-moon i-carbon-sun block" />
                     </button>
