@@ -7,11 +7,11 @@ build-en:
 en:
   cd tools; cargo run --release --bin viz-rs-tools -- -i en -o ../dist/.stage/assets
 
-serve-zh:
-  cd frontend; RUSTFLAGS=--cfg=web_sys_unstable_apis trunk --config Trunk.zh.toml serve --dist ../dist
+serve-zh-cn:
+  cd frontend; RUSTFLAGS=--cfg=web_sys_unstable_apis trunk --config Trunk.zh-cn.toml serve --dist ../dist
 
-build-zh:
-  cd frontend; RUSTFLAGS=--cfg=web_sys_unstable_apis trunk --config Trunk.zh.toml build --release --dist ../dist
+build-zh-cn:
+  cd frontend; RUSTFLAGS=--cfg=web_sys_unstable_apis trunk --config Trunk.zh-cn.toml build --release --dist ../dist
 
-zh:
-  cd tools; cargo run --release --bin viz-rs-tools -- -i zh -o ../dist/.stage/assets
+zh-cn:
+  cd tools; cargo run --release --bin viz-rs-tools -- -i zh-cn -o ../dist/.stage/assets

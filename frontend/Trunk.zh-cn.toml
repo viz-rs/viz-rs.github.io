@@ -16,10 +16,10 @@ command_arguments = [
 stage = "post_build"
 command = "just"
 command_arguments = [
-  "zh",
+  "zh-cn",
 ]
 
 [watch]
 paths = [
-  "../zh"
+  "../zh-cn"
 ]
