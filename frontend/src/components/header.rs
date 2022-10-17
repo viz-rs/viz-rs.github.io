@@ -71,6 +71,7 @@ impl Component for Header {
     fn view(&self, ctx: &Context<Self>) -> Html {
         let location = utils::location();
         let hostname = location.hostname().unwrap();
+        let pathname = location.pathname().unwrap();
         let parts = hostname.split('.').collect::<Vec<&str>>();
         let lang = if parts.len() == 3 { parts[0] } else { "" };
 
@@ -104,7 +105,7 @@ impl Component for Header {
                                         (lang == "").then(|| Some("text-yellow-600"))
                                     )}
                                     data-lang="en"
-                                    href="https://viz.rs"
+                                    href={format!("https://viz.rs{}", pathname)}
                                 >
                                     {"English"}
                                 </a>
@@ -116,7 +117,7 @@ impl Component for Header {
                                         (lang == "zh-cn").then(|| Some("text-yellow-600"))
                                     )}
                                     data-lang="zh-cn"
-                                    href="https://zh-cn.viz.rs"
+                                    href={format!("https://zh-cn.viz.rs{}", pathname)}
                                 >
                                     {"简体中文"}
                                 </a>
