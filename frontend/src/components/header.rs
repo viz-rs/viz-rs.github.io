@@ -91,11 +91,11 @@ impl Component for Header {
                     <a class="transition-colors op75 hover:op100" href="https://docs.rs/viz/latest/viz" target="_blank" rel="noreferrer">
                         {"API"}
                     </a>
-                    <a class="transition-colors op75 hover:op100 i-carbon-logo-github" href="https://github.com/viz-rs/viz" target="_blank" rel="noreferrer" />
+                    <a class="transition-colors op75 hover:op100 i-lucide-github" href="https://github.com/viz-rs/viz" target="_blank" rel="noreferrer" />
                     <div class="dropdown-menu op75 hover:op100 cursor-pointer h-7.5 flex justify-center items-center relative">
                         <button class="flex items-center button">
                             <span class="inline-block transition-colors i-lucide-languages" />
-                            <span class="button-arrow" />
+                            <span class="i-lucide-chevron-down" />
                         </button>
                         <ul class="dropdown-list absolute top-7.5 right--2 text-3.5">
                             <li>
@@ -125,7 +125,7 @@ impl Component for Header {
                         </ul>
                     </div>
                     <button class="hover:bg-gray5:2 hover:op100" onclick={ctx.props().toggle_dark.clone()}>
-                        <span class="dark:i-carbon-moon i-carbon-sun block" />
+                        <span class="dark:i-lucide-moon i-lucide-sun block" />
                     </button>
                 </div>
             </header>

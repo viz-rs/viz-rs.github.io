@@ -3,24 +3,28 @@ import {
   presetAttributify,
   presetIcons,
   presetUno,
-} from 'unocss'
+} from "unocss";
 
 export default defineConfig({
-  rules: [
-  ],
+  rules: [],
   shortcuts: {},
   preflights: [
     {
-      getCSS: ({ theme }) => `
-      `
-    }
+      getCSS: ({ theme: _ }) => `
+      `,
+    },
   ],
   presets: [
     presetUno(),
     presetAttributify(),
     presetIcons({
       // scale: 1.2,
-      cdn: 'https://esm.sh/'
+      cdn: "https://esm.sh/",
+      customizations: {
+        iconCustomizer(_collection, _icon, props) {
+          props["stroke-width"] = '1';
+        },
+      },
     }),
-  ]
-})
+  ],
+});

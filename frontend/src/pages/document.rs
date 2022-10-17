@@ -21,7 +21,7 @@ fn content(props: &Props) -> HtmlResult {
     let onclick = Callback::from(|e: MouseEvent| {
         if let Some(target) = e.target_dyn_into::<HtmlElement>() {
             if target
-                .matches("button.i-carbon-copy:not(.text-lime-500)")
+                .matches("button.i-lucide-copy:not(.text-lime-500)")
                 .unwrap_or(false)
             {
                 if let Some(next) = target
@@ -99,7 +99,7 @@ fn content(props: &Props) -> HtmlResult {
 pub fn doc(props: &Props) -> Html {
     let fallback = html! {
         <div class="flex items-center w-full op61.8">
-            <div class="i-carbon-circle-dash w-6 h-6 animate-spin" />
+            <div class="i-lucide-loader w-6 h-6 animate-spin" />
         </div>
     };
 
