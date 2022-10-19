@@ -51,7 +51,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
       - run: |
-          cd frontend && npm i
+          cd app && npm i
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@v1  
