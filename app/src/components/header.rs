@@ -84,7 +84,7 @@ impl Component for Header {
                         {"iz"}
                     </Link<Route>>
                 </div>
-                <div class="flex-row items-center gap-5">
+                <div class="flex-row items-center gap-5 text-4">
                     <Link<Route> classes="transition-colors op75 hover:op100" to={Route::Document { path: "guide/introduction".to_string() }}>
                         {METADATA.docs}
                     </Link<Route>>
