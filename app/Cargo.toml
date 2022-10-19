@@ -1,9 +1,13 @@
 [package]
-name = "viz-rs-frontend"
+name = "app"
 authors.workspace = true
 edition.workspace = true
 homepage.workspace = true
 version.workspace = true
+
+[features]
+en = []
+zh-cn = []
 
 [dependencies]
 yew = { git = "https://github.com/yewstack/yew.git", branch = "master", features = ["csr"] }
@@ -15,3 +19,4 @@ log = "0.4.17"
 console_error_panic_hook = "0.1.7"
 web-sys = { version = "0.3.60", features = ["InputEvent", "KeyboardEvent", "Location", "Storage", "MediaQueryList", "MediaQueryListEvent", "Window", "Element", "DomTokenList", "Event", "HtmlAnchorElement", "Clipboard", "Navigator"] }
 gloo-net = "0.2.4"
+once_cell = "1.15.0"

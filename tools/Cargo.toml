@@ -1,9 +1,13 @@
 [package]
-name = "viz-rs-tools"
+name = "tools"
 authors.workspace = true
 edition.workspace = true
 homepage.workspace = true
 version.workspace = true
+
+[features]
+en = []
+zh-cn = []
 
 [dependencies]
 anyhow = "1.0.65"

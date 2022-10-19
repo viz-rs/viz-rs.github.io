@@ -1,5 +1,5 @@
 [build]
-target = "index.html"
+target = "index.zh-cn.html"
 dist = "dist"
 
 [[hooks]]

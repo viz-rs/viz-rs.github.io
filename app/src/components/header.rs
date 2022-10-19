@@ -3,7 +3,7 @@ use web_sys::HtmlAnchorElement;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::{utils, Msg, Route};
+use crate::{utils, Msg, Route, METADATA};
 
 #[derive(Clone, Debug, PartialEq, Properties)]
 pub struct Props {
@@ -86,7 +86,7 @@ impl Component for Header {
                 </div>
                 <div class="flex-row items-center gap-5">
                     <Link<Route> classes="transition-colors op75 hover:op100" to={Route::Document { path: "guide/introduction".to_string() }}>
-                        {"Docs"}
+                        {METADATA.docs}
                     </Link<Route>>
                     <a class="transition-colors op75 hover:op100" href="https://docs.rs/viz/latest/viz" target="_blank" rel="noreferrer">
                         {"API"}

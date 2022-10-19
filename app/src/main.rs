@@ -1,14 +1,29 @@
 use std::rc::Rc;
 
+use once_cell::sync::Lazy;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{HtmlElement, MediaQueryList, MediaQueryListEvent};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
 mod components;
+mod i18n;
 mod pages;
 
 pub mod utils;
+
+#[derive(Debug)]
+pub struct Metadata {
+    pub title: &'static str,
+    pub description: &'static str,
+    pub note: &'static str,
+    pub docs: &'static str,
+    pub build_with: &'static str,
+    pub deploys_on: &'static str,
+    pub get_started: &'static str
+}
+
+pub static METADATA: Lazy<Metadata> = Lazy::new(i18n::metadata);
 
 #[derive(Routable, PartialEq, Eq, Clone, Debug)]
 pub enum Route {

@@ -1,7 +1,7 @@
 [workspace]
 members = [
+  "app",
   "tools",
-  "frontend",
 ]
 
 [workspace.package]
@@ -17,4 +17,4 @@ codegen-units = 1
 opt-level = 'z'
 lto = true
 
-[workspace.metadata.frontend]
+[workspace.metadata.app]
