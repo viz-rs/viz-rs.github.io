@@ -16,6 +16,7 @@
 .absolute{position:absolute;}
 .fixed{position:fixed;}
 .relative{position:relative;}
+.static{position:static;}
 .bottom-0{bottom:0rem;}
 .right--2{right:-0.5rem;}
 .right-2{right:0.5rem;}
