@@ -20,7 +20,7 @@ pub struct Metadata {
     pub docs: &'static str,
     pub build_with: &'static str,
     pub deploys_on: &'static str,
-    pub get_started: &'static str
+    pub get_started: &'static str,
 }
 
 pub static METADATA: Lazy<Metadata> = Lazy::new(i18n::metadata);
@@ -103,6 +103,7 @@ impl Component for App {
             dark,
             sidebar: false,
             mql,
+            #[cfg(all(feature = "en", not(feature = "zh-cn")))]
             sections: Rc::new(vec![
                 Section {
                     text: "Get Started".to_string(),
@@ -131,7 +132,6 @@ impl Component for App {
                         ("Handlers".to_string(), "handlers".to_string()),
                         ("Middleware".to_string(), "middleware".to_string()),
                         ("Extractors".to_string(), "extractors".to_string()),
-                        ("Server".to_string(), "server".to_string()),
                         ("TLS".to_string(), "tls".to_string()),
                     ],
                 },
@@ -143,6 +143,49 @@ impl Component for App {
                         ("Examples".to_string(), "examples".to_string()),
                         ("Extractors".to_string(), "extractors".to_string()),
                         ("Showcase".to_string(), "showcase".to_string()),
+                    ],
+                },
+            ]),
+            #[cfg(all(feature = "zh-cn", not(feature = "en")))]
+            sections: Rc::new(vec![
+                Section {
+                    text: "开始".to_string(),
+                    prefix: "guide/".to_string(),
+                    items: vec![
+                        ("介绍".to_string(), "introduction".to_string()),
+                        ("快速上手".to_string(), "quick-start".to_string()),
+                    ],
+                },
+                Section {
+                    text: "概念".to_string(),
+                    prefix: "concepts/".to_string(),
+                    items: vec![
+                        ("请求处理".to_string(), "handler".to_string()),
+                        ("中间件".to_string(), "middleware".to_string()),
+                        ("路由".to_string(), "routing".to_string()),
+                        ("提取器".to_string(), "extractors".to_string()),
+                        ("服务".to_string(), "server".to_string()),
+                        ("错误处理".to_string(), "error-handling".to_string()),
+                    ],
+                },
+                Section {
+                    text: "内建组件".to_string(),
+                    prefix: "built-in/".to_string(),
+                    items: vec![
+                        ("处理函数".to_string(), "handlers".to_string()),
+                        ("中间件".to_string(), "middleware".to_string()),
+                        ("提取器".to_string(), "extractors".to_string()),
+                        ("TLS".to_string(), "tls".to_string()),
+                    ],
+                },
+                Section {
+                    text: "进阶主题".to_string(),
+                    prefix: "extra-topics/".to_string(),
+                    items: vec![
+                        ("性能测试".to_string(), "benchmarks".to_string()),
+                        ("例子".to_string(), "examples".to_string()),
+                        ("提取器".to_string(), "extractors".to_string()),
+                        ("产品示例".to_string(), "showcase".to_string()),
                     ],
                 },
             ]),
@@ -230,7 +273,7 @@ impl Component for App {
 
         html! {
             <BrowserRouter>
-                <div id="app">
+                <div id="app" class="tracking-0.2px">
                     <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
 
                     <div class="page-container flex-row pt-4.375rem">
