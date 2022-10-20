@@ -1,23 +1,20 @@
 # 快速上手
 
-## Cargo
+## 创建一个 Cargo 项目
 
-```toml
-[package]
-name = "hello-world"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-viz = { version = "0.4.2" }
-
-tokio = { version = "1.0", features = [
-  "rt-multi-thread",
-  "macros",
-] }
+```bash
+> cargo new app
 ```
 
-## Main
+## 安装 Viz 和 Tokio
+
+```bash
+> cd app
+> cargo add viz
+> cargo add tokio
+```
+
+## 编写 main
 
 ```rust
 use std::net::SocketAddr;
@@ -43,4 +40,10 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
+```
+
+## 运行测试
+
+```bash
+> cargo run -- --nocaputre
 ```

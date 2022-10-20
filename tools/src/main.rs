@@ -249,6 +249,13 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
                 Some(event)
             }
         }
+        Event::Code(ref text) => {
+            let mut code = String::new();
+            code.push_str("<code>");
+            code.push_str(text);
+            code.push_str("</code>");
+            Some(Event::Html(CowStr::from(code)))
+        }
         _ => Some(event),
     });
 

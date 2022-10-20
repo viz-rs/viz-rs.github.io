@@ -1,23 +1,20 @@
 # Quick Start
 
-## Cargo
+## Create a cargo project
 
-```toml
-[package]
-name = "hello-world"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-viz = { version = "0.4.2" }
-
-tokio = { version = "1.0", features = [
-  "rt-multi-thread",
-  "macros",
-] }
+```bash
+> cargo new app
 ```
 
-## Main
+## Install Viz and Tokio
+
+```bash
+> cd app
+> cargo add viz
+> cargo add tokio
+```
+
+## Edit main
 
 ```rust
 use std::net::SocketAddr;
@@ -43,4 +40,10 @@ async fn main() -> Result<()> {
 
     Ok(())
 }
+```
+
+## Run and test
+
+```bash
+> cargo run -- --nocaputre
 ```

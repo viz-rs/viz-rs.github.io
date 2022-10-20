@@ -35,9 +35,10 @@ async fn main() -> Result<()> {
 ```
 
 ```bash
-$ curl 127.0.0.1:3000
+> curl 127.0.0.1:3000
 # Hello, World!
 ```
 
+[Rust]: https://rust-lang.org/
 [Tokio]: https://tokio.rs/
 [Hyper]: https://hyper.rs/
