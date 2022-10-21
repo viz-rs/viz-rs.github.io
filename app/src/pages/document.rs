@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::collections::BTreeMap;
+use std::ops::Index;
 use std::rc::Rc;
 use std::time::Duration;
 
@@ -24,7 +24,7 @@ pub struct Props {
 fn content(props: &Props) -> HtmlResult {
     let node = use_node_ref();
     let path = use_state_eq(|| None);
-    let toc: Rc<RefCell<BTreeMap<String, bool>>> = use_mut_ref(|| BTreeMap::new());
+    let toc: Rc<RefCell<Vec<(String, bool)>>> = use_mut_ref(|| Vec::new());
 
     let onclick = Callback::from(|e: MouseEvent| {
         if let Some(target) = e.target_dyn_into::<HtmlElement>() {
@@ -72,7 +72,9 @@ fn content(props: &Props) -> HtmlResult {
                         for e in es {
                             let id = e.target().id();
                             let is_intersecting = e.is_intersecting();
-                            toc.borrow_mut().insert(id, is_intersecting);
+                            if let Some(t) = toc.borrow_mut().iter_mut().find(|t| t.0 == id) {
+                                t.1 = is_intersecting;
+                            }
                         }
 
                         if let Some(k) = toc
@@ -170,7 +172,7 @@ fn content(props: &Props) -> HtmlResult {
                                     .as_ref()
                                     .and_then(|node| node.dyn_ref::<Element>())
                                     .map(|node| {
-                                        toc.borrow_mut().remove(&node.id());
+                                        toc.borrow_mut().retain(|(id, _)| id == &node.id());
                                         ob.unobserve(node);
                                     });
                             }
@@ -183,7 +185,7 @@ fn content(props: &Props) -> HtmlResult {
                                     .as_ref()
                                     .and_then(|node| node.dyn_ref::<HtmlElement>())
                                     .map(|node| {
-                                        toc.borrow_mut().insert(node.id(), false);
+                                        toc.borrow_mut().push((node.id(), false));
                                         ob.observe(node);
                                     });
                             }
