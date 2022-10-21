@@ -1,5 +1,4 @@
 use std::cell::RefCell;
-use std::ops::Index;
 use std::rc::Rc;
 use std::time::Duration;
 
