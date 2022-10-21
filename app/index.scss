@@ -298,18 +298,24 @@ flex-240 {
     width: 240px;
     padding: 1.25rem;
 
-    a {
+    ul {
+      --top: 0px;
       position: relative;
 
-      &.active::before {
+      &::after {
         position: absolute;
         left: -10px;
         top: 2px;
         content: "";
         height: 20px;
         width: 4px;
-        background-color: rgba(202, 138, 4, 0.382);
+        // background-color: rgba(253, 224, 71, 1);
+        background-color: rgba(250, 204, 21, 1);
+        // background-color: rgba(234, 179, 8, 1);
         border-radius: 4px;
+        transform: translate(0, var(--top));
+        transition: transform 0.25s cubic-bezier(0, 1, 0.5, 1), opacity 0.25s,
+          background-color 0.5s;
       }
     }
   }

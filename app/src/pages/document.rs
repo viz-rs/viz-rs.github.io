@@ -82,43 +82,59 @@ fn content(props: &Props) -> HtmlResult {
                             .filter_map(|(k, v)| if *v { Some(k) } else { None })
                             .next()
                         {
-                            if let Ok(nodes) = document().query_selector_all("#page nav a") {
-                                for index in 0..nodes.length() {
-                                    nodes
-                                        .get(index)
-                                        .as_ref()
-                                        .and_then(|node| node.dyn_ref::<HtmlAnchorElement>())
-                                        .map(|node| {
-                                            log::info!(
-                                                "{} {}",
-                                                node.href().trim_start_matches('#'),
-                                                &k
-                                            );
-                                            if node
-                                                .get_attribute("href")
-                                                .unwrap()
-                                                .trim_start_matches('#')
-                                                == k
-                                            {
-                                                if !node.class_list().contains("active") {
-                                                    let _ = node.class_list().add_1("active");
-                                                }
-                                            } else {
-                                                if node.class_list().contains("active") {
-                                                    let _ = node.class_list().remove_1("active");
-                                                }
+                            let document = document();
+                            let mut not_find = true;
+                            if let Some(node) =
+                                document.query_selector("#page nav a.active").unwrap_throw()
+                            {
+                                if let Some(element) = node.dyn_ref::<HtmlAnchorElement>() {
+                                    if element
+                                        .get_attribute("href")
+                                        .unwrap()
+                                        .trim_start_matches('#')
+                                        != k
+                                    {
+                                        let _ = element.class_list().remove_1("active");
+                                    } else {
+                                        not_find = false;
+                                    }
+                                }
+                            }
+
+                            if not_find {
+                                let mut selector = String::new();
+                                selector.push_str("#page nav a[href='#");
+                                selector.push_str(k);
+                                selector.push_str("']");
+
+                                if let Some(node) =
+                                    document.query_selector(&selector).unwrap_throw()
+                                {
+                                    if let Some(element) = node.dyn_ref::<HtmlAnchorElement>() {
+                                        let _ = element.class_list().add_1("active");
+
+                                        let top = element.offset_top();
+
+                                        if let Some(node) =
+                                            document.query_selector("#page nav ul").unwrap_throw()
+                                        {
+                                            if let Some(element) = node.dyn_ref::<HtmlElement>() {
+                                                let mut value = String::new();
+                                                value.push_str(&top.to_string());
+                                                value.push_str("px");
+                                                let _ =
+                                                    element.style().set_property("--top", &value);
                                             }
-                                        });
+                                        }
+                                    }
                                 }
                             }
                         }
                     });
 
-                log::info!("233");
                 let mut options = IntersectionObserverInit::new();
 
                 let root = document().query_selector("#page article").unwrap();
-                log::info!("377 {:?}", &root);
                 options.root(root.as_ref());
 
                 let ob =
@@ -148,7 +164,6 @@ fn content(props: &Props) -> HtmlResult {
 
                     if let Some(div) = node.cast::<HtmlElement>() {
                         if let Ok(nodes) = div.query_selector_all("h2") {
-                            log::info!("0 {}", nodes.length());
                             for index in 0..nodes.length() {
                                 nodes
                                     .get(index)
@@ -162,14 +177,12 @@ fn content(props: &Props) -> HtmlResult {
                         }
                         div.set_inner_html(&res);
                         if let Ok(nodes) = div.query_selector_all("h2") {
-                            log::info!("1 {}", nodes.length() as usize);
                             for index in 0..nodes.length() {
                                 nodes
                                     .get(index)
                                     .as_ref()
                                     .and_then(|node| node.dyn_ref::<HtmlElement>())
                                     .map(|node| {
-                                        log::info!("1 node {:?}", &node);
                                         toc.borrow_mut().insert(node.id(), false);
                                         ob.observe(node);
                                     });
