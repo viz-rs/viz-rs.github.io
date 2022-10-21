@@ -296,6 +296,22 @@ flex-240 {
     top: 90px;
     align-self: flex-start;
     width: 240px;
+    padding: 1.25rem;
+
+    a {
+      position: relative;
+
+      &.active::before {
+        position: absolute;
+        left: -10px;
+        top: 2px;
+        content: "";
+        height: 20px;
+        width: 4px;
+        background-color: rgba(202, 138, 4, 0.382);
+        border-radius: 4px;
+      }
+    }
   }
 }
 
