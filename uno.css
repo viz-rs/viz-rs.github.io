@@ -67,6 +67,7 @@
 .dark .dark\:bg-neutral-100{--un-bg-opacity:1;background-color:rgba(245,245,245,var(--un-bg-opacity));}
 .hover\:bg-gray5\:2:hover{background-color:rgba(107,114,128,0.02);}
 .p-5{padding:1.25rem;}
+.px{padding-left:1rem;padding-right:1rem;}
 .px-4\.5{padding-left:1.125rem;padding-right:1.125rem;}
 .px-5{padding-left:1.25rem;padding-right:1.25rem;}
 .py-1{padding-top:0.25rem;padding-bottom:0.25rem;}
