@@ -2,10 +2,10 @@
 
 ## 基础特征
 
-在 Viz 中，定义了一个特征 [`Handler`][handler] 来处理请求，它的接口非常简单，只有一个输入和一个输出，
+在 Viz 中，定义了一个特征 [`Handler`] 来处理请求，它的接口非常简单，只有一个输入和一个输出，
 内部也对异步函数实现了该特征，所以可以轻松地构建异步处理。
 
-下面是 [`Handler`][handler] 的定义：
+下面是 [`Handler`] 的定义：
 
 ```rust
 #[async_trait]
@@ -19,7 +19,7 @@ pub trait Handler<Input>: dyn_clone::DynClone + Send + Sync + 'static {
 
 ### 一个简单的异步处理函数
 
-其中输入 [`Request`][request]，输出 Result<[`Response`][response]>。
+其中输入 [`Request`]，输出 Result<[`Response`]>。
 
 ```rust
 async fn index(_: Request) -> Result<Response> {
@@ -27,9 +27,9 @@ async fn index(_: Request) -> Result<Response> {
 }
 ```
 
-### 高级自定义
+### 支持自定义类型
 
-当然也可以通过自定义类型，实现 [`Handler`][handler] 特征来构造处理请求。
+通过自定义类型，实现 [`Handler`] 特征来构造处理请求。
 
 ```rust
 #[derive(Clone)]
@@ -51,6 +51,9 @@ impl Handler<Request> for MyHandler {
 
 ## 扩展特征
 
-[handler]: https://docs.rs/viz/latest/viz/trait.Handler.html
-[request]: https://docs.rs/viz/latest/viz/type.Request.html
-[response]: https://docs.rs/viz/latest/viz/type.Response.html
+[`HandlerExt`] 是对 [`Handler`] 的扩展，它提供了方便的适配器，通过链式和组合的方式去构建请求函数。
+
+[`Handler`]: https://docs.rs/viz/latest/viz/trait.Handler.html
+[`HandlerExt`]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html
+[`Request`]: https://docs.rs/viz/latest/viz/type.Request.html
+[`Response`]: https://docs.rs/viz/latest/viz/type.Response.html
