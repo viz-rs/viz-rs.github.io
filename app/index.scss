@@ -239,8 +239,12 @@ flex-240 {
     }
 
     h3 {
-      margin-top: 2rem;
+      margin: 3rem 0 1.25rem;
       font-size: 1.35rem;
+    }
+
+    h2 + h3 {
+      margin-top: 0;
     }
 
     a {
@@ -296,7 +300,7 @@ flex-240 {
     top: 90px;
     align-self: flex-start;
     width: 240px;
-    padding: 1.25rem;
+    padding: auto 1.25rem;
 
     ul {
       --top: 0px;

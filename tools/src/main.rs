@@ -230,11 +230,7 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
             let mut div = String::new();
             div.push_str("<div class='code'>");
             div.push_str("<button class='i-lucide-copy transition w-4 h-4 select-none absolute top-4 right-2 op-20 hover:op-80'></button>");
-            div.push_str("<pre class=language-");
-            div.push_str(lang);
-            div.push_str("><code>");
             div.push_str(&languages.render(lang, code.as_bytes()).unwrap_or(code));
-            div.push_str("</code></pre>");
             div.push_str("</div>");
             Some(Event::Html(CowStr::from(div)))
         }

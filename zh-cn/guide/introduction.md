@@ -38,6 +38,10 @@ async fn main() -> Result<()> {
 # Hello, World!
 ```
 
+## 为什么取名 Viz？
+
+我的愿景是用可视化的方式去构建应用。
+
 [Rust]: https://rust-lang.org/
 [Tokio]: https://tokio.rs/
 [Hyper]: https://hyper.rs/
