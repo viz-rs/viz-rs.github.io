@@ -1,11 +1,9 @@
-use std::cell::RefCell;
-use std::rc::Rc;
 use std::time::Duration;
 
 use gloo_net::http::Request;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{
-    Element, HtmlAnchorElement, HtmlElement, IntersectionObserver, IntersectionObserverEntry,
+    HtmlAnchorElement, HtmlElement, IntersectionObserver, IntersectionObserverEntry,
     IntersectionObserverInit,
 };
 use yew::platform::time::sleep;
@@ -23,7 +21,7 @@ pub struct Props {
 fn content(props: &Props) -> HtmlResult {
     let node = use_node_ref();
     let path = use_state_eq(|| None);
-    let toc: Rc<RefCell<Vec<(String, bool)>>> = use_mut_ref(|| Vec::new());
+    let toc = use_mut_ref(|| Vec::<(String, bool)>::new());
 
     let onclick = Callback::from(|e: MouseEvent| {
         if let Some(target) = e.target_dyn_into::<HtmlElement>() {
@@ -85,20 +83,16 @@ fn content(props: &Props) -> HtmlResult {
                         {
                             let document = document();
                             let mut not_find = true;
-                            if let Some(node) =
-                                document.query_selector("#page nav a.active").unwrap_throw()
+                            if let Some(node) = document
+                                .query_selector("#page nav a.active")
+                                .unwrap_throw()
+                                .and_then(|node| node.dyn_into::<HtmlAnchorElement>().ok())
                             {
-                                if let Some(element) = node.dyn_ref::<HtmlAnchorElement>() {
-                                    if element
-                                        .get_attribute("href")
-                                        .unwrap()
-                                        .trim_start_matches('#')
-                                        != k
-                                    {
-                                        let _ = element.class_list().remove_1("active");
-                                    } else {
-                                        not_find = false;
-                                    }
+                                if node.get_attribute("href").unwrap().trim_start_matches('#') != k
+                                {
+                                    let _ = node.class_list().remove_1("active");
+                                } else {
+                                    not_find = false;
                                 }
                             }
 
@@ -108,25 +102,23 @@ fn content(props: &Props) -> HtmlResult {
                                 selector.push_str(k);
                                 selector.push_str("']");
 
-                                if let Some(node) =
-                                    document.query_selector(&selector).unwrap_throw()
+                                if let Some(node) = document
+                                    .query_selector(&selector)
+                                    .unwrap_throw()
+                                    .and_then(|node| node.dyn_into::<HtmlAnchorElement>().ok())
                                 {
-                                    if let Some(element) = node.dyn_ref::<HtmlAnchorElement>() {
-                                        let _ = element.class_list().add_1("active");
+                                    let _ = node.class_list().add_1("active");
+                                    let top = node.offset_top();
 
-                                        let top = element.offset_top();
-
-                                        if let Some(node) =
-                                            document.query_selector("#page nav ul").unwrap_throw()
-                                        {
-                                            if let Some(element) = node.dyn_ref::<HtmlElement>() {
-                                                let mut value = String::new();
-                                                value.push_str(&top.to_string());
-                                                value.push_str("px");
-                                                let _ =
-                                                    element.style().set_property("--top", &value);
-                                            }
-                                        }
+                                    if let Some(node) = document
+                                        .query_selector("#page nav ul")
+                                        .unwrap_throw()
+                                        .and_then(|node| node.dyn_into::<HtmlElement>().ok())
+                                    {
+                                        let mut value = String::new();
+                                        value.push_str(&top.to_string());
+                                        value.push_str("px");
+                                        let _ = node.style().set_property("--top", &value);
                                     }
                                 }
                             }
@@ -135,7 +127,7 @@ fn content(props: &Props) -> HtmlResult {
 
                 let mut options = IntersectionObserverInit::new();
 
-                let root = document().query_selector("#page article").unwrap();
+                let root = document().query_selector("#page article").unwrap_throw();
                 options.root(root.as_ref());
 
                 let ob =
@@ -169,7 +161,7 @@ fn content(props: &Props) -> HtmlResult {
                                 nodes
                                     .get(index)
                                     .as_ref()
-                                    .and_then(|node| node.dyn_ref::<Element>())
+                                    .and_then(|node| node.dyn_ref::<HtmlElement>())
                                     .map(|node| {
                                         toc.borrow_mut().retain(|(id, _)| id == &node.id());
                                         ob.unobserve(node);
