@@ -20,6 +20,4 @@ command_arguments = [
 ]
 
 [watch]
-paths = [
-  "../en",
-]
+watch = ["index.scss", "../en"]
