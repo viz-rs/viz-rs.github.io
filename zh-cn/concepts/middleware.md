@@ -34,10 +34,10 @@ pub type Next<I, H> = (I, H);
 
 ```rust
 #[derive(Clone)]
-struct MyMiddlewarre;
+struct MyMiddleware;
 
 #[async_trait]
-impl<H> Handler<Next<Request, H>> for MyMiddlewarre
+impl<H> Handler<Next<Request, H>> for MyMiddleware
 where
     H: Handler<Request, Output = Result<Response>> + Clone,
 {
