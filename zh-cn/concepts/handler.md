@@ -3,7 +3,7 @@
 ## 基础特征
 
 在 Viz 中，定义了一个基础特征 [`Handler`] 来处理请求，它的接口非常简单，只有一个输入和一个输出，
-内部也对异步函数实现了该特征，所以可以轻松地构建异步处理。
+内部已对异步函数实现了该特征，所以可以轻松地构建异步处理。
 
 下面是 [`Handler`] 的定义：
 
@@ -51,7 +51,7 @@ impl Handler<Request> for MyHandler {
 
 ## 扩展特征
 
-[`HandlerExt`] 是对 [`Handler`] 的扩展，提供了各种方便的适配器，通过链式和组合的方式去构建请求函数。
+[`HandlerExt`] 是对 [`Handler`] 的扩展，提供了各种方便的适配器，通过链式和组合的方式去构造请求处理。
 
 以下是扩展方法列表：
 
@@ -68,8 +68,8 @@ impl Handler<Request> for MyHandler {
 | [`or_err`][method.or_err]                       | 在执行 `handler` 后，添加一个操作来处理错误结果    |
 | [`catch_error`][method.catch_error]             | 在执行 `handler` 时，捕获错误信息并处理            |
 | [`catch_unwind`][method.catch_unwind]           | 在执行 `handler` 时，捕获错误信息并阻止 `panic`    |
-| [`with`][method.with]                           | 用一个实现 [`Transform`] 特征的类型包裹 `handler`      |
-| [`with_fn`][method.with_fn]                     | 添加一个操作对 `handler` 进行处理                  |
+| [`with`][method.with]                           | 用一个实现 [`Transform`] 特征的类型包裹 `handler`  |
+| [`with_fn`][method.with_fn]                     | 添加一个操作，对 `handler` 进行处理或者转换        |
 
 > 这里先简单介绍下，在路由章节会详细展开
 
