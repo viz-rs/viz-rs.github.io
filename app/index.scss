@@ -521,6 +521,10 @@ pre[class*="language"] {
       .label {
         color: #{map-get($color, "sapphire")};
       }
+
+      .comment {
+        color: #{map-get($color, "surface2")};
+      }
     }
   }
 }
