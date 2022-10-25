@@ -248,7 +248,10 @@ fn parse(languages: &Languages, path: &Path) -> Result<Document> {
         Event::Code(ref text) => {
             let mut code = String::new();
             code.push_str("<code>");
-            code.push_str(text);
+            // code.push_str(text);
+            let mut inline_html = String::new();
+            push_html(&mut inline_html, MarkParser::new(text));
+            code.push_str(inline_html.trim_start_matches("<p>").trim_end_matches("</p>").trim());
             code.push_str("</code>");
             Some(Event::Html(CowStr::from(code)))
         }
