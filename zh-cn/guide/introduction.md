@@ -18,7 +18,7 @@ async fn index(_: Request) -> Result<&'static str> {
 #[tokio::main]
 async fn main() -> Result<()> {
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
-    println!("listening on {}", addr);
+    println!("listening on {addr}");
 
     let app = Router::new().get("/", index);
 
@@ -26,7 +26,7 @@ async fn main() -> Result<()> {
         .serve(ServiceMaker::from(app))
         .await
     {
-        println!("{}", err);
+        println!("{err}");
     }
 
     Ok(())
@@ -44,11 +44,10 @@ async fn main() -> Result<()> {
 
 ## 关于 Logo
 
-取自围棋棋盘的一角，点和线纵横交错，无线延伸；视觉和逻辑交织，充满想象；也像一条轻灵的鱼，
-助我们的开发如鱼得水，体验流畅。
+取自围棋棋盘的一角，点和线纵横交错，无线延伸；视觉和逻辑交织，充满想象；也像一条轻灵的鱼， 助我们的开发如鱼得水，体验流畅。
 
 > 目前的设计还很朴素，不够醒目。
 
-[Rust]: https://rust-lang.org/
-[Tokio]: https://tokio.rs/
-[Hyper]: https://hyper.rs/
+[rust]: https://rust-lang.org/
+[tokio]: https://tokio.rs/
+[hyper]: https://hyper.rs/
