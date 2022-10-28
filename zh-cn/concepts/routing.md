@@ -14,6 +14,23 @@
 
 - [`Router`]：是对 [`Route`]、[`Resources`]、嵌套路由，中间件的管理和维护。
 
+## 路径参数
+
+得益于 [`path-tree`] 提供的支持，在路径中，可以通过 `:` 来添加参数，`?` `\+` `\*` 用来设置参数类型。
+
+| 模式                          | 规则                                             |
+| ----------------------------- | ------------------------------------------------ |
+| `:name`                       | 匹配除 `/` 以外的字符                            |
+| `:name?`                      | 匹配除 `/` 以外的字符，可选                      |
+| `/:name?/` `/:name?`          | 匹配以 `/` 开头或结尾，但除 `/` 以外的字符，可选 |
+| `\+` `:name\+`                | 匹配长度 > 0 的字符串                            |
+| `\*` `:name\*`                | 匹配长度 >= 0 的字符串                           |
+| `/\*/` `/:name\*/` `/:name\*` | 匹配以 `/` 开头或结尾，且长度 >= 0 的字符串      |
+
+后续可以通过 [`Params\<T\>`] 提取器对参数进行提取。
+
+> 同时也支持**连续参数**和参数之间穿插特殊字符进行分割。
+
 ## 方法路由
 
 使用 HTTP 方法添加路由。支持以下方法：
@@ -189,14 +206,15 @@ let routes = Router::new()
   .with_handler(middle_fn);
 ```
 
-## 例子 
+## 例子
 
-* [Todos]
+- [Todos]
 
 [`path-tree`]: https://github.com/viz-rs/path-tree
 [前缀树]: https://en.wikipedia.org/wiki/Trie
 [`route`]: https://docs.rs/viz/latest/viz/struct.Route.html
 [`resources`]: https://docs.rs/viz/latest/viz/struct.Resources.html
+[`Params\<T\>`]: https://docs.rs/viz/latest/viz/types/struct.Params.html
 [`router`]: https://docs.rs/viz/latest/viz/struct.Router.html
 [`method`]: https://docs.rs/viz/latest/viz/struct.Method.html
 [`handler`]: https://docs.rs/viz/latest/viz/handler/trait.Handler.html
@@ -224,4 +242,4 @@ let routes = Router::new()
 [resources.update]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.update
 [resources.update_with_patch]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.update_with_patch
 [resources.destroy]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.destroy
-[Todos]: https://github.com/viz-rs/viz/tree/main/examples/routing/todos
+[todos]: https://github.com/viz-rs/viz/tree/main/examples/routing/todos
