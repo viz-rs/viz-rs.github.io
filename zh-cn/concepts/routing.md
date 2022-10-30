@@ -18,14 +18,14 @@
 
 得益于 [`path-tree`] 提供的支持，在路径中，可以通过 `:` 来添加参数，`?` `\+` `\*` 用来设置参数类型。
 
-| 模式                          | 规则                                             |
-| ----------------------------- | ------------------------------------------------ |
-| `:name`                       | 匹配除 `/` 以外的字符                            |
-| `:name?`                      | 匹配除 `/` 以外的字符，可选                      |
-| `/:name?/` `/:name?`          | 匹配以 `/` 开头或结尾，但除 `/` 以外的字符，可选 |
-| `\+` `:name\+`                | 匹配长度 > 0 的字符串                            |
-| `\*` `:name\*`                | 匹配长度 >= 0 的字符串                           |
-| `/\*/` `/:name\*/` `/:name\*` | 匹配以 `/` 开头或结尾，且长度 >= 0 的字符串      |
+| 模式                               | 规则                                             |
+| ---------------------------------- | ------------------------------------------------ |
+| `:name`                            | 匹配除 `/` 以外的字符                            |
+| `:name?`                           | 匹配除 `/` 以外的字符，可选                      |
+| `/:name?/` `/:name?`               | 匹配以 `/` 开头或结尾，但除 `/` 以外的字符，可选 |
+| `\+` `:name\+`                     | 匹配长度 > 0 的字符串                            |
+| `\*` `:name\*`                     | 匹配长度 >= 0 的字符串                           |
+| `/\*`/\*/`` `/:name\*/` `/:name\*` | 匹配以 `/` 开头或结尾，且长度 >= 0 的字符串      |
 
 后续可以通过 [`Params\<T\>`] 提取器对参数进行提取。
 
@@ -214,7 +214,7 @@ let routes = Router::new()
 [前缀树]: https://en.wikipedia.org/wiki/Trie
 [`route`]: https://docs.rs/viz/latest/viz/struct.Route.html
 [`resources`]: https://docs.rs/viz/latest/viz/struct.Resources.html
-[`Params\<T\>`]: https://docs.rs/viz/latest/viz/types/struct.Params.html
+[`params\<t\>`]: https://docs.rs/viz/latest/viz/types/struct.Params.html
 [`router`]: https://docs.rs/viz/latest/viz/struct.Router.html
 [`method`]: https://docs.rs/viz/latest/viz/struct.Method.html
 [`handler`]: https://docs.rs/viz/latest/viz/handler/trait.Handler.html
