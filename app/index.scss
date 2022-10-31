@@ -520,6 +520,10 @@ pre[class*="language"] {
         color: #{map-get($color, "text")};
       }
 
+      .variable\.builtin {
+        color: #{map-get($color, "red")};
+      }
+
       .label {
         color: #{map-get($color, "sapphire")};
       }
