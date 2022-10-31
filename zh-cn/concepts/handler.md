@@ -19,7 +19,7 @@ pub trait Handler<Input>: dyn_clone::DynClone + Send + Sync + 'static {
 
 ### 一个简单的异步处理函数
 
-其中输入 [`Request`]，输出 `Result<[Response](https://docs.rs/viz/latest/viz/type.Response.html)>`。
+其中输入 [`Request`]，输出 `Result\<[Response](https://docs.rs/viz/latest/viz/type.Response.html)\>`。
 
 ```rust
 async fn index(_: Request) -> Result<Response> {

@@ -117,6 +117,8 @@ impl Component for App {
                     text: "Concepts".to_string(),
                     prefix: "concepts/".to_string(),
                     items: vec![
+                        ("Request".to_string(), "requests".to_string()),
+                        ("Response".to_string(), "responses".to_string()),
                         ("Handler".to_string(), "handler".to_string()),
                         ("Middleware".to_string(), "middleware".to_string()),
                         ("Routing".to_string(), "routing".to_string()),
@@ -160,6 +162,8 @@ impl Component for App {
                     text: "概念".to_string(),
                     prefix: "concepts/".to_string(),
                     items: vec![
+                        ("请求".to_string(), "requests".to_string()),
+                        ("响应".to_string(), "responses".to_string()),
                         ("请求处理".to_string(), "handler".to_string()),
                         ("中间件".to_string(), "middleware".to_string()),
                         ("路由".to_string(), "routing".to_string()),
