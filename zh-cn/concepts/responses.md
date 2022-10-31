@@ -8,16 +8,16 @@
 
 ```rust
 struct MyResponse {
-  code: u16,
-  data: Vec<u8>,
+    code: u16,
+    data: Vec<u8>,
 }
 
 impl IntoResponse for MyResponse {
   fn into_response(self) -> Response {
       Response::builder()
-      .status(StatusCode::from_u16(self.code).unwrap())
-      .body(self.data.into())
-      .unwrap()
+          .status(StatusCode::from_u16(self.code).unwrap())
+          .body(self.data.into())
+          .unwrap()
   }
 }
 ```
