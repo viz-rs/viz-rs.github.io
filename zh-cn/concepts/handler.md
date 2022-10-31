@@ -19,7 +19,7 @@ pub trait Handler<Input>: dyn_clone::DynClone + Send + Sync + 'static {
 
 ### 一个简单的异步处理函数
 
-其中输入 [`Request`]，输出 Result<[`Response`]>。
+其中输入 [`Request`]，输出 `Result<[Response](https://docs.rs/viz/latest/viz/type.Response.html)>`。
 
 ```rust
 async fn index(_: Request) -> Result<Response> {
@@ -44,7 +44,7 @@ impl Handler<Request> for MyHandler {
         let path = req.path().clone();
         let method = req.method().clone();
         let count = self.count.fetch_add(1, Ordering::SeqCst);
-        Ok(format!("method = {}, path = {}, count = {}", method, path, count).into_response())
+        Ok(format!("method = {method}, path = {path}, count = {count}").into_response())
     }
 }
 ```

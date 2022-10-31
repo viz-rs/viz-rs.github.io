@@ -1,6 +1,6 @@
 # 提取器
 
-提取器的主要用途是提取请求中的数据。
+提取器的用途是从 HTTP 请求中提取数据。
 
 ## 接口定义
 
@@ -10,7 +10,7 @@ pub trait FromRequest: Sized {
     /// 当提取失败时，返回错误信息
     type Error: IntoResponse;
 
-    /// 从 HTTP [`Request`] 提取数据，返回该类型
+    /// 从 HTTP 请求中提取数据，返回该类型
     #[must_use]
     async fn extract(req: &mut Request) -> Result<Self, Self::Error>;
 }
@@ -18,7 +18,7 @@ pub trait FromRequest: Sized {
 
 ## 提取函数
 
-通过 [`extract`] 函数提取信息
+通过 [`extract`] 函数提取信息。
 
 ```rust
 async fn show_user(mut req: Request) -> Result<Resposne> {
@@ -28,6 +28,8 @@ async fn show_user(mut req: Request) -> Result<Resposne> {
 ```
 
 ## 自定义类型
+
+通过定义新类型，实现 [`FromRequest`] 特征来提取信息。
 
 ```rust
 #[derive(Debug)]
@@ -56,3 +58,4 @@ async fn show_info(mut req: Request) -> Result<Resposne> {
 ```
 
 [`extract`]: https://docs.rs/viz/latest/viz/trait.RequestExt.html#tymethod.extract
+[`FromRequest`]: https://docs.rs/viz/latest/viz/trait.FromRequest.html
