@@ -16,7 +16,7 @@ let app = Router::new().get("/", index);
 
 // 创建 Server 实例，绑定端口
 if let Err(err) = Server::bind(&addr)
-    // 转换成 Service 实例
+    // 转换成 ServiceMaker 实例
     .serve(ServiceMaker::from(app))
     .await
 {
@@ -30,7 +30,7 @@ if let Err(err) = Server::bind(&addr)
 
 ## Unix Sock Domain
 
-开启 `unix-socket` 特性，一般需要配合一个发代（例如：Nginx Proxy）。
+开启 `unix-socket` 特性，一般需要配合一个反代（例如：Nginx Proxy）。
 
 [`Server`]: https://docs.rs/viz/latest/viz/struct.Server.html
 [`Router`]: https://docs.rs/viz/latest/viz/struct.Router.html
