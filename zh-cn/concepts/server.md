@@ -2,7 +2,7 @@
 
 对 [`Server`] 进行配置，可以快速地启动一个服务。
 
-然后把 [`Router`] 实例转换成一个 [`Service`] 实例。
+然后把 [`Router`] 实例转换成实现 [`Service`] 特性的 [`ServiceMaker`] 实例。
 
 ```rust
 async fn index(_: Request) -> Result<&'static str> {
@@ -34,4 +34,5 @@ if let Err(err) = Server::bind(&addr)
 
 [`Server`]: https://docs.rs/viz/latest/viz/struct.Server.html
 [`Router`]: https://docs.rs/viz/latest/viz/struct.Router.html
+[`ServiceMaker`]: https://docs.rs/viz/latest/viz/struct.ServiceMaker.html
 [`Service`]: https://docs.rs/hyper/0.14/hyper/service/index.html
