@@ -1,8 +1,8 @@
 # 服务
 
-对 [`Server`] 进行配置，可以快速地启动一个服务。
+通过对 [`Server`] 进行配置，然后就可以快速地启动一个服务。
 
-然后把 [`Router`] 实例转换成实现 [`Service`] 特性的 [`ServiceMaker`] 实例。
+在完全启动前，需要把 [`Router`] 实例转换成实现 [`Service`] 特性的 [`ServiceMaker`] 实例。
 
 ```rust
 async fn index(_: Request) -> Result<&'static str> {
