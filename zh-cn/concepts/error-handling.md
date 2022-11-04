@@ -12,7 +12,7 @@ pub trait Handler<Input>: dyn_clone::DynClone + Send + Sync + 'static {
 }
 ```
 
-且异步函数对 [`Handler`] 特征的实现：
+还有异步函数对 [`Handler`] 特征的实现：
 
 ```rust
 #[async_trait]
