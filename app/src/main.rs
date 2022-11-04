@@ -146,6 +146,13 @@ impl Component for App {
                         ("Showcase".to_string(), "showcase".to_string()),
                     ],
                 },
+                Section {
+                    text: "Others".to_string(),
+                    prefix: "others/".to_string(),
+                    items: vec![
+                        ("Sponsor".to_string(), "sponsor".to_string()),
+                    ],
+                },
             ]),
             #[cfg(all(feature = "zh-cn", not(feature = "en")))]
             sections: Rc::new(vec![
@@ -188,6 +195,13 @@ impl Component for App {
                         ("例子".to_string(), "examples".to_string()),
                         ("提取器".to_string(), "extractors".to_string()),
                         ("产品示例".to_string(), "showcase".to_string()),
+                    ],
+                },
+                Section {
+                    text: "其他".to_string(),
+                    prefix: "others/".to_string(),
+                    items: vec![
+                        ("捐助".to_string(), "sponsor".to_string()),
                     ],
                 },
             ]),
