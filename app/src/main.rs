@@ -128,7 +128,7 @@ impl Component for App {
                 },
                 Section {
                     text: "Built-in".to_string(),
-                    prefix: "built-in/".to_string(),
+                    prefix: "built-ins/".to_string(),
                     items: vec![
                         ("Handlers".to_string(), "handlers".to_string()),
                         ("Middleware".to_string(), "middleware".to_string()),
@@ -179,7 +179,7 @@ impl Component for App {
                 },
                 Section {
                     text: "内建组件".to_string(),
-                    prefix: "built-in/".to_string(),
+                    prefix: "built-ins/".to_string(),
                     items: vec![
                         ("处理函数".to_string(), "handlers".to_string()),
                         ("中间件".to_string(), "middleware".to_string()),
