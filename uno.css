@@ -18,12 +18,10 @@
 .relative{position:relative;}
 .static{position:static;}
 .bottom-0{bottom:0rem;}
-.right--2{right:-0.5rem;}
 .right-2{right:0.5rem;}
 .top-0{top:0rem;}
 .top-4{top:1rem;}
 .top-4\.375rem{top:4.375rem;}
-.top-7\.5{top:1.875rem;}
 .z-36{z-index:36;}
 .mb-7\.5{margin-bottom:1.875rem;}
 .mr-1{margin-right:0.25rem;}
@@ -31,7 +29,8 @@
 .mt-4\.5{margin-top:1.125rem;}
 .block{display:block;}
 .inline-block{display:inline-block;}
-.hidden{display:none;}
+.hidden,
+[hidden=""]{display:none;}
 .h-10{height:2.5rem;}
 .h-4{height:1rem;}
 .h-6{height:1.5rem;}
@@ -48,7 +47,8 @@
 @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .animate-spin{animation:spin 1s linear infinite;}
 .cursor-pointer{cursor:pointer;}
-.select-none{user-select:none;}
+.select-none,
+[select-none=""]{user-select:none;}
 .items-center{align-items:center;}
 .justify-center{justify-content:center;}
 .justify-between{justify-content:space-between;}
@@ -76,15 +76,21 @@
 .py-5{padding-top:1.25rem;padding-bottom:1.25rem;}
 .pt-4\.375rem{padding-top:4.375rem;}
 .text-center{text-align:center;}
+.text-right,
+[text-right=""]{text-align:right;}
 .text-15px{font-size:15px;}
 .text-2{font-size:0.5rem;}
-.text-3{font-size:0.75rem;}
+.text-3,
+[text-3=""]{font-size:0.75rem;}
 .text-3\.5{font-size:0.875rem;}
 .text-4{font-size:1rem;}
 .text-5{font-size:1.25rem;}
 .text-8{font-size:2rem;}
 .text-sm{font-size:0.875rem;line-height:1.25rem;}
-.font-light{font-weight:300;}
+.font-bold,
+[font-bold=""]{font-weight:700;}
+.font-light,
+[font-light=""]{font-weight:300;}
 .font-medium{font-weight:500;}
 .font-normal{font-weight:400;}
 .font-semibold{font-weight:600;}
