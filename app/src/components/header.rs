@@ -103,7 +103,7 @@ impl Component for Header {
                     <Link<Route> classes="transition-colors op75 hover:op100" to={Route::Document { path: "guide/introduction".to_string() }}>
                         {METADATA.docs}
                     </Link<Route>>
-                    <a class="transition-colors op75 hover:op100" href="https://docs.rs/viz/latest/viz" target="_blank" rel="noreferrer">
+                    <a class="transition-colors op75 hover:op100" href={format!("https://docs.rs/viz/{}", version)} target="_blank" rel="noreferrer">
                         {"API"}
                     </a>
                     <a class="transition-colors op75 hover:op100 i-lucide-github" href="https://github.com/viz-rs/viz" target="_blank" rel="noreferrer" />
