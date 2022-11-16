@@ -20,7 +20,7 @@ tree-sitter-bash = { git = "https://github.com/syntacti/tree-sitter-bash.git", r
 tree-sitter-javascript = { git = "https://github.com/tree-sitter/tree-sitter-javascript.git", branch = "master" }
 tree-sitter-json = { git = "https://github.com/tree-sitter/tree-sitter-json.git", branch = "master" }
 tree-sitter-md = { git = "https://github.com/MDeiml/tree-sitter-markdown.git", branch = "split_parser" }
-tree-sitter-rust = { git = "https://github.com/tree-sitter/tree-sitter-rust.git", branch = "master" }
+tree-sitter-rust = { git = "https://github.com/tree-sitter/tree-sitter-rust.git", rev = "0431a2c" }
 tree-sitter-toml = "0.20.0"
 tree-sitter-zig = { git = "https://github.com/maxxnino/tree-sitter-zig.git", branch = "main" }
 walkdir = { version = "2.3.2" }

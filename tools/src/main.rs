@@ -44,8 +44,8 @@ fn main() -> Result<()> {
         HighlightConfiguration::new(
             tree_sitter_bash::language(),
             include_str!("../queries/bash/highlights.scm"),
-            "",
-            "",
+            include_str!("../queries/bash/injections.scm"),
+            include_str!("../queries/bash/locals.scm"),
         )?,
     );
     languages.insert(
