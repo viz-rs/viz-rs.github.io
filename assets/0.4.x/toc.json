@@ -1,0 +1,104 @@
+[
+  {
+    "text": "开始",
+    "prefix": "guide",
+    "items": [
+      [
+        "介绍",
+        "introduction"
+      ],
+      [
+        "快速上手",
+        "quick-start"
+      ]
+    ]
+  },
+  {
+    "text": "概念",
+    "prefix": "concepts",
+    "items": [
+      [
+        "请求及响应",
+        "requests-and-responses"
+      ],
+      [
+        "请求处理",
+        "handler"
+      ],
+      [
+        "中间件",
+        "middleware"
+      ],
+      [
+        "路由",
+        "routing"
+      ],
+      [
+        "提取器",
+        "extractors"
+      ],
+      [
+        "服务",
+        "server"
+      ],
+      [
+        "错误处理",
+        "error-handling"
+      ]
+    ]
+  },
+  {
+    "text": "内建组件",
+    "prefix": "built-ins",
+    "items": [
+      [
+        "处理函数",
+        "handlers"
+      ],
+      [
+        "中间件",
+        "middleware"
+      ],
+      [
+        "提取器",
+        "extractors"
+      ],
+      [
+        "TLS",
+        "tls"
+      ]
+    ]
+  },
+  {
+    "text": "进阶主题",
+    "prefix": "extra-topics",
+    "items": [
+      [
+        "性能测试",
+        "benchmarks"
+      ],
+      [
+        "例子",
+        "examples"
+      ],
+      [
+        "提取器",
+        "extractors"
+      ],
+      [
+        "产品示例",
+        "showcase"
+      ]
+    ]
+  },
+  {
+    "text": "其他",
+    "prefix": "others",
+    "items": [
+      [
+        "捐助",
+        "sponsor"
+      ]
+    ]
+  }
+]
