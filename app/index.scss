@@ -180,6 +180,7 @@ flex-240 {
     margin-top: calc((1.25rem - 0.75rem) / 2);
     margin-left: calc((1.25rem - 0.75rem) / 2);
     outline: none;
+    background: transparent;
 
     option[selected] {
       color: rgb(202, 138, 4);
