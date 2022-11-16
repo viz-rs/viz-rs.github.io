@@ -1,0 +1,104 @@
+[
+  {
+    "text": "Get Started",
+    "prefix": "guide",
+    "items": [
+      [
+        "Introduction",
+        "introduction"
+      ],
+      [
+        "Quick Start",
+        "quick-start"
+      ]
+    ]
+  },
+  {
+    "text": "Concepts",
+    "prefix": "concepts",
+    "items": [
+      [
+        "Request & Response",
+        "requests-and-responses"
+      ],
+      [
+        "Handler",
+        "handler"
+      ],
+      [
+        "Middleware",
+        "middleware"
+      ],
+      [
+        "Routing",
+        "routing"
+      ],
+      [
+        "Extractors",
+        "extractors"
+      ],
+      [
+        "Server",
+        "server"
+      ],
+      [
+        "Error Handling",
+        "error-handling"
+      ]
+    ]
+  },
+  {
+    "text": "Built-in",
+    "prefix": "built-ins",
+    "items": [
+      [
+        "Handlers",
+        "handlers"
+      ],
+      [
+        "Middleware",
+        "middleware"
+      ],
+      [
+        "Extractors",
+        "extractors"
+      ],
+      [
+        "TLS",
+        "tls"
+      ]
+    ]
+  },
+  {
+    "text": "Extra Topics",
+    "prefix": "extra-topics",
+    "items": [
+      [
+        "Benchmarks",
+        "benchmarks"
+      ],
+      [
+        "Examples",
+        "examples"
+      ],
+      [
+        "Extractors",
+        "extractors"
+      ],
+      [
+        "Showcase",
+        "showcase"
+      ]
+    ]
+  },
+  {
+    "text": "Others",
+    "prefix": "others",
+    "items": [
+      [
+        "Sponsor",
+        "sponsor"
+      ]
+    ]
+  }
+]

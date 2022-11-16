@@ -175,6 +175,16 @@ flex-240 {
 
 .navbar {
   background-color: rgba(255, 255, 255, 1);
+
+  #versions {
+    margin-top: calc((1.25rem - 0.75rem) / 2);
+    margin-left: calc((1.25rem - 0.75rem) / 2);
+    outline: none;
+
+    option[selected] {
+      color: rgb(202, 138, 4);
+    }
+  }
 }
 
 .button-arrow {
@@ -549,7 +559,6 @@ pre[class*="language"] {
 
 .dropdown-menu {
   .dropdown-list {
-    display: none;
     min-width: 8rem;
     background-color: #ffffff;
     border-width: 1px;
@@ -558,11 +567,23 @@ pre[class*="language"] {
     border-radius: 0.25rem;
     padding: 12px;
     line-height: 32px;
+
+    top: 30px;
+    right: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.25s, visibility 0.25s, transform 0.25s;
   }
 
   &:hover {
+    transition: color 0.25s;
+
     .dropdown-list {
-      display: block;
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(-1px);
+      visibility: visible;
     }
   }
 }

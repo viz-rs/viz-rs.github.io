@@ -9,6 +9,7 @@ use crate::{Route, Section};
 #[derive(Clone, Debug, PartialEq, Properties)]
 pub struct Props {
     pub sections: Rc<Vec<Section>>,
+    pub version: Rc<String>,
 }
 
 pub struct Sidebar {}
@@ -23,17 +24,18 @@ impl Component for Sidebar {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let location = ctx.link().location().expect_throw("Can't find location");
+        let props = ctx.props();
 
         html! {
             <aside class="fixed flex flex-col p-5 gap-4 sidebar top-4.375rem bottom-0">
-                { self.view_sections(ctx.props().sections.to_vec(), location.path()) }
+                { self.view_sections(props.sections.to_vec(), props.version.clone(), location.path()) }
             </aside>
         }
     }
 }
 
 impl Sidebar {
-    fn view_sections(&self, sections: Vec<Section>, path: &str) -> Html {
+    fn view_sections(&self, sections: Vec<Section>, version: Rc<String>, path: &str) -> Html {
         html! {
             {
                 sections.into_iter()
@@ -43,7 +45,7 @@ impl Sidebar {
                                 {section.text}
                             </h3>
                             <ul class="text-3.5">
-                                {self.view_list(section.items, section.prefix, path)}
+                                {self.view_list(section.items, section.prefix, version.clone(), path)}
                             </ul>
                         </section>
                     })
@@ -52,15 +54,20 @@ impl Sidebar {
         }
     }
 
-    fn view_list(&self, list: Vec<(String, String)>, prefix: String, path: &str) -> Html {
+    fn view_list(&self, list: Vec<(String, String)>, prefix: String, version: Rc<String>, path: &str) -> Html {
         let cs = "inline-block py-1 font-normal transition-colors hover:op100";
 
         html! {
             {
                 list.into_iter()
                     .map(|item| {
-                        let p = format!("{}{}", prefix.clone(), item.1);
-                        let a = if path.ends_with(p.as_str()) { "op100 text-yellow-600" } else { "op61.8" };
+                        let mut p = String::new();
+                        p.push_str(version.clone().as_str());
+                        p.push('/');
+                        p.push_str(prefix.clone().as_str());
+                        p.push('/');
+                        p.push_str(item.1.as_str());
+                        let a = if path.ends_with(&p) { "op100 text-yellow-600" } else { "op61.8" };
                         html! {
                             <li key={p.to_string()}>
                                 <Link<Route>

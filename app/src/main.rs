@@ -1,6 +1,8 @@
 use std::rc::Rc;
 
+use gloo_net::http::Request;
 use once_cell::sync::Lazy;
+use serde::Deserialize;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{HtmlElement, MediaQueryList, MediaQueryListEvent};
 use yew::prelude::*;
@@ -36,10 +38,10 @@ pub enum Route {
     NotFound,
 }
 
-fn switch(routes: Route) -> Html {
+fn switch((routes, version): (Route, Rc<String>)) -> Html {
     match routes {
         Route::Home => {
-            html! { <pages::Home /> }
+            html! { <pages::Home version={version} /> }
         }
         Route::Document { path } => {
             html! { <pages::Document path={path} /> }
@@ -50,7 +52,7 @@ fn switch(routes: Route) -> Html {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Deserialize)]
 pub struct Section {
     text: String,
     prefix: String,
@@ -62,6 +64,8 @@ pub enum Msg {
     ChangedDark(bool),
     OpenSidebar,
     CloseSidebar,
+    UpdateSidebar(Vec<Section>),
+    ChangedVersion(String),
 }
 
 #[allow(dead_code)]
@@ -70,6 +74,8 @@ struct App {
     sidebar: bool,
     mql: MediaQueryList,
     sections: Rc<Vec<Section>>,
+    version: Rc<String>,
+    update_sidebar: Callback<Vec<Section>>,
 }
 
 impl Component for App {
@@ -85,6 +91,8 @@ impl Component for App {
             });
         mql.set_onchange(Some(cb.as_ref().unchecked_ref()));
         cb.forget();
+
+        let update_sidebar = ctx.link().callback(|sections| Msg::UpdateSidebar(sections));
 
         let mode = utils::local_storage_get("color-scheme").unwrap_or("auto".to_string());
         let dark = if mql.matches() {
@@ -103,108 +111,9 @@ impl Component for App {
             dark,
             sidebar: false,
             mql,
-            #[cfg(all(feature = "en", not(feature = "zh-cn")))]
-            sections: Rc::new(vec![
-                Section {
-                    text: "Get Started".to_string(),
-                    prefix: "guide/".to_string(),
-                    items: vec![
-                        ("Introduction".to_string(), "introduction".to_string()),
-                        ("Quick Start".to_string(), "quick-start".to_string()),
-                    ],
-                },
-                Section {
-                    text: "Concepts".to_string(),
-                    prefix: "concepts/".to_string(),
-                    items: vec![
-                        ("Request & Response".to_string(), "requests-and-responses".to_string()),
-                        ("Handler".to_string(), "handler".to_string()),
-                        ("Middleware".to_string(), "middleware".to_string()),
-                        ("Routing".to_string(), "routing".to_string()),
-                        ("Extractors".to_string(), "extractors".to_string()),
-                        ("Server".to_string(), "server".to_string()),
-                        ("Error Handling".to_string(), "error-handling".to_string()),
-                    ],
-                },
-                Section {
-                    text: "Built-in".to_string(),
-                    prefix: "built-ins/".to_string(),
-                    items: vec![
-                        ("Handlers".to_string(), "handlers".to_string()),
-                        ("Middleware".to_string(), "middleware".to_string()),
-                        ("Extractors".to_string(), "extractors".to_string()),
-                        ("TLS".to_string(), "tls".to_string()),
-                    ],
-                },
-                Section {
-                    text: "Extra Topics".to_string(),
-                    prefix: "extra-topics/".to_string(),
-                    items: vec![
-                        ("Benchmarks".to_string(), "benchmarks".to_string()),
-                        ("Examples".to_string(), "examples".to_string()),
-                        ("Extractors".to_string(), "extractors".to_string()),
-                        ("Showcase".to_string(), "showcase".to_string()),
-                    ],
-                },
-                Section {
-                    text: "Others".to_string(),
-                    prefix: "others/".to_string(),
-                    items: vec![
-                        ("Sponsor".to_string(), "sponsor".to_string()),
-                    ],
-                },
-            ]),
-            #[cfg(all(feature = "zh-cn", not(feature = "en")))]
-            sections: Rc::new(vec![
-                Section {
-                    text: "开始".to_string(),
-                    prefix: "guide/".to_string(),
-                    items: vec![
-                        ("介绍".to_string(), "introduction".to_string()),
-                        ("快速上手".to_string(), "quick-start".to_string()),
-                    ],
-                },
-                Section {
-                    text: "概念".to_string(),
-                    prefix: "concepts/".to_string(),
-                    items: vec![
-                        ("请求及响应".to_string(), "requests-and-responses".to_string()),
-                        ("请求处理".to_string(), "handler".to_string()),
-                        ("中间件".to_string(), "middleware".to_string()),
-                        ("路由".to_string(), "routing".to_string()),
-                        ("提取器".to_string(), "extractors".to_string()),
-                        ("服务".to_string(), "server".to_string()),
-                        ("错误处理".to_string(), "error-handling".to_string()),
-                    ],
-                },
-                Section {
-                    text: "内建组件".to_string(),
-                    prefix: "built-ins/".to_string(),
-                    items: vec![
-                        ("处理函数".to_string(), "handlers".to_string()),
-                        ("中间件".to_string(), "middleware".to_string()),
-                        ("提取器".to_string(), "extractors".to_string()),
-                        ("TLS".to_string(), "tls".to_string()),
-                    ],
-                },
-                Section {
-                    text: "进阶主题".to_string(),
-                    prefix: "extra-topics/".to_string(),
-                    items: vec![
-                        ("性能测试".to_string(), "benchmarks".to_string()),
-                        ("例子".to_string(), "examples".to_string()),
-                        ("提取器".to_string(), "extractors".to_string()),
-                        ("产品示例".to_string(), "showcase".to_string()),
-                    ],
-                },
-                Section {
-                    text: "其他".to_string(),
-                    prefix: "others/".to_string(),
-                    items: vec![
-                        ("捐助".to_string(), "sponsor".to_string()),
-                    ],
-                },
-            ]),
+            version: Rc::new("0.4.x".to_string()),
+            sections: Rc::new(vec![]),
+            update_sidebar,
         }
     }
 
@@ -280,31 +189,77 @@ impl Component for App {
                     false
                 }
             }
+            Msg::UpdateSidebar(sections) => {
+                self.sections = sections.into();
+                true
+            }
+            Msg::ChangedVersion(version) => {
+                if *self.version == version {
+                    false
+                } else {
+                    self.version = version.clone().into();
+                    let update_sidebar = self.update_sidebar.clone();
+
+                    wasm_bindgen_futures::spawn_local(async move {
+                        let mut url = String::new();
+                        url.push_str("/assets/");
+                        url.push_str(&version);
+                        url.push_str("/toc.json");
+                        if let Ok(res) = Request::new(&url).send().await {
+                            if let Ok(body) = res.json::<Vec<Section>>().await {
+                                update_sidebar.emit(body);
+                            }
+                        }
+                    });
+
+                    true
+                }
+            }
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let toggle_dark = ctx.link().callback(|_| Msg::ToggleDark);
         let toggle_sidebar = ctx.link().callback(|m| m);
+        let change_version = ctx.link().callback(|v| Msg::ChangedVersion(v));
+        let version = self.version.clone();
 
         html! {
             <BrowserRouter>
                 <div id="app" class="tracking-0.2px">
-                    <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} />
+                    <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} version={version.clone()} change={change_version} />
 
                     <div class="page-container flex-row pt-4.375rem">
                         if self.sidebar {
-                            <components::Sidebar sections={self.sections.clone()} />
+                            <components::Sidebar sections={self.sections.clone()} version={version.clone()} />
                         }
 
                         <main id="page" class="flex flex-row flex-1 py-5">
-                            <Switch<Route> render={switch} />
+                            <components::Switch<Route> render={switch} version={version} />
                         </main>
                     </div>
 
                     <components::Footer />
                 </div>
             </BrowserRouter>
+        }
+    }
+
+    fn rendered(&mut self, _ctx: &Context<Self>, first_render: bool) {
+        if first_render {
+            let version = self.version.clone();
+            let update_sidebar = self.update_sidebar.clone();
+            wasm_bindgen_futures::spawn_local(async move {
+                let mut url = String::new();
+                url.push_str("/assets/");
+                url.push_str(&version);
+                url.push_str("/toc.json");
+                if let Ok(res) = Request::new(&url).send().await {
+                    if let Ok(body) = res.json::<Vec<Section>>().await {
+                        update_sidebar.emit(body);
+                    }
+                }
+            });
         }
     }
 }

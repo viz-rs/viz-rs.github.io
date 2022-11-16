@@ -1,5 +1,7 @@
+use std::rc::Rc;
+
 use wasm_bindgen::{JsCast, UnwrapThrowExt};
-use web_sys::HtmlAnchorElement;
+use web_sys::{HtmlAnchorElement, HtmlSelectElement};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -9,6 +11,8 @@ use crate::{utils, Msg, Route, METADATA};
 pub struct Props {
     pub toggle_dark: Callback<MouseEvent>,
     pub toggle_sidebar: Callback<Msg>,
+    pub version: Rc<String>,
+    pub change: Callback<String>,
 }
 
 pub struct Header {
@@ -74,15 +78,26 @@ impl Component for Header {
         let pathname = location.pathname().unwrap();
         let parts = hostname.split('.').collect::<Vec<&str>>();
         let lang = if parts.len() == 3 { parts[0] } else { "" };
+        let version = ctx.props().version.clone();
+        let change_version = ctx.props().change.clone();
+        let change = ctx.link().callback(move |e: Event| {
+            if let Some(target) = e.target_dyn_into::<HtmlSelectElement>() {
+                change_version.emit(target.value());
+            }
+        });
 
         html! {
             <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
-                <div>
+                <div class="flex flex-row">
                     <Link<Route> classes="flex flex-row items-center transition-colors op75 hover:op100" to={Route::Home}>
                         <img class="h-10 block b-neutral-100 dark:b-neutral-500 b mr-1 mr-3" alt="Viz" src="/logo.svg" />
                         <span class="font-semibold">{"V"}</span>
                         {"iz"}
                     </Link<Route>>
+                    <select id="versions" onchange={change} class={classes!("text-right","font-bold","select-none","text-3","font-light", (pathname == "/").then(|| Some("hidden")) )}>
+                        // <option value="0.5.0" selected={*version == "0.5.0"}>{ "v0.5.0" }</option>
+                        <option value="0.4.x" selected={*version == "0.4.x"}>{ "v0.4.x" }</option>
+                    </select>
                 </div>
                 <div class="flex-row items-center gap-5 font-medium text-15px">
                     <Link<Route> classes="transition-colors op75 hover:op100" to={Route::Document { path: "guide/introduction".to_string() }}>
@@ -92,12 +107,12 @@ impl Component for Header {
                         {"API"}
                     </a>
                     <a class="transition-colors op75 hover:op100 i-lucide-github" href="https://github.com/viz-rs/viz" target="_blank" rel="noreferrer" />
-                    <div class="dropdown-menu op75 hover:op100 cursor-pointer h-7.5 flex justify-center items-center relative">
+                    <div class="dropdown-menu cursor-pointer h-7.5 flex justify-center items-center relative">
                         <button class="flex items-center button">
                             <span class="inline-block transition-colors i-lucide-languages" />
                             <span class="i-lucide-chevron-down" />
                         </button>
-                        <ul class="dropdown-list absolute top-7.5 right--2 text-3.5">
+                        <ul class="dropdown-list absolute text-3.5">
                             <li>
                                 <a class={classes!(
                                         "flex",

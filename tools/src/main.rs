@@ -139,7 +139,7 @@ fn main() -> Result<()> {
         )?,
     );
 
-    let glob = GlobBuilder::new("**/*.md")
+    let glob = GlobBuilder::new("**/*.{md,json}")
         .literal_separator(true)
         .build()?
         .compile_matcher();
@@ -158,19 +158,24 @@ fn main() -> Result<()> {
             if !dir.exists() {
                 fs::create_dir_all(&dir)?;
             }
-            let doc = parse(&languages, entry.path())?;
-            let mut file = dir.join(file.file_stem().unwrap().to_ascii_lowercase());
-            file.set_extension("html");
-            fs::write(&file, minify_html::minify(doc.html.as_bytes(), &minify_cfg))?;
-            println!("{:?}", file.canonicalize().unwrap());
+            let raw = fs::read_to_string(entry.path())?;
+            let mut fp = dir.join(file.file_stem().unwrap().to_ascii_lowercase());
+            if matches!(file.extension(), Some(e) if e == "json") {
+                fp.set_extension("json");
+                fs::write(&fp, raw)?;
+            } else {
+                fp.set_extension("html");
+                let doc = parse(&languages, raw)?;
+                fs::write(&fp, minify_html::minify(doc.html.as_bytes(), &minify_cfg))?;
+            }
+            println!("{:?}", fp.canonicalize()?);
         }
     }
 
     Ok(())
 }
 
-fn parse(languages: &Languages, path: &Path) -> Result<Document> {
-    let raw = fs::read_to_string(path)?;
+fn parse(languages: &Languages, raw: String) -> Result<Document> {
     let options = Options::all();
     let mut toc = Vec::new();
     let mut heading = None;

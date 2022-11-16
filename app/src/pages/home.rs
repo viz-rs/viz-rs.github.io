@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -31,8 +33,17 @@ fn sub_desc() -> Html {
     }
 }
 
+#[derive(Properties, PartialEq)]
+pub struct Props {
+    pub version: Rc<String>,
+}
+
 #[function_component(Home)]
-pub fn home() -> Html {
+pub fn home(props: &Props) -> Html {
+    let mut path = String::new();
+    path.push_str(props.version.as_str());
+    path.push_str("/guide/introduction");
+
     html! {
         <section class="w-full hero text-center p-5 sm:py-19">
             <h1 class="text-8 sm:text-10 font-medium">
@@ -41,7 +52,7 @@ pub fn home() -> Html {
             {sub_desc()}
             <Link<Route>
                 classes="inline-block bg-neutral-900 text-neutral-100 dark:bg-neutral-100 dark:text-neutral-900 shadow py-2 px-4.5 border-rounded font-medium text-4 get-started"
-                to={Route::Document { path: "guide/introduction".to_string()  }}
+                to={Route::Document { path }}
             >
                 {METADATA.get_started}
             </Link<Route>>
