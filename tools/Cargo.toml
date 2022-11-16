@@ -16,7 +16,7 @@ pulldown-cmark = { version = "0.9.2", default-features = false }
 
 tree-sitter-c = "0.20.2"
 # tree-sitter-html = { git = "https://github.com/tree-sitter/tree-sitter-html.git", branch = "master" }
-tree-sitter-bash = { git = "https://github.com/syntacti/tree-sitter-bash.git", branch = "master" }
+tree-sitter-bash = { git = "https://github.com/syntacti/tree-sitter-bash.git", rev = "77cf8a7" }
 tree-sitter-javascript = { git = "https://github.com/tree-sitter/tree-sitter-javascript.git", branch = "master" }
 tree-sitter-json = { git = "https://github.com/tree-sitter/tree-sitter-json.git", branch = "master" }
 tree-sitter-md = { git = "https://github.com/MDeiml/tree-sitter-markdown.git", branch = "split_parser" }
