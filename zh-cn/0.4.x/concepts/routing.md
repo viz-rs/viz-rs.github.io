@@ -242,4 +242,4 @@ let routes = Router::new()
 [resources.update]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.update
 [resources.update_with_patch]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.update_with_patch
 [resources.destroy]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.destroy
-[todos]: https://github.com/viz-rs/viz/tree/main/examples/routing/todos
+[todos]: https://github.com/viz-rs/viz/tree/0.4.x/examples/routing/todos

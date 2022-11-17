@@ -22,7 +22,7 @@ let app = Router::new()
     .with(cookie::Config::new());
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/session)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/session)。
 
 ## CORS
 
@@ -33,7 +33,7 @@ let app = Router::new()
     .with(cors::Config::default());
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/cors)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/cors)。
 
 ## CSRF
 
@@ -56,7 +56,7 @@ let app = Router::new()
     ));
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/csrf)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/csrf)。
 
 ## Limits
 
@@ -82,7 +82,7 @@ let app = Router::new()
     ));
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/session)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/session)。
 
 ## Compression
 
@@ -93,15 +93,15 @@ let app = Router::new()
     .with(compression::Config::default());
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/compression)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/compression)。
 
 ## OpenTelemetry Tracing
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/otel/tracing)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/tracing)。
 
 ## OpenTelemetry Metrics
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/otel/metrics)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/metrics)。
 
 [m:cookie]: https://docs.rs/viz-core/latest/viz_core/middleware/cookie
 [m:cors]: https://docs.rs/viz-core/latest/viz_core/middleware/cors

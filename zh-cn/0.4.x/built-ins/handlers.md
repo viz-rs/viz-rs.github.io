@@ -16,7 +16,7 @@
 
 - [`serve::Dir`]：服务指定目录
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/static-files/serve)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/static-files/serve)。
 
 ## embed
 
@@ -26,7 +26,7 @@
 
 - [`embed::Dir`]：嵌入指定目录
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/static-files/embed)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/static-files/embed)。
 
 ## prometheus
 
@@ -63,7 +63,7 @@ let app = Router::new()
     .get("/metrics", handler);
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/main/examples/otel/metrics)。
+完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/metrics)。
 
 [`serve`]: https://docs.rs/viz/latest/viz/handlers/serve/index.html
 [`serve::File`]: https://docs.rs/viz/latest/viz/handlers/serve/struct.File.html
