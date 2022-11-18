@@ -6,8 +6,7 @@
 
 - [结果](https://www.techempower.com/benchmarks/)
 
-> 目前 [PR](https://github.com/TechEmpower/FrameworkBenchmarks/pull/7488) 还没有被合并，可以等待第
-> 22 轮测试。
+> [PR](https://github.com/TechEmpower/FrameworkBenchmarks/pull/7488) 已合并，期待第 22 轮测试。
 
 ## Web Frameworks Benchmark
 

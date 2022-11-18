@@ -6,8 +6,8 @@
 
 - [Result](https://www.techempower.com/benchmarks/)
 
-> Currently the [PR](https://github.com/TechEmpower/FrameworkBenchmarks/pull/7488) is not be merged,
-> wait the 22 round.
+> [PR](https://github.com/TechEmpower/FrameworkBenchmarks/pull/7488) was be merged.
+> Let's wait for round 22.
 
 ## Web Frameworks Benchmark
 
