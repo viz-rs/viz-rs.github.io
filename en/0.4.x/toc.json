@@ -78,6 +78,10 @@
         "benchmarks"
       ],
       [
+        "Templates",
+        "templates"
+      ],
+      [
         "Examples",
         "examples"
       ],
