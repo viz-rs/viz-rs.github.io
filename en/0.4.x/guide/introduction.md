@@ -40,6 +40,21 @@ async fn main() -> Result<()> {
 # Hello, World!
 ```
 
+## Why name it Viz?
+
+Our vision is to build applications in a visual way.
+
+## About logo
+
+Take the corner of a Go board.
+
+Dots and lines are intertwined and extend wirelessly,
+Visual and logical interweaving, full of imagination.
+
+It is also like a light fish, helping us to develop like a fish in water and experience smoothly.
+
+> The current design is still very plain and not eye-catching enough.
+
 [rust]: https://rust-lang.org/
 [tokio]: https://tokio.rs/
 [hyper]: https://hyper.rs/
