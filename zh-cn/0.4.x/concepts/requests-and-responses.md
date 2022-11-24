@@ -31,8 +31,8 @@ impl IntoResponse for MyResponse {
 ```
 
 [`Request`]: https://docs.rs/http/0.2.8/http/request/struct.Request.html
-[`RequestExt`]: https://docs.rs/viz/latest/viz/trait.RequestExt.html
-[`response`]: https://docs.rs/http/0.2.8/http/request/struct.Response.html
-[`responseext`]: https://docs.rs/viz/latest/viz/trait.ResponseExt.html
-[`intoresponse`]: https://docs.rs/viz/latest/viz/trait.IntoResponse.html
+[`RequestExt`]: https://docs.rs/viz/0.4.x/viz/trait.RequestExt.html
+[`Response`]: https://docs.rs/http/0.2.8/http/request/struct.Response.html
+[`ResponseExt`]: https://docs.rs/viz/0.4.x/viz/trait.ResponseExt.html
+[`IntoResponse`]: https://docs.rs/viz/0.4.x/viz/trait.IntoResponse.html
 
