@@ -46,7 +46,7 @@ Our vision is to build applications in a visual way.
 
 ## About logo
 
-Take the corner of a Go board.
+Take the corner of a [Go] board.
 
 Dots and lines are intertwined and extend wirelessly,
 Visual and logical interweaving, full of imagination.
@@ -58,3 +58,4 @@ It is also like a light fish, helping us to develop like a fish in water and exp
 [rust]: https://rust-lang.org/
 [tokio]: https://tokio.rs/
 [hyper]: https://hyper.rs/
+[go]: https://en.wikipedia.org/wiki/Go_(game)

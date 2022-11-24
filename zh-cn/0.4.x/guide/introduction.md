@@ -44,10 +44,11 @@ async fn main() -> Result<()> {
 
 ## 关于 Logo
 
-取自围棋棋盘的一角，点和线纵横交错，无线延伸；视觉和逻辑交织，充满想象；也像一条轻灵的鱼， 助我们的开发如鱼得水，体验流畅。
+取自[围棋]棋盘的一角，点和线纵横交错，无线延伸；视觉和逻辑交织，充满想象；也像一条轻灵的鱼， 助我们的开发如鱼得水，体验流畅。
 
 > 目前的设计还很朴素，不够醒目。
 
 [rust]: https://rust-lang.org/
 [tokio]: https://tokio.rs/
 [hyper]: https://hyper.rs/
+[围棋]: https://zh.wikipedia.org/wiki/%E5%9B%B4%E6%A3%8B 
