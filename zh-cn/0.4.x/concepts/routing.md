@@ -4,9 +4,9 @@
 
 在 Viz 的路由系统中，使用 [`path-tree`] 模块来存储 `path` 和 `handler` 之间的关系。
 
-[`path-tree`] 核心是一个[前缀树]实现，提供一个高效的搜索引擎和一些友好的辅助方法。
+[`path-tree`] 核心是一个[前缀树][trie]实现，提供一个高效的搜索引擎和一些友好的辅助方法。
 
-## 概念及结构
+## 结构及概念
 
 - [`Route`]：基础结构，是 [`Method`] - [`Handler`] 对的合集。
 
@@ -18,13 +18,13 @@
 
 得益于 [`path-tree`] 提供的支持，在路径中，可以通过 `:` 对参数命名，`?` `\+` `\*` 对参数设置类型。
 
-| 模式                               | 规则                                             |
-| ---------------------------------- | ------------------------------------------------ |
-| `:name`                            | 匹配除 `/` 以外的字符                            |
-| `:name?`                           | 匹配除 `/` 以外的字符，可选                      |
-| `/:name?/` `/:name?`               | 匹配以 `/` 开头或结尾，但除 `/` 以外的字符，可选 |
-| `\+` `:name\+`                     | 匹配长度 > 0 的字符串                            |
-| `\*` `:name\*`                     | 匹配长度 >= 0 的字符串                           |
+| 模式                                | 规则                                             |
+| ----------------------------------- | ------------------------------------------------ |
+| `:name`                             | 匹配除 `/` 以外的字符                            |
+| `:name?`                            | 匹配除 `/` 以外的字符，可选                      |
+| `/:name?/` `/:name?`                | 匹配以 `/` 开头或结尾，但除 `/` 以外的字符，可选 |
+| `\+` `:name\+`                      | 匹配长度 > 0 的字符串                            |
+| `\*` `:name\*`                      | 匹配长度 >= 0 的字符串                           |
 | `/\*` `/\*/` `/:name\*/` `/:name\*` | 匹配以 `/` 开头或结尾，且长度 >= 0 的字符串      |
 
 后续可以通过 [`Params\<T\>`] 提取器对参数进行提取。
@@ -109,7 +109,7 @@ let app = Router::new()
 
 ## 中间件
 
-即可以对单个 `handler` 添加中间件，也可以对所有路由添加中间件。
+可以对单个 `handler` 添加中间件，也可以对所有路由添加中间件。
 
 ### handler
 
@@ -211,35 +211,35 @@ let routes = Router::new()
 - [Todos]
 
 [`path-tree`]: https://github.com/viz-rs/path-tree
-[前缀树]: https://en.wikipedia.org/wiki/Trie
-[`route`]: https://docs.rs/viz/latest/viz/struct.Route.html
-[`resources`]: https://docs.rs/viz/latest/viz/struct.Resources.html
-[`params\<t\>`]: https://docs.rs/viz/latest/viz/types/struct.Params.html
-[`router`]: https://docs.rs/viz/latest/viz/struct.Router.html
-[`method`]: https://docs.rs/viz/latest/viz/struct.Method.html
-[`handler`]: https://docs.rs/viz/latest/viz/handler/trait.Handler.html
-[`handlerext`]: https://docs.rs/viz/latest/viz/handler/trait.HandlerExt.html
-[handlerext.around]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.around
-[handlerext.with]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.with
-[handlerext.with_fn]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.with_fn
-[router.get]: https://docs.rs/viz/latest/viz/struct.Router.html#method.get
-[router.post]: https://docs.rs/viz/latest/viz/struct.Router.html#method.post
-[router.put]: https://docs.rs/viz/latest/viz/struct.Router.html#method.put
-[router.delete]: https://docs.rs/viz/latest/viz/struct.Router.html#method.delete
-[router.head]: https://docs.rs/viz/latest/viz/struct.Router.html#method.head
-[router.options]: https://docs.rs/viz/latest/viz/struct.Router.html#method.options
-[router.connect]: https://docs.rs/viz/latest/viz/struct.Router.html#method.connect
-[router.patch]: https://docs.rs/viz/latest/viz/struct.Router.html#method.path
-[router.trace]: https://docs.rs/viz/latest/viz/struct.Router.html#method.trace
-[router.route]: https://docs.rs/viz/latest/viz/struct.Router.html#method.route
-[router.resources]: https://docs.rs/viz/latest/viz/struct.Router.html#method.resources
-[router.nest]: https://docs.rs/viz/latest/viz/struct.Router.html#method.nest
-[resources.index]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.index
-[resources.new]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.new
-[resources.create]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.create
-[resources.show]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.show
-[resources.edit]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.edit
-[resources.update]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.update
-[resources.update_with_patch]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.update_with_patch
-[resources.destroy]: https://docs.rs/viz/latest/viz/struct.Resources.html#method.destroy
+[trie]: https://en.wikipedia.org/wiki/Trie
+[`route`]: https://docs.rs/viz/0.4.x/viz/struct.Route.html
+[`resources`]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html
+[`params\<t\>`]: https://docs.rs/viz/0.4.x/viz/types/struct.Params.html
+[`router`]: https://docs.rs/viz/0.4.x/viz/struct.Router.html
+[`method`]: https://docs.rs/viz/0.4.x/viz/struct.Method.html
+[`handler`]: https://docs.rs/viz/0.4.x/viz/handler/trait.Handler.html
+[`handlerext`]: https://docs.rs/viz/0.4.x/viz/handler/trait.HandlerExt.html
+[handlerext.around]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.around
+[handlerext.with]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.with
+[handlerext.with_fn]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.with_fn
+[router.get]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.get
+[router.post]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.post
+[router.put]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.put
+[router.delete]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.delete
+[router.head]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.head
+[router.options]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.options
+[router.connect]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.connect
+[router.patch]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.path
+[router.trace]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.trace
+[router.route]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.route
+[router.resources]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.resources
+[router.nest]: https://docs.rs/viz/0.4.x/viz/struct.Router.html#method.nest
+[resources.index]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.index
+[resources.new]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.new
+[resources.create]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.create
+[resources.show]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.show
+[resources.edit]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.edit
+[resources.update]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.update
+[resources.update_with_patch]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.update_with_patch
+[resources.destroy]: https://docs.rs/viz/0.4.x/viz/struct.Resources.html#method.destroy
 [todos]: https://github.com/viz-rs/viz/tree/0.4.x/examples/routing/todos
