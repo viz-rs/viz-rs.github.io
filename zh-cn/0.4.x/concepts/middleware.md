@@ -19,14 +19,13 @@ where
 ```
 
 其中输入参数是一个包含两个元素的元组类型
-`[Next<Request, H>](https://docs.rs/viz/latest/viz/type.Next.html)`：
+`[Next<Request, H>](https://docs.rs/viz/0.4.x/viz/type.Next.html)`：
 
 ```rust
 pub type Next<I, H> = (I, H);
 ```
 
-然后输出结果 `Result<[Response](https://docs.rs/viz/latest/viz/type.Response.html)>`
-进行返回。
+然后返回输出结果 `Result<[Response](https://docs.rs/viz/0.4.x/viz/type.Response.html)>`。
 
 ## 自定义类型
 
@@ -54,5 +53,4 @@ where
 
 > 可以打开 「请求处理」进行对比，它们非常相似，只是参数不同而已，`Handler` 节省了我们很多脑力。🦀️
 
-[`handler`]: https://docs.rs/viz/latest/viz/trait.Handler.html
-
+[`handler`]: https://docs.rs/viz/0.4.x/viz/trait.Handler.html
