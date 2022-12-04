@@ -30,7 +30,7 @@ async fn show_user(mut req: Request) -> Result<Resposne> {
 The [`extract`] function can also take a tuple type, and up to 12 type elements
 can be added to the tuple.
 
-```
+```rust
 #[derive(Debug, Deserialize)]
 struct Pagination {
     pub offset: Option<usize>,

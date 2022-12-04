@@ -29,7 +29,7 @@ async fn show_user(mut req: Request) -> Result<Resposne> {
 
 [`extract`] 函数也可以接收一个元组类型，元组最多可以添加 12 个类型元素。
 
-```
+```rust
 #[derive(Debug, Deserialize)]
 struct Pagination {
     pub offset: Option<usize>,
