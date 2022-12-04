@@ -27,6 +27,22 @@ async fn show_user(mut req: Request) -> Result<Resposne> {
 }
 ```
 
+[`extract`] 函数也可以接收一个元组类型，元组最多可以添加 12 个类型元素。
+
+```
+#[derive(Debug, Deserialize)]
+struct Pagination {
+    pub offset: Option<usize>,
+    pub limit: Option<usize>,
+}
+
+async fn show_more(mut req: Request) -> Result<Resposne> {
+  let (id, Query(Pagination { offset, limit })) =
+      req.extract::<(Params<u32>, Query<Pagination>)>().await?;
+  Ok(Resposne::text(format!("id: {id}, offset: {offset}, limit: {limit}")))
+}
+```
+
 ## 自定义类型
 
 通过定义新类型，实现 [`FromRequest`] 特征来提取信息。

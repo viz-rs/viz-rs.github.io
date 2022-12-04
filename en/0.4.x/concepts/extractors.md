@@ -27,6 +27,23 @@ async fn show_user(mut req: Request) -> Result<Resposne> {
 }
 ```
 
+The [`extract`] function can also take a tuple type, and up to 12 type elements
+can be added to the tuple.
+
+```
+#[derive(Debug, Deserialize)]
+struct Pagination {
+    pub offset: Option<usize>,
+    pub limit: Option<usize>,
+}
+
+async fn show_more(mut req: Request) -> Result<Resposne> {
+  let (id, Query(Pagination { offset, limit })) =
+      req.extract::<(Params<u32>, Query<Pagination>)>().await?;
+  Ok(Resposne::text(format!("id: {id}, offset: {offset}, limit: {limit}")))
+}
+```
+
 ## Custom Types
 
 The [`FromRequest`] feature is implemented to extract information by defining
