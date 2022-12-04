@@ -57,5 +57,5 @@ async fn show_info(mut req: Request) -> Result<Resposne> {
 }
 ```
 
-[`extract`]: https://docs.rs/viz/latest/viz/trait.RequestExt.html#tymethod.extract
-[`FromRequest`]: https://docs.rs/viz/latest/viz/trait.FromRequest.html
+[`extract`]: https://docs.rs/viz/0.4.x/viz/trait.RequestExt.html#tymethod.extract
+[`fromrequest`]: https://docs.rs/viz/0.4.x/viz/trait.FromRequest.html
