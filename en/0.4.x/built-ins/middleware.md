@@ -1,17 +1,18 @@
-# 中间件
+# Middleware
 
-在 Viz 中同时也内置了一些方便的中间件，开启相应的特性，就可以使用它们。
+There is also some convenient middleware built into Viz, and you can use it by
+enabling the appropriate features.
 
-| 特性                             | 说明                  |
-| -------------------------------- | --------------------- |
-| [cookie][m:cookie]               | 提供 Cookie 管理功能   |
-| [cors][m:cors]                   | 跨资源共享处理        |
-| [csrf][m:csrf]                   | 跨站请求伪造处理      |
-| [limits][m:limits]               | 请求主体大小限制      |
-| [session][m:session]             | 会话处理              |
-| [compression][m:compression]     | 响应主体压缩          |
-| [otel::tracing][m:otel::tracing] | OpenTelemetry Tracing |
-| [otel::metrics][m:otel::metrics] | OpenTelemetry Metrics |
+| Feature                          | Description                             |
+| -------------------------------- | --------------------------------------- |
+| [cookie][m:cookie]               | Provides cookie management capabilities |
+| [cors][m:cors]                   | Cross-resource sharing processing       |
+| [csrf][m:csrf]                   | Cross-site request forgery processing   |
+| [limits][m:limits]               | Request body size Limit                 |
+| [session][m:session]             | Session processing                      |
+| [compression][m:compression]     | Response body compression               |
+| [otel::tracing][m:otel::tracing] | OpenTelemetry Tracing                   |
+| [otel::metrics][m:otel::metrics] | OpenTelemetry Metrics                   |
 
 ## Cookie
 
@@ -22,7 +23,7 @@ let app = Router::new()
     .with(cookie::Config::new());
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/session)。
+Complete [example](https://github.com/viz-rs/viz/tree/0.4.x/examples/session).
 
 ## CORS
 
@@ -33,7 +34,7 @@ let app = Router::new()
     .with(cors::Config::default());
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/cors)。
+Complete [example](https://github.com/viz-rs/viz/tree/0.4.x/examples/cors).
 
 ## CSRF
 
@@ -56,7 +57,7 @@ let app = Router::new()
     ));
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/csrf)。
+Complete [example](https://github.com/viz-rs/viz/tree/0.4.x/examples/csrf).
 
 ## Limits
 
@@ -82,7 +83,7 @@ let app = Router::new()
     ));
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/session)。
+Complete [example](https://github.com/viz-rs/viz/tree/0.4.x/examples/session).
 
 ## Compression
 
@@ -93,15 +94,18 @@ let app = Router::new()
     .with(compression::Config::default());
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/compression)。
+Complete
+[example](https://github.com/viz-rs/viz/tree/0.4.x/examples/compression).
 
 ## OpenTelemetry Tracing
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/tracing)。
+Complete
+[example](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/tracing).
 
 ## OpenTelemetry Metrics
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/metrics)。
+Complete
+[example](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/metrics).
 
 [m:cookie]: https://docs.rs/viz-core/0.4.x/viz_core/middleware/cookie
 [m:cors]: https://docs.rs/viz-core/0.4.x/viz_core/middleware/cors

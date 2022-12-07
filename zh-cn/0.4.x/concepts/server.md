@@ -32,7 +32,7 @@ if let Err(err) = Server::bind(&addr)
 
 开启 `unix-socket` 特性，一般需要配合一个反代（例如：Nginx Proxy）。
 
-[`Server`]: https://docs.rs/viz/latest/viz/struct.Server.html
-[`Router`]: https://docs.rs/viz/latest/viz/struct.Router.html
-[`ServiceMaker`]: https://docs.rs/viz/latest/viz/struct.ServiceMaker.html
+[`Server`]: https://docs.rs/viz/0.4.x/viz/struct.Server.html
+[`Router`]: https://docs.rs/viz/0.4.x/viz/struct.Router.html
+[`ServiceMaker`]: https://docs.rs/viz/0.4.x/viz/struct.ServiceMaker.html
 [`Service`]: https://docs.rs/hyper/0.14/hyper/service/index.html

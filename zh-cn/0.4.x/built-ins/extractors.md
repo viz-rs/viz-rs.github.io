@@ -16,14 +16,14 @@
 | state     | [State]     | 提取 `state` 状态数据          |
 | websocket | [Websocket] | 提取 `WebSocket` 连接          |
 
-[query]: https://docs.rs/viz-core/latest/viz_core/types/struct.Query.html
-[params]: https://docs.rs/viz-core/latest/viz_core/types/struct.Params.html
-[header]: https://docs.rs/viz-core/latest/viz_core/types/struct.Header.html
-[cookies]: https://docs.rs/viz-core/latest/viz_core/types/struct.Cookies.html
-[form]: https://docs.rs/viz-core/latest/viz_core/types/struct.Form.html
-[json]: https://docs.rs/viz-core/latest/viz_core/types/struct.Json.html
-[multipart]: https://docs.rs/viz-core/latest/viz_core/types/type.Multipart.html
-[session]: https://docs.rs/viz-core/latest/viz_core/types/struct.Session.html
-[state]: https://docs.rs/viz-core/latest/viz_core/types/struct.State.html
-[websocket]: https://docs.rs/viz-core/latest/viz_core/types/struct.WebSocket.html
-[limits]: https://docs.rs/viz-core/latest/viz_core/types/struct.Limits.html
+[query]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Query.html
+[params]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Params.html
+[header]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Header.html
+[cookies]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Cookies.html
+[form]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Form.html
+[json]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Json.html
+[multipart]: https://docs.rs/viz-core/0.4.x/viz_core/types/type.Multipart.html
+[session]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Session.html
+[state]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.State.html
+[websocket]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.WebSocket.html
+[limits]: https://docs.rs/viz-core/0.4.x/viz_core/types/struct.Limits.html

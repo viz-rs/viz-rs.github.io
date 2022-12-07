@@ -46,18 +46,19 @@ async fn index(_: Request) -> Result<Response> {
 
 其中 `Input = Request`，`Output = Result\<Response\>`。
 
-对 `Result\<Response\>` 补全，
-将是 `Result\<Response, [Error](https://docs.rs/viz/latest/viz/enum.Error.html)\>`
+对 `Result\<Response\>` 补全， 将是
+`Result\<Response, [Error](https://docs.rs/viz/0.4.x/viz/enum.Error.html)\>`
 
 1. 为什么不直接返回 [`Response`]？
 
-因为在实际场景中，需要判断文件、IO、DB 等的常规错误，所以返回 `Result\<Response\>` 是最合适的。
-也能利用 `?` 操作符，尽早返回错误，响应给客户端。
+因为在实际场景中，需要判断文件、IO、DB 等的常规错误，所以返回 `Result\<Response\>` 是最合适的。 也能利用 `?`
+操作符，尽早返回错误，响应给客户端。
 
-2. 为什么不直接返回 `impl [IntoResponse](https://docs.rs/viz/latest/viz/trait.IntoResponse.htm)`？
+2. 为什么不直接返回
+   `impl [IntoResponse](https://docs.rs/viz/0.4.x/viz/trait.IntoResponse.html)`？
 
-虽然已经对 `Result\<T\>` 实现了 [`IntoResponse`] 特征，但有个特殊情况，如果 `T = Result\<R\>`，
-在 [`fatten`] 未稳定的情况下，暂时还无法打平结果，因此无法正常返回。
+虽然已经对 `Result\<T\>` 实现了 [`IntoResponse`] 特征，但有个特殊情况，如果 `T = Result\<R\>`， 在
+[`fatten`] 未稳定的情况下，暂时还无法打平结果，因此无法正常返回。
 
 3. 如何自定义错误及响应？
 
@@ -85,8 +86,7 @@ impl IntoResponse for MyError {
 }
 ```
 
-
-[`Handler`]: https://docs.rs/viz/latest/viz/trait.Handler.html
-[`IntoResponse`]: https://docs.rs/viz/latest/viz/trait.IntoResponse.html
-[`Response`]: https://docs.rs/viz/latest/viz/struct.Response.html
+[`handler`]: https://docs.rs/viz/0.4.x/viz/trait.Handler.html
+[`intoresponse`]: https://docs.rs/viz/0.4.x/viz/trait.IntoResponse.html
+[`response`]: https://docs.rs/viz/0.4.x/viz/struct.Response.html
 [`fatten`]: https://doc.rust-lang.org/std/result/enum.Result.html#method.flatten

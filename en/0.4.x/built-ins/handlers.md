@@ -1,36 +1,40 @@
-# 请求处理
+# Request Handling
 
-在 Viz 中内置了一些方便的 `handler`，开启相应的特性，就可以使用它们。
+There are some handy `handler` built into Viz, and you can use them by turning
+on the corresponding features.
 
-| 特性           | 说明                              |
+| Feature        | Description                       |
 | -------------- | --------------------------------- |
-| [`serve`]      | 静态文件和目录服务                |
-| [`embed`]      | 嵌入资源文件                      |
+| [`serve`]      | Serve static file and directory   |
+| [`embed`]      | Embedded resource files           |
 | [`prometheus`] | OpenTelemetry Prometheus Exporter |
 
 ## serve
 
-可以灵活的对单个文件或者目录进行服务。
+Flexible servicing of individual files or directories is possible.
 
-- [`serve::File`]：服务指定文件
+- [`serve::File`]：Serve specific file
 
-- [`serve::Dir`]：服务指定目录
+- [`serve::Dir`]：Serve specific directory
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/static-files/serve)。
+Complete
+[example](https://github.com/viz-rs/viz/tree/0.4.x/examples/static-files/serve).
 
 ## embed
 
-可以把资源文件打包进执行文件中，生成单一文件，方便管理部署。
+Resource files can be packaged into executable files to generate a single file
+for easy management of deployment.
 
-- [`embed::File`]：嵌入指定文件
+- [`embed::File`]：Embed specific file
 
-- [`embed::Dir`]：嵌入指定目录
+- [`embed::Dir`]：Embed specific directory
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/static-files/embed)。
+Complete
+[example](https://github.com/viz-rs/viz/tree/0.4.x/examples/static-files/embed).
 
 ## prometheus
 
-可以输出当前 `metrics` 信息，以供 `Prometheus` 收集。
+Current `metrics` information can be exported for collection by `Prometheus`.
 
 ```rust
 use opentelemetry::{
@@ -63,7 +67,8 @@ let app = Router::new()
     .get("/metrics", handler);
 ```
 
-完整[示例](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/metrics)。
+Complete
+[example](https://github.com/viz-rs/viz/tree/0.4.x/examples/otel/metrics).
 
 [`serve`]: https://docs.rs/viz/0.4.x/viz/handlers/serve/index.html
 [`serve::file`]: https://docs.rs/viz/0.4.x/viz/handlers/serve/struct.File.html

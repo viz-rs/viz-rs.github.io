@@ -1,37 +1,37 @@
-# 示例
+# Examples
 
-这里，你可以找到一些小螃蟹 🦀。
+Here you can find a lot of small crabs 🦀.
 
-## 列表
+## Table of contents
 
-* [Hello world][hello-world]
-* [Unix socket domain][unix-socket]
-* [Static file serving and directory listing][static-files/serve]
-* [Static files serving and embedding][static-files/embed]
-* [Extract body from Form][forms/form]
-* [Extract body from Multipart][forms/multipart]
-* [Websockt Chat][websocket-chat]
-* [Server-Sent Events][sse]
-* [Session][session]
-* [CSRF][csrf]
-* [CORS][cors]
-* [Compression response body][compression]
-* [HTTPS/TLS - rustls][rustls]
-* [Defined a static router][static-routes]
-* [Todos][routing/todos]
-* [Integration Opentelemetry(OTEL)](https://github.com/open-telemetry/opentelemetry-rust)
-  * [Tracing][otel/tracing]
-  * [Metrics & Prometheus][otel/metrics]
+- [Hello world][hello-world]
+- [Unix socket domain][unix-socket]
+- [Static file serving and directory listing][static-files/serve]
+- [Static files serving and embedding][static-files/embed]
+- [Extract body from Form][forms/form]
+- [Extract body from Multipart][forms/multipart]
+- [Websockt Chat][websocket-chat]
+- [Server-Sent Events][sse]
+- [Session][session]
+- [CSRF][csrf]
+- [CORS][cors]
+- [Compression response body][compression]
+- [HTTPS/TLS - rustls][rustls]
+- [Defined a static router][static-routes]
+- [Todos][routing/todos]
+- [Integration Opentelemetry(OTEL)](https://github.com/open-telemetry/opentelemetry-rust)
+  - [Tracing][otel/tracing]
+  - [Metrics & Prometheus][otel/metrics]
 
-## 运行与测试
+## Usage
 
-### 运行
+### Run it
 
 ```bash
 $ cargo run --bin hello-world -- --nocapture
 ```
 
-### 测试
+### Fetch data
 
 ```bash
 $ curl http://127.0.0.1:3000
@@ -48,7 +48,7 @@ $ curl http://127.0.0.1:3000
 [session]: https://github.com/viz-rs/viz/blob/0.4.x/examples/session
 [csrf]: https://github.com/viz-rs/viz/blob/0.4.x/examples/csrf
 [cors]: https://github.com/viz-rs/viz/blob/0.4.x/examples/cors
-[compression]: https://github.com/viz-rs/viz/blob/0.4.x/examples/compresssion 
+[compression]: https://github.com/viz-rs/viz/blob/0.4.x/examples/compresssion
 [rustls]: https://github.com/viz-rs/viz/blob/0.4.x/examples/rustls
 [static-routes]: https://github.com/viz-rs/viz/blob/0.4.x/examples/static-routes
 [routing/todos]: https://github.com/viz-rs/viz/blob/0.4.x/examples/routing/todos

@@ -19,7 +19,7 @@ pub trait Handler<Input>: dyn_clone::DynClone + Send + Sync + 'static {
 
 ### 一个简单的异步处理函数
 
-其中输入 [`Request`]，输出 `Result\<[Response](https://docs.rs/viz/latest/viz/type.Response.html)\>`。
+其中输入 [`Request`]，输出 `Result\<[Response](https://docs.rs/viz/0.4.x/viz/type.Response.html)\>`。
 
 ```rust
 async fn index(_: Request) -> Result<Response> {
@@ -73,21 +73,21 @@ impl Handler<Request> for MyHandler {
 
 > 这里先简单介绍下，在路由章节会详细展开
 
-[`handler`]: https://docs.rs/viz/latest/viz/trait.Handler.html
-[`handlerext`]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html
-[`transform`]: https://docs.rs/viz/latest/viz/trait.Transform.html
-[`request`]: https://docs.rs/viz/latest/viz/type.Request.html
-[`response`]: https://docs.rs/viz/latest/viz/type.Response.html
-[method.boxed]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.boxed
-[method.before]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.before
-[method.after]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.after
-[method.around]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.around
-[method.map]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.map
-[method.map_into_response]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.map_into_response
-[method.and_then]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.and_then
-[method.map_err]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.map_err
-[method.or_err]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.or_err
-[method.catch_error]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.catch_error
-[method.catch_unwind]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.catch_unwind
-[method.with]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.with
-[method.with_fn]: https://docs.rs/viz/latest/viz/trait.HandlerExt.html#method.with_fn
+[`handler`]: https://docs.rs/viz/0.4.x/viz/trait.Handler.html
+[`handlerext`]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html
+[`transform`]: https://docs.rs/viz/0.4.x/viz/trait.Transform.html
+[`request`]: https://docs.rs/viz/0.4.x/viz/type.Request.html
+[`response`]: https://docs.rs/viz/0.4.x/viz/type.Response.html
+[method.boxed]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.boxed
+[method.before]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.before
+[method.after]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.after
+[method.around]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.around
+[method.map]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.map
+[method.map_into_response]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.map_into_response
+[method.and_then]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.and_then
+[method.map_err]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.map_err
+[method.or_err]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.or_err
+[method.catch_error]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.catch_error
+[method.catch_unwind]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.catch_unwind
+[method.with]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.with
+[method.with_fn]: https://docs.rs/viz/0.4.x/viz/trait.HandlerExt.html#method.with_fn
