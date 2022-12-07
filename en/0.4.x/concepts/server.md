@@ -1,4 +1,4 @@
-# 服务
+# Server
 
 By configuring the [`Server`], you can then quickly start a service.
 
