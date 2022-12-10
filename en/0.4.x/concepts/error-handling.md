@@ -38,7 +38,7 @@ async fn index(_: Request) -> Result<Response> {
 }
 ```
 
-Or (closed function):
+Or (closure function):
 
 ```rust
 |req: Request| async { Ok("Hello".into_response()) }
