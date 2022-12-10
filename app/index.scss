@@ -145,6 +145,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 @supports (font-variation-settings: normal) {
@@ -174,17 +175,22 @@ flex-240 {
 }
 
 .navbar {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: #ffffff;
 
   #versions {
     margin-top: calc((1.25rem - 0.75rem) / 2);
     margin-left: calc((1.25rem - 0.75rem) / 2);
     outline: none;
+    appearance: none;
     background: transparent;
 
     option[selected] {
       color: rgb(202, 138, 4);
     }
+  }
+
+  #toggle-sidebar {
+    display: flex;
   }
 }
 
@@ -201,6 +207,7 @@ flex-240 {
 }
 
 .sidebar {
+  background-color: #ffffff;
   width: 240px;
   opacity: 0;
   overflow-x: hidden;
@@ -208,10 +215,13 @@ flex-240 {
   transform: translate(-100%);
   transition: background-color 0.5s, opacity 0.25s,
     transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-}
 
-.sidebar + #page {
-  padding-left: 240px;
+  &.opened {
+    opacity: 1;
+    visibility: visible;
+    box-shadow: none;
+    transform: translate(0);
+  }
 }
 
 .page-container {
@@ -225,6 +235,7 @@ flex-240 {
     font-weight: 400;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    max-width: 100vw;
 
     h1 {
       font-size: 1.9rem;
@@ -605,6 +616,10 @@ html.dark {
     }
   }
 
+  .sidebar {
+    background-color: rgba(18, 18, 18, 0.876);
+  }
+
   #page {
     article {
       :not(pre) > code {
@@ -653,12 +668,21 @@ html.dark {
 }
 
 @media (min-width: 960px) {
+  /*
   .sidebar {
-    z-index: 1;
     opacity: 1;
     visibility: visible;
     box-shadow: none;
     transform: translate(0);
+  }
+  */
+
+  .sidebar + #page {
+    padding-left: 240px;
+  }
+
+  .navbar #toggle-sidebar {
+    display: none;
   }
 
   #page article {

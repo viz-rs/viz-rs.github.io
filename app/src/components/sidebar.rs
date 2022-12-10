@@ -10,6 +10,7 @@ use crate::{Route, Section};
 pub struct Props {
     pub sections: Rc<Vec<Section>>,
     pub version: Rc<String>,
+    pub sidebar: bool,
 }
 
 pub struct Sidebar {}
@@ -27,7 +28,12 @@ impl Component for Sidebar {
         let props = ctx.props();
 
         html! {
-            <aside class="fixed flex flex-col p-5 gap-4 sidebar top-4.375rem bottom-0">
+            <aside
+                class={classes!(
+                        "fixed", "z-35", "flex", "flex-col", "p-5", "gap-4", "sidebar", "top-4.375rem", "bottom-0",
+                        props.sidebar.then_some("opened")
+                    )}
+                >
                 { self.view_sections(props.sections.to_vec(), props.version.clone(), location.path()) }
             </aside>
         }
@@ -54,7 +60,13 @@ impl Sidebar {
         }
     }
 
-    fn view_list(&self, list: Vec<(String, String)>, prefix: String, version: Rc<String>, path: &str) -> Html {
+    fn view_list(
+        &self,
+        list: Vec<(String, String)>,
+        prefix: String,
+        version: Rc<String>,
+        path: &str,
+    ) -> Html {
         let cs = "inline-block py-1 font-normal transition-colors hover:op100";
 
         html! {

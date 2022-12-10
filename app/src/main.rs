@@ -66,13 +66,16 @@ pub enum Msg {
     CloseSidebar,
     UpdateSidebar(Vec<Section>),
     ChangedVersion(String),
+    UpdateIsHome(bool),
 }
 
 #[allow(dead_code)]
 struct App {
     dark: bool,
     sidebar: bool,
+    is_home: bool,
     mql: MediaQueryList,
+    mql_960: MediaQueryList,
     sections: Rc<Vec<Section>>,
     version: Rc<String>,
     update_sidebar: Callback<Vec<Section>>,
@@ -83,14 +86,27 @@ impl Component for App {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        let changed_dark = ctx.link().callback(|m: Msg| m);
+        let update = ctx.link().callback(|m: Msg| m);
         let mql = utils::media_query("(prefers-color-scheme: dark)").unwrap();
+        let change_dark = update.clone();
         let cb: Closure<dyn Fn(MediaQueryListEvent)> =
             Closure::new(move |e: MediaQueryListEvent| {
-                changed_dark.emit(Msg::ChangedDark(e.matches()));
+                change_dark.emit(Msg::ChangedDark(e.matches()));
             });
         mql.set_onchange(Some(cb.as_ref().unchecked_ref()));
         cb.forget();
+
+        let mql_960 = utils::media_query("(min-width: 960px)").unwrap();
+        let cb_960: Closure<dyn Fn(MediaQueryListEvent)> =
+            Closure::new(move |e: MediaQueryListEvent| {
+                update.emit(if e.matches() {
+                    Msg::OpenSidebar
+                } else {
+                    Msg::CloseSidebar
+                });
+            });
+        mql_960.set_onchange(Some(cb_960.as_ref().unchecked_ref()));
+        cb_960.forget();
 
         let update_sidebar = ctx.link().callback(|sections| Msg::UpdateSidebar(sections));
 
@@ -109,15 +125,17 @@ impl Component for App {
 
         Self {
             dark,
-            sidebar: false,
+            sidebar: mql_960.matches(),
+            is_home: true,
             mql,
+            mql_960,
             version: Rc::new("0.4.x".to_string()),
             sections: Rc::new(vec![]),
             update_sidebar,
         }
     }
 
-    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::ChangedDark(dark) => {
                 if self.dark == dark {
@@ -174,19 +192,37 @@ impl Component for App {
                     .is_ok()
             }
             Msg::OpenSidebar => {
-                if self.sidebar {
-                    false
+                if self.is_home {
+                    if self.sidebar {
+                        self.sidebar = false;
+                        true
+                    } else {
+                        false
+                    }
                 } else {
-                    self.sidebar = true;
-                    true
+                    if self.sidebar {
+                        false
+                    } else {
+                        self.sidebar = true;
+                        true
+                    }
                 }
             }
             Msg::CloseSidebar => {
-                if self.sidebar {
-                    self.sidebar = false;
-                    true
+                if self.is_home {
+                    if self.sidebar {
+                        self.sidebar = false;
+                        true
+                    } else {
+                        false
+                    }
                 } else {
-                    false
+                    if self.sidebar {
+                        self.sidebar = false;
+                        true
+                    } else {
+                        false
+                    }
                 }
             }
             Msg::UpdateSidebar(sections) => {
@@ -215,6 +251,14 @@ impl Component for App {
                     true
                 }
             }
+            Msg::UpdateIsHome(y) => {
+                if self.is_home != y {
+                    self.is_home = y;
+                    true
+                } else {
+                    false
+                }
+            }
         }
     }
 
@@ -227,12 +271,20 @@ impl Component for App {
         html! {
             <BrowserRouter>
                 <div id="app" class="tracking-0.2px">
-                    <components::Header toggle_dark={toggle_dark} toggle_sidebar={toggle_sidebar} version={version.clone()} change={change_version} />
+                    <components::Header
+                        toggle_dark={toggle_dark}
+                        toggle_sidebar={toggle_sidebar}
+                        version={version.clone()}
+                        change={change_version}
+                        sidebar={self.sidebar}
+                    />
 
                     <div class="page-container flex-row pt-4.375rem">
-                        if self.sidebar {
-                            <components::Sidebar sections={self.sections.clone()} version={version.clone()} />
-                        }
+                        <components::Sidebar
+                            sections={self.sections.clone()}
+                            version={version.clone()}
+                            sidebar={self.sidebar}
+                        />
 
                         <main id="page" class="flex flex-row flex-1 py-5">
                             <components::Switch<Route> render={switch} version={version} />

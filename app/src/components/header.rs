@@ -1,17 +1,21 @@
 use std::rc::Rc;
 
 use wasm_bindgen::{JsCast, UnwrapThrowExt};
-use web_sys::{HtmlAnchorElement, HtmlSelectElement};
+use web_sys::{HtmlAnchorElement, HtmlElement, HtmlSelectElement};
 use yew::prelude::*;
 use yew_router::prelude::*;
 
-use crate::{utils, Msg, Route, METADATA};
+use crate::{
+    utils::{self, window},
+    Msg, Route, METADATA,
+};
 
 #[derive(Clone, Debug, PartialEq, Properties)]
 pub struct Props {
     pub toggle_dark: Callback<MouseEvent>,
     pub toggle_sidebar: Callback<Msg>,
     pub version: Rc<String>,
+    pub sidebar: bool,
     pub change: Callback<String>,
 }
 
@@ -29,7 +33,12 @@ impl Component for Header {
             ctx.link()
                 .add_location_listener(ctx.link().callback(move |location: Location| {
                     let path = location.path();
-                    props.toggle_sidebar.emit(if path.starts_with("/docs") {
+
+                    props
+                        .toggle_sidebar
+                        .emit(Msg::UpdateIsHome(path.len() == 1));
+
+                    if path.starts_with("/docs") {
                         if let Some(aside) = utils::document()
                             .query_selector("aside")
                             .expect_throw("Can't find .aside")
@@ -60,10 +69,32 @@ impl Component for Header {
                             }
                         }
 
-                        Msg::OpenSidebar
+                        if let Some(e) = utils::document()
+                            .get_element_by_id("toggle-sidebar")
+                            .expect_throw("Can't find .aside")
+                            .dyn_ref::<HtmlElement>()
+                        {
+                            if let Ok(Some(s)) = window().get_computed_style(&e) {
+                                if s.get_property_value("display") == Ok("none".to_string()) {
+                                    props.toggle_sidebar.emit(Msg::OpenSidebar);
+                                } else {
+                                    props.toggle_sidebar.emit(Msg::CloseSidebar);
+                                }
+                            }
+                        }
                     } else {
-                        Msg::CloseSidebar
-                    });
+                        props.toggle_sidebar.emit(Msg::CloseSidebar);
+                        if let Some(e) = utils::document()
+                            .get_element_by_id("toggle-sidebar")
+                            .expect_throw("Can't find .aside")
+                            .dyn_ref::<HtmlElement>()
+                        {
+                            // if !e.class_list().contains("hidden") {
+                            //     let _ = e.class_list().remove_1("flex");
+                            //     let _ = e.class_list().add_1("hidden");
+                            // }
+                        }
+                    }
                 }))
         };
 
@@ -78,12 +109,22 @@ impl Component for Header {
         let pathname = location.pathname().unwrap();
         let parts = hostname.split('.').collect::<Vec<&str>>();
         let lang = if parts.len() == 3 { parts[0] } else { "" };
-        let version = ctx.props().version.clone();
-        let change_version = ctx.props().change.clone();
+        let props = ctx.props();
+        let open = props.sidebar;
+        let version = props.version.clone();
+        let change_version = props.change.clone();
         let change = ctx.link().callback(move |e: Event| {
             if let Some(target) = e.target_dyn_into::<HtmlSelectElement>() {
                 change_version.emit(target.value());
             }
+        });
+        let change_sidebar = props.toggle_sidebar.clone();
+        let toggle = ctx.link().callback(move |_: MouseEvent| {
+            change_sidebar.emit(if open {
+                Msg::CloseSidebar
+            } else {
+                Msg::OpenSidebar
+            });
         });
 
         html! {
@@ -117,7 +158,7 @@ impl Component for Header {
                                 <a class={classes!(
                                         "flex",
                                         "hover:text-yellow-600",
-                                        (lang == "").then(|| Some("text-yellow-600"))
+                                        (lang == "").then_some(Some("text-yellow-600"))
                                     )}
                                     data-lang="en"
                                     href={format!("https://viz.rs{}", pathname)}
@@ -129,7 +170,7 @@ impl Component for Header {
                                 <a class={classes!(
                                         "flex",
                                         "hover:text-yellow-600",
-                                        (lang == "zh-cn").then(|| Some("text-yellow-600"))
+                                        (lang == "zh-cn").then_some(Some("text-yellow-600"))
                                     )}
                                     data-lang="zh-cn"
                                     href={format!("https://zh-cn.viz.rs{}", pathname)}
@@ -143,6 +184,22 @@ impl Component for Header {
                         <span class="dark:i-lucide-moon i-lucide-sun block" />
                     </button>
                 </div>
+                <button
+                    class="absolute w-8 h-8 items-center justify-center left-0 bottom--8"
+                    id="toggle-sidebar"
+                    onclick={toggle}
+                >
+                    <span
+                        class={classes!(
+                            "block",
+                            if open {
+                                "i-lucide-sidebar-close"
+                            } else {
+                                "i-lucide-sidebar-open"
+                            }
+                        )}
+                    />
+                </button>
             </header>
         }
     }
