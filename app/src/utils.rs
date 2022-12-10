@@ -36,21 +36,12 @@ pub fn history() -> web_sys::History {
     window().history().expect_throw("Can't find history")
 }
 
-pub fn local_storage() -> web_sys::Storage {
-    window()
-        .local_storage()
-        .expect_throw("failed to get local_storage")
-        .expect_throw("no local storage")
-}
-
 pub fn local_storage_get(key: &str) -> Option<String> {
-    local_storage()
-        .get(key)
-        .expect_throw("Can't find local_storage")
+    window().local_storage().ok()??.get(key).ok()?
 }
 
-pub fn local_storage_set(key: &str, val: &str) -> bool {
-    local_storage().set(key, val).is_ok()
+pub fn local_storage_set(key: &str, val: &str) -> Option<()> {
+    window().local_storage().ok()??.set(key, val).ok()
 }
 
 pub fn media_query(key: &str) -> Option<web_sys::MediaQueryList> {
