@@ -677,7 +677,7 @@ html.dark {
   }
   */
 
-  .sidebar + #page {
+  .sidebar.opened + #page {
     padding-left: 240px;
   }
 
