@@ -14,12 +14,12 @@ where
 {
     // before executing the handler, you can do some processing on the request
     let resp = handler.call(req).await;
-    // After the handler is executed, something can be done with the response
+    // after the handler is executed, something can be done with the response
     resp
 }
 ```
 
-where the input parameter is a tuple type containing two elements
+Where the input parameter is a tuple type containing two elements
 `[Next<Request, H>](https://docs.rs/viz/0.4.x/viz/type.Next.html)`：
 
 ```rust
@@ -47,7 +47,7 @@ where
     async fn call(&self, (req, handler): Next<Request, H>) -> Self::Output {
         // before executing the handler, you can do some processing on the request
         let resp = handler.call(req).await;
-        // After the handler is executed, something can be done with the response
+        // after the handler is executed, something can be done with the response
         resp
     }
 }
