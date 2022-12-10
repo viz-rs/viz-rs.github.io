@@ -84,16 +84,6 @@ impl Component for Header {
                         }
                     } else {
                         props.toggle_sidebar.emit(Msg::CloseSidebar);
-                        if let Some(e) = utils::document()
-                            .get_element_by_id("toggle-sidebar")
-                            .expect_throw("Can't find .aside")
-                            .dyn_ref::<HtmlElement>()
-                        {
-                            // if !e.class_list().contains("hidden") {
-                            //     let _ = e.class_list().remove_1("flex");
-                            //     let _ = e.class_list().add_1("hidden");
-                            // }
-                        }
                     }
                 }))
         };
