@@ -21,9 +21,9 @@ pub trait FromRequest: Sized {
 Information is extracted via the [`extract`] function.
 
 ```rust
-async fn show_user(mut req: Request) -> Result<Resposne> {
+async fn show_user(mut req: Request) -> Result<Response> {
   let id = req.extract::<Params<u32>>().await?;
-  Ok(Resposne::text(format!("id: {id}")))
+  Ok(Response::text(format!("id: {id}")))
 }
 ```
 
@@ -37,10 +37,10 @@ struct Pagination {
     pub limit: Option<usize>,
 }
 
-async fn show_more(mut req: Request) -> Result<Resposne> {
+async fn show_more(mut req: Request) -> Result<Response> {
   let (id, Query(Pagination { offset, limit })) =
       req.extract::<(Params<u32>, Query<Pagination>)>().await?;
-  Ok(Resposne::text(format!("id: {id}, offset: {offset}, limit: {limit}")))
+  Ok(Response::text(format!("id: {id}, offset: {offset}, limit: {limit}")))
 }
 ```
 
@@ -69,9 +69,9 @@ impl<T> FromRequest for RequestInfo
     }
 }
 
-async fn show_info(mut req: Request) -> Result<Resposne> {
+async fn show_info(mut req: Request) -> Result<Response> {
   let req_info = req.extract::<RequestInfo>().await?;
-  Ok(Resposne::text(format!("info: {req_info:#?}")))
+  Ok(Response::text(format!("info: {req_info:#?}")))
 }
 ```
 
