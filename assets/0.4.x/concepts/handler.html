@@ -13,6 +13,7 @@
 </span><span class=line>  <span class=variable>count</span>: <span class=type>Arc</span><span class=punctuation.bracket><</span><span class=type>AtomicUsize</span><span class=punctuation.bracket>></span><span class=punctuation.delimiter>,</span>
 </span><span class=line><span class=punctuation.bracket>}</span>
 </span><span class=line>
+</span><span class=line><span class=punctuation.bracket>#</span><span class=punctuation.bracket>[</span><span class=function.macro>async_trait</span><span class=punctuation.bracket>]</span>
 </span><span class=line><span class=keyword>impl</span> <span class=type>Handler</span><span class=punctuation.bracket><</span><span class=type>Request</span><span class=punctuation.bracket>></span> <span class=keyword>for</span> <span class=type>MyHandler</span> <span class=punctuation.bracket>{</span>
 </span><span class=line>    <span class=keyword>type</span> <span class=type>Output</span> <span class=operator>=</span> <span class=type>Result</span><span class=punctuation.bracket><</span><span class=type>Response</span><span class=punctuation.bracket>></span><span class=punctuation.delimiter>;</span>
 </span><span class=line>
