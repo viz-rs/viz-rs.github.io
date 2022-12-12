@@ -120,7 +120,10 @@ impl Component for Header {
         html! {
             <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
                 <div class="flex flex-row">
-                    <Link<Route> classes="flex flex-row items-center transition-colors op75 hover:op100" to={Route::Home}>
+                    <Link<Route>
+                        classes="flex flex-row items-center transition-colors op75 hover:op100"
+                        to={Route::Home}
+                    >
                         <img class="h-10 block b-neutral-100 dark:b-neutral-500 b mr-1 mr-3" alt="Viz" src="/logo.svg" />
                         <span class="font-semibold">{"V"}</span>
                         {"iz"}
@@ -131,16 +134,36 @@ impl Component for Header {
                     </select>
                 </div>
                 <div class="flex-row items-center gap-5 font-medium text-15px">
-                    <Link<Route> classes="transition-colors op75 hover:op100" to={Route::Document { path: "guide/introduction".to_string() }}>
-                        {METADATA.docs}
+                    <Link<Route>
+                        classes="transition-colors op75 hover:op100"
+                        to={Route::Document { path: format!("{}/guide/introduction", version) }}
+                    >
+                        <span class="i-lucide-book block" />
                     </Link<Route>>
-                    <a class="transition-colors op75 hover:op100" href={format!("https://docs.rs/viz/{}", version)} target="_blank" rel="noreferrer">
-                        {"API"}
+                    <a
+                        rel="noreferrer"
+                        target="_blank"
+                        class="transition-colors op75 hover:op100"
+                        // title={"API"}
+                        href={format!("https://docs.rs/viz/{}", version)}
+                    >
+                        <span class="i-lucide-boxes block" />
                     </a>
-                    <a class="transition-colors op75 hover:op100 i-lucide-github" href="https://github.com/viz-rs/viz" target="_blank" rel="noreferrer" />
-                    <div class="dropdown-menu cursor-pointer h-7.5 flex justify-center items-center relative">
-                        <button class="flex items-center button">
-                            <span class="inline-block transition-colors i-lucide-languages" />
+                    <a
+                        target="_blank"
+                        rel="noreferrer"
+                        class="transition-colors op75 hover:op100"
+                        // title={"GitHub"}
+                        href="https://github.com/viz-rs/viz"
+                    >
+                        <span class="i-lucide-github block" />
+                    </a>
+                    <div class="dropdown-menu cursor-pointer h-7.5 flex justify-center items-center relative transition-colors op75 hover:op100">
+                        <button
+                            class="flex items-center button"
+                            title=""
+                        >
+                            <span class="inline-block i-lucide-languages" />
                             <span class="i-lucide-chevron-down" />
                         </button>
                         <ul class="dropdown-list absolute text-3.5">
@@ -148,7 +171,7 @@ impl Component for Header {
                                 <a class={classes!(
                                         "flex",
                                         "hover:text-yellow-600",
-                                        (lang == "").then_some(Some("text-yellow-600"))
+                                        (lang == "").then_some("text-yellow-600")
                                     )}
                                     data-lang="en"
                                     href={format!("https://viz.rs{}", pathname)}
@@ -160,7 +183,7 @@ impl Component for Header {
                                 <a class={classes!(
                                         "flex",
                                         "hover:text-yellow-600",
-                                        (lang == "zh-cn").then_some(Some("text-yellow-600"))
+                                        (lang == "zh-cn").then_some("text-yellow-600")
                                     )}
                                     data-lang="zh-cn"
                                     href={format!("https://zh-cn.viz.rs{}", pathname)}
@@ -170,8 +193,12 @@ impl Component for Header {
                             </li>
                         </ul>
                     </div>
-                    <button class="hover:bg-gray5:2 hover:op100" onclick={ctx.props().toggle_dark.clone()}>
-                        <span class="dark:i-lucide-moon i-lucide-sun block" />
+                    <button
+                        class="transition-colors op75 hover:op100"
+                        // title={format!("{} {} {}", METADATA.color_scheme, "dark", METADATA.mode)}
+                        onclick={ctx.props().toggle_dark.clone()}
+                    >
+                        <span class="dark:i-lucide-moon i-lucide-sun block" aria-hidden="true" />
                     </button>
                 </div>
                 <button

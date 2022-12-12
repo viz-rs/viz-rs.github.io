@@ -20,6 +20,8 @@ pub struct Metadata {
     pub description: &'static str,
     pub note: &'static str,
     pub docs: &'static str,
+    pub mode: &'static str,
+    pub color_scheme: &'static str,
     pub build_with: &'static str,
     pub deploys_on: &'static str,
     pub get_started: &'static str,

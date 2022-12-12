@@ -10,14 +10,12 @@ command_arguments = [
   "src/**/*.rs",
   "../tools/src/*.rs",
   "-o",
-  "../dist/.stage/uno.css"
+  "../dist/.stage/uno.css",
 ]
 [[hooks]]
 stage = "post_build"
 command = "just"
-command_arguments = [
-  "en",
-]
+command_arguments = ["en"]
 
 [watch]
-watch = ["index.scss", "../en"]
+watch = ["index.scss", "src", "../en"]
