@@ -37,6 +37,7 @@ struct MyHandler {
   count: Arc<AtomicUsize>,
 }
 
+#[async_trait]
 impl Handler<Request> for MyHandler {
     type Output = Result<Response>;
 
