@@ -212,9 +212,7 @@ fn content(props: &Props) -> HtmlResult {
 #[function_component(Document)]
 pub fn doc(props: &Props) -> Html {
     let fallback = html! {
-        <div class="flex items-center w-full op61.8">
-            <div class="i-lucide-loader w-6 h-6 animate-spin" />
-        </div>
+        <div id="loader" class="i-lucide-loader w-6 h-6 animate-spin absolute" />
     };
 
     html! {

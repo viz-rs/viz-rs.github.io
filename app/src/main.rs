@@ -64,22 +64,21 @@ pub struct Section {
 pub enum Msg {
     ToggleDark,
     ChangedDark(bool),
-    OpenSidebar,
-    CloseSidebar,
     UpdateSidebar(Vec<Section>),
+    OpenOrCloseSidebar(bool),
     ChangedVersion(String),
-    UpdateIsHome(bool),
+    UpdateHome(bool),
 }
 
 #[allow(dead_code)]
 struct App {
     dark: bool,
+    home: bool,
     sidebar: bool,
-    is_home: bool,
-    mql: MediaQueryList,
-    mql_960: MediaQueryList,
-    sections: Rc<Vec<Section>>,
     version: Rc<String>,
+    sections: Rc<Vec<Section>>,
+    mqls: (MediaQueryList, MediaQueryList),
+    update: Callback<Msg>,
     update_sidebar: Callback<Vec<Section>>,
 }
 
@@ -88,32 +87,23 @@ impl Component for App {
     type Properties = ();
 
     fn create(ctx: &Context<Self>) -> Self {
-        let update = ctx.link().callback(|m: Msg| m);
-        let mql = utils::media_query("(prefers-color-scheme: dark)").unwrap();
-        let change_dark = update.clone();
-        let cb: Closure<dyn Fn(MediaQueryListEvent)> =
-            Closure::new(move |e: MediaQueryListEvent| {
-                change_dark.emit(Msg::ChangedDark(e.matches()));
-            });
-        mql.set_onchange(Some(cb.as_ref().unchecked_ref()));
-        cb.forget();
+        let link = ctx.link();
+        let update = link.callback(|m: Msg| m);
+        let update_sidebar = link.callback(|sections| Msg::UpdateSidebar(sections));
 
-        let mql_960 = utils::media_query("(min-width: 960px)").unwrap();
-        let cb_960: Closure<dyn Fn(MediaQueryListEvent)> =
-            Closure::new(move |e: MediaQueryListEvent| {
-                update.emit(if e.matches() {
-                    Msg::OpenSidebar
-                } else {
-                    Msg::CloseSidebar
+        let m0 = utils::media_query("(prefers-color-scheme: dark)").unwrap();
+        {
+            let update = update.clone();
+            let cb: Closure<dyn Fn(MediaQueryListEvent)> =
+                Closure::new(move |e: MediaQueryListEvent| {
+                    update.emit(Msg::ChangedDark(e.matches()))
                 });
-            });
-        mql_960.set_onchange(Some(cb_960.as_ref().unchecked_ref()));
-        cb_960.forget();
+            m0.set_onchange(Some(cb.as_ref().unchecked_ref()));
+            cb.forget();
+        }
 
-        let update_sidebar = ctx.link().callback(|sections| Msg::UpdateSidebar(sections));
-
-        let mode = utils::local_storage_get("color-scheme").unwrap_or("auto".to_string());
-        let dark = if mql.matches() {
+        let mode = utils::get_color_scheme();
+        let dark = if m0.matches() {
             mode != "light"
         } else {
             mode == "dark"
@@ -125,14 +115,27 @@ impl Component for App {
                 .toggle_with_force("dark", dark);
         }
 
+        let m1 = utils::media_query("(min-width: 960px)").unwrap();
+        {
+            let update = update.clone();
+            let cb: Closure<dyn Fn(MediaQueryListEvent)> =
+                Closure::new(move |e: MediaQueryListEvent| {
+                    update.emit(Msg::OpenOrCloseSidebar(e.matches()))
+                });
+            m1.set_onchange(Some(cb.as_ref().unchecked_ref()));
+            cb.forget();
+        }
+
+        let sidebar = m1.matches();
+
         Self {
             dark,
-            sidebar: mql_960.matches(),
-            is_home: true,
-            mql,
-            mql_960,
+            sidebar,
+            home: false,
+            mqls: (m0, m1),
             version: Rc::new("0.4.x".to_string()),
             sections: Rc::new(vec![]),
+            update,
             update_sidebar,
         }
     }
@@ -144,7 +147,7 @@ impl Component for App {
                     return false;
                 }
 
-                let mode = utils::local_storage_get("color-scheme").unwrap_or("auto".to_string());
+                let mode = utils::get_color_scheme();
                 if mode != "auto" {
                     return false;
                 }
@@ -160,7 +163,7 @@ impl Component for App {
                 self.dark = !self.dark;
                 utils::local_storage_set(
                     "color-scheme",
-                    if self.dark == self.mql.matches() {
+                    if self.dark == self.mqls.0.matches() {
                         "auto"
                     } else if self.dark {
                         "dark"
@@ -193,8 +196,8 @@ impl Component for App {
                     .toggle_with_force("dark", self.dark)
                     .is_ok()
             }
-            Msg::OpenSidebar => {
-                if self.is_home {
+            Msg::OpenOrCloseSidebar(status) => {
+                if self.home {
                     if self.sidebar {
                         self.sidebar = false;
                         true
@@ -202,29 +205,11 @@ impl Component for App {
                         false
                     }
                 } else {
-                    if self.sidebar {
-                        false
-                    } else {
-                        self.sidebar = true;
-                        true
+                    if self.sidebar == status {
+                        return false;
                     }
-                }
-            }
-            Msg::CloseSidebar => {
-                if self.is_home {
-                    if self.sidebar {
-                        self.sidebar = false;
-                        true
-                    } else {
-                        false
-                    }
-                } else {
-                    if self.sidebar {
-                        self.sidebar = false;
-                        true
-                    } else {
-                        false
-                    }
+                    self.sidebar = status;
+                    return true;
                 }
             }
             Msg::UpdateSidebar(sections) => {
@@ -253,20 +238,19 @@ impl Component for App {
                     true
                 }
             }
-            Msg::UpdateIsHome(y) => {
-                if self.is_home != y {
-                    self.is_home = y;
-                    true
-                } else {
+            Msg::UpdateHome(home) => {
+                if self.home == home {
                     false
+                } else {
+                    self.home = home;
+                    true
                 }
             }
         }
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let toggle_dark = ctx.link().callback(|_| Msg::ToggleDark);
-        let toggle_sidebar = ctx.link().callback(|m| m);
+        let updater = ctx.link().callback(|m| m);
         let change_version = ctx.link().callback(|v| Msg::ChangedVersion(v));
         let version = self.version.clone();
 
@@ -274,22 +258,30 @@ impl Component for App {
             <BrowserRouter>
                 <div id="app" class="tracking-0.2px">
                     <components::Header
-                        toggle_dark={toggle_dark}
-                        toggle_sidebar={toggle_sidebar}
+                        updater={updater.clone()}
                         version={version.clone()}
                         change={change_version}
                         sidebar={self.sidebar}
+                        home={self.home}
                     />
 
-                    <div class="page-container flex-row pt-4.375rem">
+                    <div class={classes!(
+                            "page-container", "flex-row", "pt-4.375rem",
+                            self.sidebar.then_some("opened")
+                        )}
+                    >
+                        <div id="backdrop" onclick={move |_| updater.emit(Msg::OpenOrCloseSidebar(false))} />
+
                         <components::Sidebar
-                            sections={self.sections.clone()}
                             version={version.clone()}
-                            sidebar={self.sidebar}
+                            sections={self.sections.clone()}
                         />
 
                         <main id="page" class="flex flex-row flex-1 py-5">
-                            <components::Switch<Route> render={switch} version={version} />
+                            <components::Switch<Route>
+                                render={switch}
+                                version={version}
+                        />
                         </main>
                     </div>
 

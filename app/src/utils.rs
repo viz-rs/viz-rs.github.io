@@ -59,3 +59,7 @@ pub async fn copy(text: &str) {
 pub fn location() -> web_sys::Location {
     window().location()
 }
+
+pub fn get_color_scheme() -> String {
+    local_storage_get("color-scheme").unwrap_or("auto".to_string())
+}

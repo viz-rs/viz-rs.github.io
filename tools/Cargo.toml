@@ -6,6 +6,8 @@ homepage.workspace = true
 version.workspace = true
 
 [features]
+default = ["en"]
+
 en = []
 zh-cn = []
 
