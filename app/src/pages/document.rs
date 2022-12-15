@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{rc::Rc, time::Duration};
 
 use gloo_net::http::Request;
 use wasm_bindgen::{prelude::*, JsCast};
@@ -9,12 +9,17 @@ use web_sys::{
 use yew::platform::time::sleep;
 use yew::prelude::*;
 use yew::suspense::{use_future_with_deps, Suspense};
+use yew_router::prelude::use_navigator;
 
-use crate::utils::{self, document};
+use crate::{
+    utils::{self, document},
+    Section,
+};
 
 #[derive(PartialEq, Properties)]
 pub struct Props {
     pub path: String,
+    pub sections: Rc<Vec<Section>>,
 }
 
 #[function_component(Content)]
@@ -22,6 +27,7 @@ fn content(props: &Props) -> HtmlResult {
     let node = use_node_ref();
     let path = use_state_eq(|| None);
     let toc = use_mut_ref(|| Vec::<(String, bool)>::new());
+    let navigator = use_navigator();
 
     let onclick = Callback::from(|e: MouseEvent| {
         if let Some(target) = e.target_dyn_into::<HtmlElement>() {
@@ -146,6 +152,7 @@ fn content(props: &Props) -> HtmlResult {
         let node = node.clone();
         let toc = toc.clone();
         let ob = ob.clone();
+        let sections = props.sections.clone();
         let _ = use_future_with_deps(
             |path| async move {
                 if let Some(p) = path.as_deref() {
@@ -169,6 +176,7 @@ fn content(props: &Props) -> HtmlResult {
                             }
                         }
                         div.set_inner_html(&res);
+                        div.add_event_listener_with_callback("click");
                         if let Ok(nodes) = div.query_selector_all("h2") {
                             for index in 0..nodes.length() {
                                 nodes
@@ -217,7 +225,7 @@ pub fn doc(props: &Props) -> Html {
 
     html! {
         <Suspense {fallback}>
-            <Content path={props.path.to_owned()} />
+            <Content path={props.path.to_owned()} sections={props.sections.clone()} />
         </Suspense>
     }
 }

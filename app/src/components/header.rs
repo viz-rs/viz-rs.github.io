@@ -34,7 +34,7 @@ impl Component for Header {
                 .add_location_listener(ctx.link().callback(move |location: Location| {
                     let path = location.path();
 
-                    updater.emit(Msg::UpdateHome(path.len() == 1));
+                    updater.emit(Msg::UpdatePath(path.to_string()));
 
                     if path.starts_with("/docs") {
                         if let Some(aside) = utils::document()
@@ -46,12 +46,13 @@ impl Component for Header {
                                 .query_selector("a.text-yellow-600")
                                 .expect_throw("Can't find .text-yellow-600")
                             {
-                                let a = e.dyn_ref::<HtmlAnchorElement>().unwrap();
-                                if !a.href().ends_with(&path) {
-                                    let _ = a.class_list().remove_2("op100", "text-yellow-600");
-                                    let _ = a.class_list().add_1("op61.8");
-                                } else {
-                                    is_not_self = false;
+                                if let Some(a) = e.dyn_ref::<HtmlAnchorElement>() {
+                                    if !a.href().ends_with(&path) {
+                                        let _ = a.class_list().remove_2("op100", "text-yellow-600");
+                                        let _ = a.class_list().add_1("op61.8");
+                                    } else {
+                                        is_not_self = false;
+                                    }
                                 }
                             }
 
@@ -60,9 +61,10 @@ impl Component for Header {
                                     .query_selector(&format!(r#"a[href$="{}"]"#, path))
                                     .expect_throw("Can't find a tag")
                                 {
-                                    let a = e.dyn_ref::<HtmlAnchorElement>().unwrap();
-                                    let _ = a.class_list().remove_1("op61.8");
-                                    let _ = a.class_list().add_2("op100", "text-yellow-600");
+                                    if let Some(a) = e.dyn_ref::<HtmlAnchorElement>() {
+                                        let _ = a.class_list().remove_1("op61.8");
+                                        let _ = a.class_list().add_2("op100", "text-yellow-600");
+                                    }
                                 }
                             }
                         }
