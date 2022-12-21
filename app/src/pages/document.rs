@@ -11,6 +11,7 @@ use yew::prelude::*;
 use yew::suspense::{use_future_with_deps, Suspense};
 use yew_router::prelude::use_navigator;
 
+use crate::utils::{document_element, window};
 use crate::{
     utils::{self, document},
     Section,
@@ -51,6 +52,14 @@ fn content(props: &Props) -> HtmlResult {
             }
         }
     });
+
+    let onclick_nav = Closure::<dyn Fn(Event)>::wrap(Box::new(move |e: Event| {
+        e.stop_propagation();
+        e.prevent_default();
+        if let Some(target) = e.target_dyn_into::<HtmlAnchorElement>() {
+            log::info!("{:?}", target);
+        }
+    }));
 
     {
         let node = node.clone();
@@ -176,7 +185,24 @@ fn content(props: &Props) -> HtmlResult {
                             }
                         }
                         div.set_inner_html(&res);
-                        div.add_event_listener_with_callback("click");
+
+                        if let Ok(nodes) = div.query_selector_all(".page-nav > a") {
+                            for index in 0..nodes.length() {
+                                nodes
+                                    .get(index)
+                                    .as_ref()
+                                    // .and_then(|node| node.dyn_ref::<HtmlAnchorElement>())
+                                    .map(|node| {
+                                        log::info!("{:?}", &node);
+                                        node.add_event_listener_with_callback(
+                                            "click",
+                                            onclick_nav.as_ref().unchecked_ref(),
+                                        )
+                                        .unwrap_throw();
+                                    });
+                            }
+                        }
+
                         if let Ok(nodes) = div.query_selector_all("h2") {
                             for index in 0..nodes.length() {
                                 nodes

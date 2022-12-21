@@ -2,8 +2,9 @@
 name = "tools"
 authors.workspace = true
 edition.workspace = true
-homepage.workspace = true
 version.workspace = true
+license.workspace = true
+homepage.workspace = true
 
 [features]
 default = ["en"]
@@ -29,6 +30,8 @@ walkdir = { version = "2.3.2" }
 minify-html = "0.10.2"
 highlighting = "0.1.2"
 clap = { version = "4.0.14", features = ["derive"] }
+serde_json.workspace = true
+serde.workspace = true
 
 [build-dependencies]
 cc = "1.0"
