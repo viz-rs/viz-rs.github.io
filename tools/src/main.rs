@@ -22,7 +22,7 @@ const NAV_TITLE: &str = "On this page";
 #[cfg(all(feature = "en", not(feature = "zh-cn")))]
 const NAV_PREV: &str = "Previous";
 #[cfg(all(feature = "en", not(feature = "zh-cn")))]
-const NAV_NEXT: &str = "NEXT";
+const NAV_NEXT: &str = "Next";
 
 #[cfg(all(feature = "zh-cn", not(feature = "en")))]
 const NAV_TITLE: &str = "本页目录";
