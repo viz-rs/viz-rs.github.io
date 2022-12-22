@@ -19,9 +19,17 @@ pub struct Section {
 
 #[cfg(all(feature = "en", not(feature = "zh-cn")))]
 const NAV_TITLE: &str = "On this page";
+#[cfg(all(feature = "en", not(feature = "zh-cn")))]
+const NAV_PREV: &str = "Previous";
+#[cfg(all(feature = "en", not(feature = "zh-cn")))]
+const NAV_NEXT: &str = "NEXT";
 
 #[cfg(all(feature = "zh-cn", not(feature = "en")))]
 const NAV_TITLE: &str = "本页目录";
+#[cfg(all(feature = "zh-cn", not(feature = "en")))]
+const NAV_PREV: &str = "前一篇";
+#[cfg(all(feature = "zh-cn", not(feature = "en")))]
+const NAV_NEXT: &str = "下一篇";
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
@@ -317,9 +325,10 @@ fn parse(
             html.push_str("<a class='prev-link' href='/docs/");
             html.push_str(&link);
             html.push_str("'>");
-            html.push_str(
-        "<span class='desc'><i class='block i-lucide-chevron-left w-3 h-3'></i> Previous</span>",
-    );
+            html.push_str("<span class='desc'><i class='block i-lucide-chevron-left w-3 h-3'></i>");
+            html.push(' ');
+            html.push_str(NAV_PREV);
+            html.push_str("</span>");
             html.push_str("<span class='title'>");
             html.push_str(&name);
             html.push_str("</span>");
@@ -333,9 +342,10 @@ fn parse(
             html.push_str("<a class='next-link' href='/docs/");
             html.push_str(&link);
             html.push_str("'>");
-            html.push_str(
-            "<span class='desc'>Next <i class='block i-lucide-chevron-right w-3 h-3'></i></span>",
-        );
+            html.push_str("<span class='desc'>");
+            html.push_str(NAV_NEXT);
+            html.push(' ');
+            html.push_str("<i class='block i-lucide-chevron-right w-3 h-3'></i></span>");
             html.push_str("<span class='title'>");
             html.push_str(&name);
             html.push_str("</span>");
