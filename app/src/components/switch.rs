@@ -6,8 +6,6 @@ use yew::prelude::*;
 use yew_router::prelude::use_route;
 use yew_router::Routable;
 
-use crate::Section;
-
 /// Props for [`Switch`]
 #[derive(Properties, PartialEq, Clone)]
 pub struct SwitchProps<R>
@@ -15,11 +13,10 @@ where
     R: Routable,
 {
     /// Callback which returns [`Html`] to be rendered for the current route.
-    pub render: Callback<(R, Rc<String>, Rc<Vec<Section>>), Html>,
+    pub render: Callback<(R, Rc<String>), Html>,
     #[prop_or_default]
     pub pathname: Option<String>,
     pub version: Rc<String>,
-    pub sections: Rc<Vec<Section>>,
 }
 
 /// A Switch that dispatches route among variants of a [`Routable`].
@@ -44,9 +41,7 @@ where
         .or(route);
 
     match route {
-        Some(route) => props
-            .render
-            .emit((route, props.version.clone(), props.sections.clone())),
+        Some(route) => props.render.emit((route, props.version.clone())),
         None => {
             tracing::warn!("no route matched");
             Html::default()

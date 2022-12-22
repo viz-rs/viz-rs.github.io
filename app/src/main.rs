@@ -40,13 +40,13 @@ pub enum Route {
     NotFound,
 }
 
-fn switch((routes, version, sections): (Route, Rc<String>, Rc<Vec<Section>>)) -> Html {
+fn switch((routes, version): (Route, Rc<String>)) -> Html {
     match routes {
         Route::Home => {
             html! { <pages::Home version={version} /> }
         }
         Route::Document { path } => {
-            html! { <pages::Document path={path} sections={sections} /> }
+            html! { <pages::Document path={path} /> }
         }
         Route::NotFound => {
             html! { <div>{"Not Found!"}</div> }
@@ -140,7 +140,7 @@ impl Component for App {
         }
     }
 
-    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+    fn update(&mut self, _ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::ChangedDark(dark) => {
                 if self.dark == dark {
@@ -240,7 +240,6 @@ impl Component for App {
             }
             Msg::UpdatePath(path) => {
                 let home = path.len() == 1;
-                let mut changed = self.home != home;
 
                 if self.home == home {
                     false
@@ -284,7 +283,6 @@ impl Component for App {
                             <components::Switch<Route>
                                 render={switch}
                                 version={version}
-                                sections={self.sections.clone()}
                         />
                         </main>
                     </div>
