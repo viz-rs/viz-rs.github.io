@@ -334,6 +334,7 @@ flex-240 {
     table {
       border-collapse: separate;
       border-spacing: 0;
+      margin: 1rem 0;
       width: 100%;
 
       thead {
@@ -392,15 +393,19 @@ flex-240 {
 
       a {
         .desc {
-          display: flex;
           align-items: center;
           font-size: 11px;
-          opacity: 0.618;
-          color: initial;
+          color: #9ca3af;
         }
 
-        &.next-link .desc {
-          justify-content: flex-end;
+        .desc, .title {
+          display: flex;
+        }
+
+        &.next-link {
+          .desc, .title {
+            justify-content: flex-end;
+          }
         }
       }
     }
@@ -695,6 +700,10 @@ html.dark {
 
       .page-nav {
         border-color: #2d2d2d;
+
+        a .desc {
+          color: #9ca3af;
+        }
       }
     }
   }
