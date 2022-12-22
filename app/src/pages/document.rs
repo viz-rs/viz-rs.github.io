@@ -199,16 +199,13 @@ fn content(props: &Props) -> HtmlResult {
 
                         if let Ok(nodes) = div.query_selector_all(".page-nav > a") {
                             for index in 0..nodes.length() {
-                                nodes
-                                    .get(index)
-                                    .as_ref()
-                                    .map(|node| {
-                                        node.add_event_listener_with_callback(
-                                            "click",
-                                            (*onclick_nav).as_ref().unchecked_ref(),
-                                        )
-                                        .unwrap_throw();
-                                    });
+                                nodes.get(index).as_ref().map(|node| {
+                                    node.add_event_listener_with_callback(
+                                        "click",
+                                        (*onclick_nav).as_ref().unchecked_ref(),
+                                    )
+                                    .unwrap_throw();
+                                });
                             }
                         }
 
