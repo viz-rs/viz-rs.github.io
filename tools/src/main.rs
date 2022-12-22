@@ -1,4 +1,4 @@
-use std::{fs, path::Path};
+use std::{cmp::Ordering, fs, path::Path};
 
 use anyhow::Result;
 use clap::Parser;
@@ -7,7 +7,15 @@ use highlighting::{HighlightConfiguration, Languages};
 use pulldown_cmark::{
     html::push_html, CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser as MarkParser, Tag,
 };
+use serde::Deserialize;
 use walkdir::WalkDir;
+
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct Section {
+    text: String,
+    prefix: String,
+    items: Vec<(String, String)>,
+}
 
 #[cfg(all(feature = "en", not(feature = "zh-cn")))]
 const NAV_TITLE: &str = "On this page";
@@ -139,33 +147,64 @@ fn main() -> Result<()> {
         )?,
     );
 
-    let glob = GlobBuilder::new("**/*.{md,json}")
-        .literal_separator(true)
-        .build()?
-        .compile_matcher();
-
     let mut minify_cfg = minify_html::Cfg::new();
     minify_cfg.keep_closing_tags = true;
 
     let root = Path::new("..").join(i18n);
+    let dist = Path::new(&output);
 
-    let mut iter = WalkDir::new(&root).into_iter();
-    let dist_docs = Path::new(&output);
+    let glob = GlobBuilder::new("**/*.{json,md}")
+        .literal_separator(true)
+        .build()?
+        .compile_matcher();
+
+    let mut iter = WalkDir::new(&root)
+        .sort_by(|a, b| {
+            let at = a.file_type().is_file();
+            let bt = b.file_type().is_file();
+
+            if at && !bt {
+                Ordering::Less
+            } else if at && bt {
+                Ordering::Equal
+            } else {
+                Ordering::Greater
+            }
+        })
+        .into_iter();
+
+    let mut toc: Option<Vec<Section>> = None;
+
     while let Some(Ok(entry)) = iter.next() {
         if glob.is_match(entry.path()) {
             let file = entry.path().strip_prefix(&root)?;
-            let dir = dist_docs.join(file.parent().unwrap());
+            let dir = dist.join(file.parent().unwrap());
             if !dir.exists() {
                 fs::create_dir_all(&dir)?;
             }
             let raw = fs::read_to_string(entry.path())?;
             let mut fp = dir.join(file.file_stem().unwrap().to_ascii_lowercase());
             if matches!(file.extension(), Some(e) if e == "json") {
+                toc.replace(serde_json::from_str(&raw)?);
                 fp.set_extension("json");
                 fs::write(&fp, raw)?;
             } else {
+                let parent = file
+                    .parent()
+                    .unwrap()
+                    .as_os_str()
+                    .to_os_string()
+                    .into_string()
+                    .unwrap();
+                let components: Vec<_> = parent.split('/').collect();
+                let navs = find_prev_and_next(
+                    toc.as_ref().unwrap(),
+                    components[0],
+                    components[1],
+                    fp.file_name().and_then(|s| s.to_str()).unwrap(),
+                );
+                let doc = parse(&languages, navs, raw)?;
                 fp.set_extension("html");
-                let doc = parse(&languages, raw)?;
                 fs::write(&fp, minify_html::minify(doc.html.as_bytes(), &minify_cfg))?;
             }
             println!("{:?}", fp.canonicalize()?);
@@ -175,7 +214,11 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn parse(languages: &Languages, raw: String) -> Result<Document> {
+fn parse(
+    languages: &Languages,
+    navs: (Option<(String, String)>, Option<(String, String)>),
+    raw: String,
+) -> Result<Document> {
     let options = Options::all();
     let mut toc = Vec::new();
     let mut heading = None;
@@ -266,6 +309,43 @@ fn parse(languages: &Languages, raw: String) -> Result<Document> {
     let mut html = String::new();
     html.push_str("<article class='flex-1'>");
     push_html(&mut html, parser);
+
+    if navs.0.is_some() || navs.1.is_some() {
+        html.push_str("<div class='page-nav'>");
+        // prev
+        if let Some((name, link)) = navs.0 {
+            html.push_str("<a class='prev-link' href='/docs/");
+            html.push_str(&link);
+            html.push_str("'>");
+            html.push_str(
+        "<span class='desc'><i class='block i-lucide-chevron-left w-3 h-3'></i> Previous</span>",
+    );
+            html.push_str("<span class='title'>");
+            html.push_str(&name);
+            html.push_str("</span>");
+            html.push_str("</a>");
+        } else {
+            html.push_str("<div class='prev-link'></div>");
+        }
+
+        // next
+        if let Some((name, link)) = navs.1 {
+            html.push_str("<a class='next-link' href='/docs/");
+            html.push_str(&link);
+            html.push_str("'>");
+            html.push_str(
+            "<span class='desc'>Next <i class='block i-lucide-chevron-right w-3 h-3'></i></span>",
+        );
+            html.push_str("<span class='title'>");
+            html.push_str(&name);
+            html.push_str("</span>");
+            html.push_str("</a>");
+        } else {
+            html.push_str("<div class='next-link'></div>");
+        }
+        html.push_str("</div>");
+    }
+
     html.push_str("</article>");
 
     if !toc.is_empty() {
@@ -288,4 +368,74 @@ fn parse(languages: &Languages, raw: String) -> Result<Document> {
     }
 
     Ok(Document { html })
+}
+
+fn find_prev_and_next(
+    toc: &Vec<Section>,
+    version: &str,
+    dir: &str,
+    current: &str,
+) -> (Option<(String, String)>, Option<(String, String)>) {
+    let mut prev = None;
+    let mut next = None;
+
+    if let Some((pos, section)) = toc.iter().enumerate().find(|(_, e)| e.prefix == dir) {
+        if let Some(index) =
+            section
+                .items
+                .iter()
+                .enumerate()
+                .find_map(|(i, e)| if e.1 == current { Some(i) } else { None })
+        {
+            if index > 0 {
+                prev = section.items.get(index - 1).cloned().map(|(name, link)| {
+                    let mut new_link = String::new();
+                    new_link.push_str(&version);
+                    new_link.push('/');
+                    new_link.push_str(&section.prefix);
+                    new_link.push('/');
+                    new_link.push_str(&link);
+                    (name, new_link)
+                });
+            } else if pos > 0 {
+                prev = toc.get(pos - 1).and_then(|section| {
+                    section.items.last().cloned().map(|(name, link)| {
+                        let mut new_link = String::new();
+                        new_link.push_str(&version);
+                        new_link.push('/');
+                        new_link.push_str(&section.prefix);
+                        new_link.push('/');
+                        new_link.push_str(&link);
+                        (name, new_link)
+                    })
+                });
+            }
+
+            if index + 1 < section.items.len() {
+                next = section.items.get(index + 1).cloned().map(|(name, link)| {
+                    let mut new_link = String::new();
+                    new_link.push_str(&version);
+                    new_link.push('/');
+                    new_link.push_str(&section.prefix);
+                    new_link.push('/');
+                    new_link.push_str(&link);
+                    (name, new_link)
+                });
+            } else if pos + 1 < toc.len() {
+                next = toc.get(pos + 1).and_then(|section| {
+                    section.items.first().cloned().map(|(name, link)| {
+                        let mut new_link = String::new();
+                        new_link.push_str(&version);
+                        new_link.push('/');
+                        new_link.push_str(&section.prefix);
+                        new_link.push('/');
+                        new_link.push_str(&link);
+                        (name, new_link)
+                    })
+                });
+            }
+        }
+    }
+
+    (prev, next)
 }

@@ -67,7 +67,7 @@ pub enum Msg {
     UpdateSidebar(Vec<Section>),
     OpenOrCloseSidebar(bool),
     ChangedVersion(String),
-    UpdateHome(bool),
+    UpdatePath(String),
 }
 
 #[allow(dead_code)]
@@ -212,10 +212,6 @@ impl Component for App {
                     return true;
                 }
             }
-            Msg::UpdateSidebar(sections) => {
-                self.sections = sections.into();
-                true
-            }
             Msg::ChangedVersion(version) => {
                 if *self.version == version {
                     false
@@ -238,7 +234,13 @@ impl Component for App {
                     true
                 }
             }
-            Msg::UpdateHome(home) => {
+            Msg::UpdateSidebar(sections) => {
+                self.sections = sections.into();
+                true
+            }
+            Msg::UpdatePath(path) => {
+                let home = path.len() == 1;
+
                 if self.home == home {
                     false
                 } else {

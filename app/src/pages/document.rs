@@ -9,8 +9,10 @@ use web_sys::{
 use yew::platform::time::sleep;
 use yew::prelude::*;
 use yew::suspense::{use_future_with_deps, Suspense};
+use yew_router::prelude::use_navigator;
 
 use crate::utils::{self, document};
+use crate::Route;
 
 #[derive(PartialEq, Properties)]
 pub struct Props {
@@ -22,6 +24,30 @@ fn content(props: &Props) -> HtmlResult {
     let node = use_node_ref();
     let path = use_state_eq(|| None);
     let toc = use_mut_ref(|| Vec::<(String, bool)>::new());
+    let navigator = use_navigator();
+    let onclick_nav = use_memo(
+        |_| {
+            Closure::<dyn Fn(Event)>::wrap(Box::new(move |e: Event| {
+                e.stop_propagation();
+                e.prevent_default();
+                if let Some(a) = e
+                    .current_target()
+                    .and_then(|t| t.dyn_into::<HtmlAnchorElement>().ok())
+                {
+                    if let Some(navigator) = &navigator {
+                        navigator.push(&Route::Document {
+                            path: a
+                                .get_attribute("href")
+                                .unwrap()
+                                .trim_start_matches("/docs/")
+                                .to_string(),
+                        });
+                    }
+                }
+            }))
+        },
+        (),
+    );
 
     let onclick = Callback::from(|e: MouseEvent| {
         if let Some(target) = e.target_dyn_into::<HtmlElement>() {
@@ -146,6 +172,7 @@ fn content(props: &Props) -> HtmlResult {
         let node = node.clone();
         let toc = toc.clone();
         let ob = ob.clone();
+        let onclick_nav = onclick_nav.clone();
         let _ = use_future_with_deps(
             |path| async move {
                 if let Some(p) = path.as_deref() {
@@ -169,6 +196,19 @@ fn content(props: &Props) -> HtmlResult {
                             }
                         }
                         div.set_inner_html(&res);
+
+                        if let Ok(nodes) = div.query_selector_all(".page-nav > a") {
+                            for index in 0..nodes.length() {
+                                nodes.get(index).as_ref().map(|node| {
+                                    node.add_event_listener_with_callback(
+                                        "click",
+                                        (*onclick_nav).as_ref().unchecked_ref(),
+                                    )
+                                    .unwrap_throw();
+                                });
+                            }
+                        }
+
                         if let Ok(nodes) = div.query_selector_all("h2") {
                             for index in 0..nodes.length() {
                                 nodes

@@ -1,8 +1,5 @@
 [workspace]
-members = [
-  "app",
-  "tools",
-]
+members = ["app", "tools"]
 
 [workspace.package]
 version = "0.1.0"
@@ -11,10 +8,15 @@ license = "MIT"
 authors = ["Fangdun Tsai <cfddream@gmail.com>"]
 homepage = "https://viz.rs"
 
-[profile.release]
-panic = 'abort'
-codegen-units = 1
-opt-level = 'z'
-lto = true
+[workspace.dependencies]
+serde = { version = "1.0.151", features = ["derive"] }
+serde_json = "1.0.91"
 
-[workspace.metadata.app]
+[profile.dev]
+split-debuginfo = "unpacked"
+
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+opt-level = 2
