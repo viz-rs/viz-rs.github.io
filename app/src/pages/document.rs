@@ -202,9 +202,7 @@ fn content(props: &Props) -> HtmlResult {
                                 nodes
                                     .get(index)
                                     .as_ref()
-                                    // .and_then(|node| node.dyn_ref::<HtmlAnchorElement>())
                                     .map(|node| {
-                                        log::info!("{:?}", &node);
                                         node.add_event_listener_with_callback(
                                             "click",
                                             (*onclick_nav).as_ref().unchecked_ref(),
