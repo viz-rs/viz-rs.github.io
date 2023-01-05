@@ -5,9 +5,11 @@
   "repository": "https://github.com/viz-rs/viz.rs",
   "author": "Fangdun Tsai <cfddream@gmail.com>",
   "license": "MIT",
+  "publish": false,
   "devDependencies": {
-    "@unocss/cli": "^0.47.5",
+    "@iconify-json/lucide": "^1.1.55",
+    "@unocss/cli": "^0.48.0",
     "inter-ui": "^3.19.3",
-    "unocss": "^0.47.5"
+    "unocss": "^0.48.0"
   }
 }
