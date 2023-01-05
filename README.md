@@ -14,8 +14,11 @@ $ cargo install --locked just
 
 2. Install [`trunk`]
 
+> **Note**: The latest **master** branch includes the **copy-dir** feature.
+
 ```bash
-$ cargo install --locked trunk
+$ // cargo install --locked trunk
+$ cargo install --git https://github.com/thedodd/trunk.git --locked
 ```
 
 3. List just cmds

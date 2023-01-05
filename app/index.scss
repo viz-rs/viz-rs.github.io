@@ -331,6 +331,10 @@ flex-240 {
       background: #fafafa !important;
     }
 
+    img {
+      border-radius: 0.25rem;
+    }
+
     table {
       border-collapse: separate;
       border-spacing: 0;
@@ -399,12 +403,14 @@ flex-240 {
           color: #9ca3af;
         }
 
-        .desc, .title {
+        .desc,
+        .title {
           display: flex;
         }
 
         &.next-link {
-          .desc, .title {
+          .desc,
+          .title {
             justify-content: flex-end;
           }
         }

@@ -5,7 +5,8 @@ use clap::Parser;
 use globset::GlobBuilder;
 use highlighting::{HighlightConfiguration, Languages};
 use pulldown_cmark::{
-    html::push_html, CodeBlockKind, CowStr, Event, HeadingLevel, Options, Parser as MarkParser, Tag,
+    html::push_html, CodeBlockKind, CowStr, Event, HeadingLevel, LinkType, Options,
+    Parser as MarkParser, Tag,
 };
 use serde::Deserialize;
 use walkdir::WalkDir;
@@ -161,7 +162,7 @@ fn main() -> Result<()> {
     let root = Path::new("..").join(i18n);
     let dist = Path::new(&output);
 
-    let glob = GlobBuilder::new("**/*.{json,md}")
+    let glob = GlobBuilder::new("**/*.{json,md,png,jpg}")
         .literal_separator(true)
         .build()?
         .compile_matcher();
@@ -190,13 +191,18 @@ fn main() -> Result<()> {
             if !dir.exists() {
                 fs::create_dir_all(&dir)?;
             }
-            let raw = fs::read_to_string(entry.path())?;
-            let mut fp = dir.join(file.file_stem().unwrap().to_ascii_lowercase());
-            if matches!(file.extension(), Some(e) if e == "json") {
+            let mut fp = dir.join(file.file_stem().unwrap());
+            if matches!(file.extension(), Some(e) if e == "png" || e == "jpg") {
+                let raw = fs::read(entry.path())?;
+                fp.set_extension(file.extension().unwrap());
+                fs::write(&fp, raw)?;
+            } else if matches!(file.extension(), Some(e) if e == "json") {
+                let raw = fs::read_to_string(entry.path())?;
                 toc.replace(serde_json::from_str(&raw)?);
                 fp.set_extension("json");
                 fs::write(&fp, raw)?;
             } else {
+                let raw = fs::read_to_string(entry.path())?;
                 let parent = file
                     .parent()
                     .unwrap()
@@ -224,13 +230,14 @@ fn main() -> Result<()> {
 
 fn parse(
     languages: &Languages,
-    navs: (Option<(String, String)>, Option<(String, String)>),
+    navs: (Option<(String, String)>, Option<(String, String)>, String),
     raw: String,
 ) -> Result<Document> {
     let options = Options::all();
     let mut toc = Vec::new();
     let mut heading = None;
     let mut code = None;
+    let mut img = None;
     let parser = MarkParser::new_ext(&raw, options).filter_map(|event| match event {
         Event::Start(Tag::Heading(level, id, ..)) => {
             if id.is_none() && level < HeadingLevel::H3 {
@@ -297,6 +304,9 @@ fn parse(
             } else if code.is_some() {
                 code.replace(text.to_string());
                 None
+            } else if img.is_some(){
+                img.replace(text.to_string());
+                None
             } else {
                 Some(event)
             }
@@ -310,6 +320,35 @@ fn parse(
             code.push_str(inline_html.trim_start_matches("<p>").trim_end_matches("</p>").trim());
             code.push_str("</code>");
             Some(Event::Html(CowStr::from(code)))
+        }
+        Event::Start(Tag::Image(_, _, alt)) => {
+            img = Some(alt.to_string());
+            None
+        }
+        Event::End(Tag::Image(kind, src, alt)) => {
+            match kind {
+                LinkType::Inline | LinkType::Autolink => {
+                    let mut src = src.to_string();
+                    let alt = img.take().unwrap_or_else(||alt.to_string());
+                    let mut img = String::new();
+                    img.push_str("<img alt='");
+                    img.push_str(&alt);
+                    img.push_str("' src='");
+
+                    if src.starts_with("..") {
+                        let mut prefix = String::new();
+                        prefix.push_str("/assets/");
+                        prefix.push_str(navs.2.as_str());
+                        src.replace_range(0..2, &prefix);
+                    }
+
+                    img.push_str(&src);
+
+                    img.push_str("' />");
+                    Some(Event::Html(CowStr::from(img)))
+                },
+                _ => None
+            }
         }
         _ => Some(event),
     });
@@ -385,7 +424,7 @@ fn find_prev_and_next(
     version: &str,
     dir: &str,
     current: &str,
-) -> (Option<(String, String)>, Option<(String, String)>) {
+) -> (Option<(String, String)>, Option<(String, String)>, String) {
     let mut prev = None;
     let mut next = None;
 
@@ -447,5 +486,5 @@ fn find_prev_and_next(
         }
     }
 
-    (prev, next)
+    (prev, next, version.to_string())
 }
