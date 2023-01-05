@@ -9,6 +9,7 @@ command_arguments = [
   "node_modules/.bin/unocss",
   "src/**/*.rs",
   "../tools/src/*.rs",
+  "-m",
   "-o",
   "../dist/.stage/uno.css",
 ]
