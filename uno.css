@@ -68,8 +68,8 @@
 .justify-between{justify-content:space-between;}
 .gap-4{grid-gap:1rem;gap:1rem;}
 .gap-5{grid-gap:1.25rem;gap:1.25rem;}
-.b{border-width:1px;border-style:solid;}
-.b-b{border-bottom-width:1px;border-bottom-style:solid;}
+.b{border-width:1px;}
+.b-b{border-bottom-width:1px;}
 .b-neutral-100{--un-border-opacity:1;border-color:rgba(245,245,245,var(--un-border-opacity));}
 .dark .dark\:b-neutral-500{--un-border-opacity:1;border-color:rgba(115,115,115,var(--un-border-opacity));}
 .b-b-neutral-900{--un-border-opacity:1;--un-border-bottom-opacity:var(--un-border-opacity);border-bottom-color:rgba(23,23,23,var(--un-border-bottom-opacity));}
