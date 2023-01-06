@@ -8,9 +8,9 @@
 
 2. 声明**静态变量**
 
-3. 把一小部分数据放在**栈**中
+3. 把一小部分数据放在**栈**上
 
-> In the TFB and WFB test environments, Viz did not use 1 and 3.
+> 在 TFB 和 WFB 测试环境中，Viz 没有使用 1、3。
 
 ## TechEmpower Framework Benchmarks (TFB)
 
