@@ -6,9 +6,21 @@ In a real production environment, several approaches can be tried to optimize th
 
 1. Specify **memory allocators**
 
+	- [`mimalloc`](https://crates.io/crates/mimalloc)
+
+	- [`snmalloc-rs`](https://crates.io/crates/snmalloc-rs)
+
 2. Declaring **static variables**
 
+	- [`once_cell`](https://crates.io/crates/once_cell)
+
+	- [`lazy_static`](https://crates.io/crates/lazy_static)
+
 3. Putting a small portion of data on the **stack**
+
+	- [`smallvec`](https://crates.io/crates/smallvec)
+
+	- [`tinyvec`](https://crates.io/crates/tinyvec)
 
 > In the TFB and WFB test environments, Viz did not use 1 and 3.
 
