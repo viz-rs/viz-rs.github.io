@@ -1,16 +1,28 @@
 # 性能测试
 
+## 性能优化
+
+在真实的生产环境中，可以尝试几种方法来优化应用：
+
+1. 指定**内存分配器**
+
+2. 声明**静态变量**
+
+3. 把一小部分数据放在**栈**中
+
+> In the TFB and WFB test environments, Viz did not use 1 and 3.
+
 ## TechEmpower Framework Benchmarks (TFB)
 
 - [仓库](https://github.com/TechEmpower/FrameworkBenchmarks)
 
 - [结果](https://www.techempower.com/benchmarks/#test=composite)
 
-RunID [7ce481b2-49ec-4a4d-952d-bb1334](https://www.techempower.com/benchmarks/#section=test&runid=7ce481b2-49ec-4a4d-952d-bb1334d4a4ad&test=composite) 的结果如下：
+下面是 [7ce481b2-49ec-4a4d-952d-bb1334](https://www.techempower.com/benchmarks/#section=test&runid=7ce481b2-49ec-4a4d-952d-bb1334d4a4ad&test=composite) 的结果：
 
 ![TFB 7ce481b2-49ec-4a4d-952d-bb1334d4a4ad](../images/TFB-7ce481b2-49ec-4a4d-952d-bb1334d4a4ad.png)
 
-## Web Frameworks Benchmark
+## Web Frameworks Benchmark (WFB)
 
 - [仓库](https://github.com/the-benchmarker/website)
 
