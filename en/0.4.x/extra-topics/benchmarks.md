@@ -10,6 +10,8 @@ In a real production environment, several approaches can be tried to optimize th
 
 	- [`snmalloc-rs`](https://crates.io/crates/snmalloc-rs)
 
+	- [`jemallocator`](https://crates.io/crates/tikv-jemallocator)
+
 2. Declaring **static variables**
 
 	- [`once_cell`](https://crates.io/crates/once_cell)

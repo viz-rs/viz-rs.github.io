@@ -10,6 +10,8 @@
 
 	- [`snmalloc-rs`](https://crates.io/crates/snmalloc-rs)
 
+	- [`jemallocator`](https://crates.io/crates/tikv-jemallocator)
+
 2. 声明**静态变量**
 
 	- [`once_cell`](https://crates.io/crates/once_cell)
