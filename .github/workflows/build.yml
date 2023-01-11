@@ -69,7 +69,8 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
       - run: |
           if [ ! -f ~/.cargo/bin/trunk ]; then
-            cargo install --locked trunk
+            # cargo install --locked trunk
+            cargo install --git https://github.com/thedodd/trunk.git --locked
           fi
           if [ ! -f ~/.cargo/bin/just ]; then
             cargo install --locked just
