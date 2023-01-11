@@ -116,7 +116,7 @@ jobs:
       name: cloudflare
 
     runs-on: ubuntu-latest
-    name: Deploy
+    name: Deploy To Cloudflare
     steps:
       - uses: actions/checkout@v3
       - name: Publish
@@ -124,5 +124,6 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           email: ${{ secrets.CF_EMAIL }}
-          command: pages publish dist/en --project-name=viz-rs
-          command: pages publish dist/zh-cn --project-name=viz-rs-zh-cn
+          command: |
+            pages publish dist/en --project-name=viz-rs
+            pages publish dist/zh-cn --project-name=viz-rs-zh-cn
