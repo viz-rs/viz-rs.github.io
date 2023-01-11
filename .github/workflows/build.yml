@@ -87,10 +87,6 @@ jobs:
     # Add a dependency to the build job
     needs: build
 
-    # Deploy to the cloudflare pages environment
-    environment:
-      name: cloudflare
-
     runs-on: ubuntu-latest
     name: Deploy To Cloudflare
     steps:
