@@ -36,9 +36,9 @@
 
 - [结果](https://www.techempower.com/benchmarks/#test=composite)
 
-下面是 [7ce481b2-49ec-4a4d-952d-bb1334](https://www.techempower.com/benchmarks/#section=test&runid=7ce481b2-49ec-4a4d-952d-bb1334d4a4ad&test=composite) 的结果：
+下面是 [dc15ab19-0139-4489-b767-36eab8443eb1](https://www.techempower.com/benchmarks/#section=test&runid=dc15ab19-0139-4489-b767-36eab8443eb1&test=composite) 的结果：
 
-![TFB 7ce481b2-49ec-4a4d-952d-bb1334d4a4ad](../images/TFB-7ce481b2-49ec-4a4d-952d-bb1334d4a4ad.png)
+![TFB dc15ab19-0139-4489-b767-36eab8443eb1](../images/TFB-dc15ab19-0139-4489-b767-36eab8443eb1.png)
 
 ## Web Frameworks Benchmark (WFB)
 
@@ -46,4 +46,4 @@
 
 - [结果](https://web-frameworks-benchmark.netlify.app/compare?f=actix,axum,poem,salvo,tide,viz,warp)
 
-![WFB](../images/WFB-2023-01-01-0b5c28a.png)
+![WFB](../images/WFB-2023-01-09-aa5d158.png)
