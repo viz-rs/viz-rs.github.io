@@ -84,11 +84,18 @@ jobs:
           just build-en
           just build-zh-cn
 
-      - name: Deploy To Cloudflare
+      - name: Deploy EN To Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: |
             pages publish dist/en --project-name=viz-rs --commit-dirty=true
+
+      - name: Deploy EN To Cloudflare
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: |
             pages publish dist/zh-cn --project-name=viz-rs-zh-cn --commit-dirty=true
