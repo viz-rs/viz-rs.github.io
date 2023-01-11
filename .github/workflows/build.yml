@@ -99,6 +99,7 @@ jobs:
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: |
             pages publish dist/en --project-name=viz-rs
             pages publish dist/zh-cn --project-name=viz-rs-zh-cn
