@@ -87,6 +87,10 @@ jobs:
     # Add a dependency to the build job
     needs: build
 
+    # Deploy to the cloudflare pages environment
+    environment:
+      name: cloudflare
+
     runs-on: ubuntu-latest
     name: Deploy To Cloudflare
     steps:
@@ -95,7 +99,6 @@ jobs:
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
-          email: ${{ secrets.CF_EMAIL }}
           command: |
             pages publish dist/en --project-name=viz-rs
             pages publish dist/zh-cn --project-name=viz-rs-zh-cn
