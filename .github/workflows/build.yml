@@ -84,7 +84,7 @@ jobs:
           just build-en
           just build-zh-cn
 
-      - name: Deploy EN To Cloudflare
+      - name: Deploy en To Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
@@ -92,7 +92,7 @@ jobs:
           command: |
             pages publish dist/en --project-name=viz-rs --commit-dirty=true
 
-      - name: Deploy EN To Cloudflare
+      - name: Deploy zh-cn To Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
