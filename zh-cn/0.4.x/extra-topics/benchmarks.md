@@ -24,6 +24,10 @@
 
 	- [`tinyvec`](https://crates.io/crates/tinyvec)
 
+4. 指定 `capacity` 去创建 **vector** 或者 **hash**，在容量内的元素不会被重新分配
+
+5. SIMD
+
 > 在 TFB 和 WFB 测试环境中，Viz 没有使用 1、3。
 
 ## TechEmpower Framework Benchmarks (TFB)

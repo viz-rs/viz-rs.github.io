@@ -24,6 +24,10 @@ In a real production environment, several approaches can be tried to optimize th
 
 	- [`tinyvec`](https://crates.io/crates/tinyvec)
 
+4. Using a `capacity` to new **vector** or **hash**, a least capacity elements without reallocating
+
+5. SIMD
+
 > In the TFB and WFB test environments, Viz did not use 1 and 3.
 
 ## TechEmpower Framework Benchmarks (TFB)
