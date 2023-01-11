@@ -100,6 +100,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          preCommands: export COMMIT_HASH=(git rev-parse --short HEAD)
           command: |
-            pages publish dist/en --project-name=viz-rs
-            pages publish dist/zh-cn --project-name=viz-rs-zh-cn
+            pages publish dist/en --project-name=viz-rs --commit-hash=$COMMIT_HASH
+            pages publish dist/zh-cn --project-name=viz-rs-zh-cn --commit-hash=$COMMIT_HASH
