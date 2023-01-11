@@ -82,37 +82,12 @@ jobs:
           just build-en
           just build-zh-cn
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v2
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          # Upload entire repository
-          path: 'dist/'
-          retention-days: 1
-
   # Deploy job
   deploy:
     # Add a dependency to the build job
     needs: build
 
-    # Deploy to the github-pages environment
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    # Specify runner + deployment step
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
-
-  cloudflare:
-    # Add a dependency to the build job
-    needs: build
-
-    # Deploy to the github-pages environment
+    # Deploy to the cloudflare pages environment
     environment:
       name: cloudflare
 
