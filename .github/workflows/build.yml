@@ -30,6 +30,8 @@ env:
 
 jobs:
   build:
+    environment:
+      name: cloudflare
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -81,27 +83,14 @@ jobs:
           mkdir -p dist/{en,zh-cn}
           just build-en
           just build-zh-cn
-          ls -la dist
 
-  # Deploy job
-  deploy:
-    # Add a dependency to the build job
-    needs: build
-
-    # Deploy to the cloudflare pages environment
-    environment:
-      name: cloudflare
-
-    runs-on: ubuntu-latest
-    name: Deploy To Cloudflare
-    steps:
-      - uses: actions/checkout@v3
-      - name: Publish
+      - name: Deploy To Cloudflare
+        uses: actions/checkout@v3
+        name: Publish
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          preCommands: ls -la dist
           command: |
             pages publish dist/en --project-name=viz-rs --commit-dirty=true
             pages publish dist/zh-cn --project-name=viz-rs-zh-cn --commit-dirty=true
