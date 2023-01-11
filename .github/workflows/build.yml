@@ -29,7 +29,6 @@ env:
   RUSTUP_MAX_RETRIES: 10
 
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
@@ -78,15 +77,18 @@ jobs:
 
       - name: Build
         run: |
+          mkdir -p dist/{en,zh-cn}
           just build-en
+          just build-zh-cn
 
-      - name: Deploy en
+      - name: Deploy To Cloudflare
       - uses: actions/checkout@v3
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           email: ${{ secrets.CF_EMAIL }}
-          command: pages publish dist --project-name=viz-rs
+          command: pages publish dist/en --project-name=viz-rs
+          command: pages publish dist/zh-cn --project-name=viz-rs-zh-cn
 
       - name: Setup Pages
         uses: actions/configure-pages@v2
@@ -96,19 +98,6 @@ jobs:
           # Upload entire repository
           path: 'dist/'
           retention-days: 1
-
-      - name: Build
-        run: |
-          just build-zh-cn
-
-      - name: Deploy zh-cn
-      - uses: actions/checkout@v3
-        uses: cloudflare/wrangler-action@2.0.0
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          email: ${{ secrets.CF_EMAIL }}
-          command: pages publish dist --project-name=viz-rs-zh-cn
-
 
   # Deploy job
   deploy:

@@ -1,6 +1,6 @@
 [build]
 target = "index.html"
-dist = "dist"
+dist = "../dist/en"
 
 [[hooks]]
 stage = "post_build"
@@ -11,7 +11,7 @@ command_arguments = [
   "../tools/src/*.rs",
   "-m",
   "-o",
-  "../dist/.stage/uno.css",
+  "../dist/en/.stage/uno.css",
 ]
 [[hooks]]
 stage = "post_build"
