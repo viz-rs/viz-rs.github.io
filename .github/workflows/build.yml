@@ -80,6 +80,14 @@ jobs:
         run: |
           just build-en
 
+      - name: Deploy en
+      - uses: actions/checkout@v3
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          email: ${{ secrets.CF_EMAIL }}
+          command: pages publish dist --project-name=viz-rs
+
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
@@ -88,6 +96,19 @@ jobs:
           # Upload entire repository
           path: 'dist/'
           retention-days: 1
+
+      - name: Build
+        run: |
+          just build-zh-cn
+
+      - name: Deploy zh-cn
+      - uses: actions/checkout@v3
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          email: ${{ secrets.CF_EMAIL }}
+          command: pages publish dist --project-name=viz-rs-zh-cn
+
 
   # Deploy job
   deploy:
