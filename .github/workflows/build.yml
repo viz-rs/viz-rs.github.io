@@ -81,15 +81,6 @@ jobs:
           just build-en
           just build-zh-cn
 
-      - name: Deploy To Cloudflare
-      - uses: actions/checkout@v3
-        uses: cloudflare/wrangler-action@2.0.0
-        with:
-          apiToken: ${{ secrets.CF_API_TOKEN }}
-          email: ${{ secrets.CF_EMAIL }}
-          command: pages publish dist/en --project-name=viz-rs
-          command: pages publish dist/zh-cn --project-name=viz-rs-zh-cn
-
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Upload artifact
@@ -115,3 +106,23 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+
+  cloudflare:
+    # Add a dependency to the build job
+    needs: build
+
+    # Deploy to the github-pages environment
+    environment:
+      name: cloudflare
+
+    runs-on: ubuntu-latest
+    name: Deploy
+    steps:
+      - uses: actions/checkout@v3
+      - name: Publish
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          email: ${{ secrets.CF_EMAIL }}
+          command: pages publish dist/en --project-name=viz-rs
+          command: pages publish dist/zh-cn --project-name=viz-rs-zh-cn
