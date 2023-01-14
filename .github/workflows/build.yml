@@ -71,8 +71,7 @@ jobs:
           key: ubuntu-latest-cargo-${{ hashFiles('**/Cargo.lock') }}
       - run: |
           if [ ! -f ~/.cargo/bin/trunk ]; then
-            # cargo install --locked trunk
-            cargo install --git https://github.com/thedodd/trunk.git --locked
+            cargo install --locked trunk
           fi
           if [ ! -f ~/.cargo/bin/just ]; then
             cargo install --locked just
