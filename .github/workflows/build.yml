@@ -40,19 +40,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-      - uses: actions/cache@v3
-        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - run: |
-          cd app && npm i
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@v1  
@@ -60,28 +47,11 @@ jobs:
           toolchain: nightly
           target: wasm32-unknown-unknown
 
-      - uses: actions/cache@v3
-        id: cargo-cache
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-${{ hashFiles('Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
-      - run: |
-          if [ ! -f ~/.cargo/bin/trunk ]; then
-            cargo install --locked trunk
-          fi
-          if [ ! -f ~/.cargo/bin/just ]; then
-            cargo install --locked just
-          fi
-
       - name: Build
         run: |
+          cd app && npm i
+          cargo install --locked trunk
+          cargo install --locked just
           mkdir -p dist/{en,zh-cn}
           just build-en
           just build-zh-cn
@@ -101,3 +71,11 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: |
             pages publish dist/zh-cn --project-name=viz-rs-zh-cn --commit-dirty=true
+
+      - name: Deploy zh-cn To Cloudflare
+        uses: cloudflare/wrangler-action@2.0.0
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: |
+            pages deployment
