@@ -47,11 +47,20 @@ jobs:
           toolchain: nightly
           target: wasm32-unknown-unknown
 
-      - name: Install Trunk & Just
-        run: |
-          cargo install --locked trunk
-          cargo install --locked just
-          mkdir -p dist/{en,zh-cn}
+      - uses: taiki-e/install-action@just
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Checkout Trunk
+        uses: actions/checkout@v3
+        with:
+          repository: thedodd/trunk
+          path: trunk
+
+      - name: Install Just
+        run: cargo install --bin trunk trunk
+
+      - name: Init dist
+        run: mkdir -p dist/{en,zh-cn}
 
       - name: Init App
         run: just app
