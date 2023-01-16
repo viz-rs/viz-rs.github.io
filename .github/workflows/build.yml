@@ -84,7 +84,9 @@ jobs:
         run: mkdir -p dist/{en,zh-cn}
 
       - name: Init App
-        run: just app
+        run: |
+          npm config set node-linker hoisted
+          just app
 
       - name: Build en
         run: just build-en
