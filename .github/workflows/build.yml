@@ -61,6 +61,7 @@ jobs:
           target: wasm32-unknown-unknown
 
       - uses: actions/cache@v3
+        id: cargo-cache
         with:
           path: |
             ~/.cargo/bin/
@@ -69,6 +70,8 @@ jobs:
             ~/.cargo/git/db/
             target/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
       - run: |
           if [ ! -f ~/.cargo/bin/trunk ]; then
             cargo install --locked trunk
