@@ -1,5 +1,5 @@
 app:
-  cd app; npm i
+  cd app; pnpm i
 
 serve-en:
   cd app; RUSTFLAGS=--cfg=web_sys_unstable_apis trunk --config Trunk.toml serve
