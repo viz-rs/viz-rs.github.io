@@ -7,8 +7,8 @@ use leptos_router::*;
 struct ExampleContext(i32);
 
 #[component]
-pub fn RouterExample(cx: Scope) -> impl IntoView {
-    log::debug!("rendering <RouterExample/>");
+pub fn MyRouter(cx: Scope) -> impl IntoView {
+    log::debug!("rendering <MyRouter/>");
 
     // contexts are passed down through the route tree
     provide_context(cx, ExampleContext(0));
