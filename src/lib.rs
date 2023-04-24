@@ -1,7 +1,9 @@
 mod api;
+mod components;
 use crate::api::*;
 use leptos::*;
 use leptos_router::*;
+use components::*;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 struct ExampleContext(i32);
@@ -15,39 +17,43 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
 
     view! { cx,
         <Router>
-            <nav>
-                // ordinary <a> elements can be used for client-side navigation
-                // using <A> has two effects:
-                // 1) ensuring that relative routing works properly for nested routes
-                // 2) setting the `aria-current` attribute on the current link,
-                //    for a11y and styling purposes
-                <A exact=true href="/">"Contacts"</A>
-                <A href="about">"About"</A>
-                <A href="settings">"Settings"</A>
-                <A href="redirect-home">"Redirect to Home"</A>
-            </nav>
-            <main>
-                <AnimatedRoutes
-                    outro="slideOut"
-                    intro="slideIn"
-                    outro_back="slideOutBack"
-                    intro_back="slideInBack"
-                >
-                    <ContactRoutes/>
-                    <Route
-                        path="about"
-                        view=move |cx| view! { cx,  <About/> }
-                    />
-                    <Route
-                        path="settings"
-                        view=move |cx| view! { cx,  <Settings/> }
-                    />
-                    <Route
-                        path="redirect-home"
-                        view=move |cx| view! { cx, <Redirect path="/"/> }
-                    />
-                </AnimatedRoutes>
-            </main>
+            <div id="app" class="tracking-0.2px">
+                <Navbar />
+                <div class="page-container flex-row pt-4.375rem" >
+                    <div id="backdrop" />
+
+                    <Sidebar />
+
+                    <main id="page" class="flex flex-row flex-1 py-5">
+                        //     <components::Switch<Route>
+                        //         render={switch}
+                        //         version={version}
+                        // />
+                        <AnimatedRoutes
+                            outro="slideOut"
+                            intro="slideIn"
+                            outro_back="slideOutBack"
+                            intro_back="slideInBack"
+                        >
+                            <ContactRoutes/>
+                            <Route
+                                path="about"
+                                view=move |cx| view! { cx,  <About/> }
+                            />
+                            <Route
+                                path="settings"
+                                view=move |cx| view! { cx,  <Settings/> }
+                            />
+                            <Route
+                                path="redirect-home"
+                                view=move |cx| view! { cx, <Redirect path="/"/> }
+                            />
+                        </AnimatedRoutes>
+                    </main>
+                </div>
+
+                <Footer />
+            </div>
         </Router>
     }
 }

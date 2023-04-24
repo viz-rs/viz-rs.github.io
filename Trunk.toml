@@ -1,0 +1,17 @@
+[build]
+target = "index.html"
+dist = "../dist"
+
+[[hooks]]
+stage = "post_build"
+command = "node"
+command_arguments = [
+  "node_modules/.bin/unocss",
+  "src/**/*.rs",
+  "-m",
+  "-o",
+  "../dist/.stage/uno.css",
+]
+
+[watch]
+watch = ["index.scss", "src"]
