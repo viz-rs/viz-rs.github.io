@@ -1,19 +1,22 @@
 mod api;
 mod components;
+mod pages;
+
 use crate::api::*;
 use leptos::*;
 use leptos_router::*;
 use components::*;
+use pages::*;
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
-struct ExampleContext(i32);
+struct Context(i32);
 
 #[component]
 pub fn MyRouter(cx: Scope) -> impl IntoView {
     log::debug!("rendering <MyRouter/>");
 
     // contexts are passed down through the route tree
-    provide_context(cx, ExampleContext(0));
+    provide_context(cx, Context(0));
 
     view! { cx,
         <Router>
@@ -25,24 +28,19 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
                     <Sidebar />
 
                     <main id="page" class="flex flex-row flex-1 py-5">
-                        //     <components::Switch<Route>
-                        //         render={switch}
-                        //         version={version}
-                        // />
                         <AnimatedRoutes
                             outro="slideOut"
                             intro="slideIn"
                             outro_back="slideOutBack"
                             intro_back="slideInBack"
                         >
-                            <ContactRoutes/>
                             <Route
-                                path="about"
-                                view=move |cx| view! { cx,  <About/> }
+                                path=""
+                                view=move |cx| view! { cx,  <Home /> }
                             />
                             <Route
-                                path="settings"
-                                view=move |cx| view! { cx,  <Settings/> }
+                                path="docs/*path"
+                                view=move |cx| view! { cx, <Doc /> }
                             />
                             <Route
                                 path="redirect-home"
@@ -58,33 +56,12 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
     }
 }
 
-// You can define other routes in their own component.
-// Use a #[component(transparent)] that returns a <Route/>.
-#[component(transparent)]
-pub fn ContactRoutes(cx: Scope) -> impl IntoView {
-    view! { cx,
-        <Route
-            path=""
-            view=move |cx| view! { cx,  <ContactList/> }
-        >
-            <Route
-                path=":id"
-                view=move |cx| view! { cx,  <Contact/> }
-            />
-            <Route
-                path="/"
-                view=move |_| view! { cx,  <p>"Select a contact."</p> }
-            />
-        </Route>
-    }
-}
-
 #[component]
 pub fn ContactList(cx: Scope) -> impl IntoView {
     log::debug!("rendering <ContactList/>");
 
     // contexts are passed down through the route tree
-    provide_context(cx, ExampleContext(42));
+    provide_context(cx, Context(42));
 
     on_cleanup(cx, || {
         log!("cleaning up <ContactList/>");
@@ -133,7 +110,7 @@ pub fn Contact(cx: Scope) -> impl IntoView {
 
     log::debug!(
         "ExampleContext should be Some(42). It is {:?}",
-        use_context::<ExampleContext>(cx)
+        use_context::<Context>(cx)
     );
 
     on_cleanup(cx, || {
@@ -182,59 +159,5 @@ pub fn Contact(cx: Scope) -> impl IntoView {
                 {contact_display}
             </Transition>
         </div>
-    }
-}
-
-#[component]
-pub fn About(cx: Scope) -> impl IntoView {
-    log::debug!("rendering <About/>");
-
-    on_cleanup(cx, || {
-        log!("cleaning up <About/>");
-    });
-
-    log::debug!(
-        "ExampleContext should be Some(0). It is {:?}",
-        use_context::<ExampleContext>(cx)
-    );
-
-    // use_navigate allows you to navigate programmatically by calling a function
-    let navigate = use_navigate(cx);
-
-    view! { cx,
-        <>
-            // note: this is just an illustration of how to use `use_navigate`
-            // <button on:click> to navigate is an *anti-pattern*
-            // you should ordinarily use a link instead,
-            // both semantically and so your link will work before WASM loads
-            <button on:click=move |_| { _ = navigate("/", Default::default()); }>
-                "Home"
-            </button>
-            <h1>"About"</h1>
-            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
-        </>
-    }
-}
-
-#[component]
-pub fn Settings(cx: Scope) -> impl IntoView {
-    log::debug!("rendering <Settings/>");
-
-    on_cleanup(cx, || {
-        log!("cleaning up <Settings/>");
-    });
-
-    view! { cx,
-        <>
-            <h1>"Settings"</h1>
-            <form>
-                <fieldset>
-                    <legend>"Name"</legend>
-                    <input type="text" name="first_name" placeholder="First"/>
-                    <input type="text" name="last_name" placeholder="Last"/>
-                </fieldset>
-                <pre>"This page is just a placeholder."</pre>
-            </form>
-        </>
     }
 }
