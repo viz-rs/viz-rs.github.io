@@ -1,9 +1,7 @@
 use leptos::*;
 
 #[component]
-pub fn Sidebar(
-    cx: Scope,
-) -> impl IntoView {
+pub fn Sidebar(cx: Scope) -> impl IntoView {
     view! { cx,
         <aside class="fixed z-35 flex flex-col p-5 gap-4 sidebar top-4.375rem bottom-0">
             <section>

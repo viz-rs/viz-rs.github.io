@@ -1,9 +1,7 @@
 use leptos::*;
 
 #[component]
-pub fn Footer(
-    cx: Scope,
-) -> impl IntoView {
+pub fn Footer(cx: Scope) -> impl IntoView {
     view! { cx,
         <footer class="footer text-center text-neutral-400 text-sm p-5">
             <p>

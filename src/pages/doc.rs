@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_router::{Params, use_params, IntoParam};
+use leptos_router::{use_params, IntoParam, Params};
 
 #[derive(Params, PartialEq, Clone, Debug)]
 pub struct DocParams {
@@ -7,13 +7,13 @@ pub struct DocParams {
 }
 
 #[component]
-pub fn Doc(
-    cx: Scope,
-) -> impl IntoView {
+pub fn Doc(cx: Scope) -> impl IntoView {
     let params = use_params::<DocParams>(cx);
     let path = move || {
         params.with(|params| {
-            params.as_ref().map(|params| params.path.clone())
+            params
+                .as_ref()
+                .map(|params| params.path.clone())
                 .unwrap_or_default()
         })
     };
