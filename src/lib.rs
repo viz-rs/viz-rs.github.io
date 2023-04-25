@@ -29,12 +29,26 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
             version: VERSIONS[0].to_string(),
         },
     );
+
+    let lang_part = create_slice(
+        cx,
+        state,
+        |state| state.lang.clone(),
+        |state, lang| state.lang = lang,
+    );
+    let version_part = create_slice(
+        cx,
+        state,
+        |state| state.version.clone(),
+        |state, version| state.version = version,
+    );
+
     provide_context(cx, state);
 
     view! { cx,
         <Router>
             <div id="app" class="tracking-0.2px">
-                <Navbar />
+                <Navbar lang_part=lang_part version_part=version_part />
                 <div class="page-container flex-row pt-4.375rem" >
                     <div id="backdrop" />
 
@@ -44,11 +58,11 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
                         <Routes>
                             <Route
                                 path=""
-                                view=move |cx| view! { cx,  <Home /> }
+                                view=move |cx| view! { cx,  <Home lang=lang_part.0 version=version_part.0 /> }
                             />
                             <Route
                                 path=":lang/:version/*path"
-                                view=move |cx| view! { cx, <Doc /> }
+                                view=move |cx| view! { cx, <Doc lang_part=lang_part version_part=version_part /> }
                             />
                             <Route
                                 path="redirect-home"

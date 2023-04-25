@@ -1,35 +1,35 @@
 use leptos::*;
+use leptos_router::{use_location, use_navigate};
 use wasm_bindgen::prelude::*;
 use web_sys::{HtmlAnchorElement, HtmlElement};
 
-use crate::{AppState, LANGS, VERSIONS};
+use crate::{LANGS, VERSIONS};
 
 #[component]
-pub fn Navbar(cx: Scope) -> impl IntoView {
-    let state = use_context::<RwSignal<AppState>>(cx).unwrap();
+pub fn Navbar(
+    cx: Scope,
+    lang_part: (Signal<String>, SignalSetter<String>),
+    version_part: (Signal<String>, SignalSetter<String>),
+) -> impl IntoView {
+    let navigate = use_navigate(cx);
+    let location = use_location(cx);
 
-    let (lang, set_lang) = create_slice(
-        cx,
-        state,
-        |state| state.lang.clone(),
-        |state, lang| {
-            log::info!("{}", lang);
-            state.lang = lang
-        },
-    );
-    let (version, set_version) = create_slice(
-        cx,
-        state,
-        |state| state.version.clone(),
-        |state, version| {
-            log::info!("{}", version);
-            state.version = version
-        },
-    );
+    let (lang, set_lang) = lang_part;
+    let (version, set_version) = version_part;
+
+    let toggle_color_scheme = move |_| {
+    };
+
+    let doc_path = move || {
+        let pathname = (location.pathname)();
+        pathname.trim_start_matches(&format!("/{}/{}", lang(), version())).to_string()
+    };
 
     let change_version = move |ev: ev::Event| {
+        let doc_path = doc_path();
         let value = event_target_value(&ev);
-        set_version(value);
+        set_version(value.clone());
+        let _ = navigate(&format!("/{}/{}{}", lang(), value, doc_path), Default::default());
     };
 
     let change_lang = move |ev: ev::MouseEvent| {
@@ -62,7 +62,7 @@ pub fn Navbar(cx: Scope) -> impl IntoView {
                 <a href="/docs/0.4.x/guide/introduction" class="transition-colors op75 hover:op100">
                     <span class="i-lucide-book-open block"></span>
                 </a>
-                <a rel="noreferrer" target="_blank" href="https://docs.rs/viz/"{version()} class="transition-colors op75 hover:op100">
+                <a rel="noreferrer" target="_blank" href={format!("https://docs.rs/viz/{}", version())} class="transition-colors op75 hover:op100">
                     <span class="i-lucide-boxes block"></span>
                 </a>
                 <a target="_blank" rel="noreferrer" href="https://github.com/viz-rs/viz" class="transition-colors op75 hover:op100">
@@ -81,7 +81,7 @@ pub fn Navbar(cx: Scope) -> impl IntoView {
                                         <li>
                                             <a
                                                 data-lang={l[0]}
-                                                href={format!("/{}/{}", l[0], version())}
+                                                href={format!("/{}/{}{}", l[0], version(), doc_path())}
                                                 class="flex hover:text-yellow-600" class=("text-yellow-600", {move || l[0] == lang()} )
                                                 on:click=change_lang.clone()
                                             >{l[1]}</a>
@@ -92,7 +92,7 @@ pub fn Navbar(cx: Scope) -> impl IntoView {
                         }
                     </ul>
                 </div>
-                <button class="transition-colors op75 hover:op100">
+                <button class="transition-colors op75 hover:op100" on:click=toggle_color_scheme>
                     <span aria-hidden="true" class="dark:i-lucide-moon i-lucide-sun block"></span>
                 </button>
             </div>
