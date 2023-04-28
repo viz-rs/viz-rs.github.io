@@ -63,11 +63,11 @@ pub fn Navbar(
                     }
                 </select>
             </div>
-            <div class="flex-row items-center gap-5 font-medium text-15px">
-                <A href={format!("/{}/guide/introduction", version())} class="transition-colors op75 hover:op100">
-                    <span class="block" class=("i-lucide-book", is_home) class=("i-lucide-book-open", move || !is_home())></span>
+            <div class="flex flex-row items-center gap-5 font-medium text-15px">
+                <A href={move || format!("/{}/guide/introduction", version())} class="transition-colors op75 hover:op100">
+                    <span class="block" class=("i-lucide-book", move || is_home()) class=("i-lucide-book-open", move || !is_home())></span>
                 </A>
-                <a rel="noreferrer" target="_blank" href={format!("https://docs.rs/viz/{}", version())} class="transition-colors op75 hover:op100">
+                <a rel="noreferrer" target="_blank" href={move || format!("https://docs.rs/viz/{}", version())} class="transition-colors op75 hover:op100">
                     <span class="i-lucide-boxes block"></span>
                 </a>
                 <a target="_blank" rel="noreferrer" href="https://github.com/viz-rs/viz" class="transition-colors op75 hover:op100">
@@ -86,8 +86,8 @@ pub fn Navbar(
                                         <li>
                                             <a
                                                 data-lang={l[0]}
-                                                href={format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), doc_path())}
-                                                class="flex hover:text-yellow-600" class=("text-yellow-600", {move || l[0] == lang()} )
+                                                href={move || format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), doc_path())}
+                                                class="flex hover:text-yellow-600" class=("text-yellow-600", move || l[0] == lang() )
                                                 on:click=change_lang.clone()
                                             >{l[1]}</a>
                                         </li>

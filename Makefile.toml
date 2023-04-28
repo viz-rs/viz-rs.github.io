@@ -1,26 +1,26 @@
-[env]
-CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+[config]
+default_to_workspace = false
 
-# [tasks.build]
-# command = "cargo"
-# args = ["+nightly", "build-all-features"]
-# install_crate = "cargo-all-features"
-#
-# [tasks.check]
-# command = "cargo"
-# args = ["+nightly", "check-all-features"]
-# install_crate = "cargo-all-features"
-
-# [tasks.dev-en]
-# command = "trunk"
-# args = ["--config", "app/Trunk.toml", "serve", "--open"]
-
-[tasks.init-en]
+[tasks.init]
 command = "mkdir"
-args = ["-p", "dist/en"]
+args = ["-p", "dist/{en,zh-cn}"]
+
+[tasks.dev-en]
+dependencies = ["init"]
+command = "trunk"
+args = ["--config", "Trunk.toml", "serve", "--open"]
+
+[tasks.dev-zh-cn]
+dependencies = ["init"]
+command = "trunk"
+args = ["--config", "Trunk.zh-cn.toml", "serve", "--open"]
 
 [tasks.build-en]
-cwd = "./app/"
+dependencies = ["init"]
 command = "trunk"
 args = ["--config", "Trunk.toml", "build", "--release"]
-dependencies = ["init-en"]
+
+[tasks.build-zh-cn]
+dependencies = ["init"]
+command = "trunk"
+args = ["--config", "Trunk.zh-cn.toml", "build", "--release"]

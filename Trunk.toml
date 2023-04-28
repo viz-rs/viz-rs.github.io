@@ -1,0 +1,19 @@
+[build]
+target = "app/index.html"
+dist = "dist/en"
+
+[[hooks]]
+stage = "post_build"
+command = "node"
+command_arguments = [
+  "app/node_modules/.bin/unocss",
+  "-c",
+  "app/uno.config.ts",
+  "app/src/**/*.rs",
+  "gen/src/*.rs",
+  "-o",
+  "dist/en/.stage/uno.css",
+]
+
+[watch]
+watch = ["app/index.scss", "app/src", "en"]

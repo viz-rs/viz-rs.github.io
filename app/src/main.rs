@@ -1,5 +1,5 @@
+use app::*;
 use leptos::*;
-use viz_rs::*;
 
 pub fn main() {
     _ = console_log::init_with_level(log::Level::Debug);
