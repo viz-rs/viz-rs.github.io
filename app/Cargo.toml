@@ -1,0 +1,34 @@
+[package]
+name = "viz_rs"
+authors.workspace = true
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+homepage.workspace = true
+
+[features]
+default = ["en"]
+en = []
+zh-cn = []
+
+[dependencies]
+console_log = "1"
+log = "0.4"
+leptos = { git = "https://github.com/leptos-rs/leptos.git", branch = "main" }
+leptos_router = { git = "https://github.com/leptos-rs/leptos.git", branch = "main", features = ["csr"] }
+leptos_dom = { git = "https://github.com/leptos-rs/leptos.git", branch = "main"}
+leptos_meta = {  git = "https://github.com/leptos-rs/leptos.git", branch = "main", features = ["csr"] }
+# leptos_reactive = { git = "https://github.com/leptos-rs/leptos.git", branch = "main"}
+serde = { version = "1", features = ["derive"] }
+futures = "0.3"
+console_error_panic_hook = "0.1.7"
+web-sys = "0.3.61"
+wasm-bindgen = "0.2.84"
+cfg-if = "1.0.0"
+
+[dev-dependencies]
+wasm-bindgen-test = "0.3.34"
+
+[profile.release]
+codegen-units = 1
+lto = true

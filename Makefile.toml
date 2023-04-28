@@ -1,9 +1,26 @@
-[tasks.build]
-command = "cargo"
-args = ["+nightly", "build-all-features"]
-install_crate = "cargo-all-features"
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
 
-[tasks.check]
-command = "cargo"
-args = ["+nightly", "check-all-features"]
-install_crate = "cargo-all-features"
+# [tasks.build]
+# command = "cargo"
+# args = ["+nightly", "build-all-features"]
+# install_crate = "cargo-all-features"
+#
+# [tasks.check]
+# command = "cargo"
+# args = ["+nightly", "check-all-features"]
+# install_crate = "cargo-all-features"
+
+# [tasks.dev-en]
+# command = "trunk"
+# args = ["--config", "app/Trunk.toml", "serve", "--open"]
+
+[tasks.init-en]
+command = "mkdir"
+args = ["-p", "dist/en"]
+
+[tasks.build-en]
+cwd = "./app/"
+command = "trunk"
+args = ["--config", "Trunk.toml", "build", "--release"]
+dependencies = ["init-en"]
