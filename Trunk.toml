@@ -3,6 +3,20 @@ target = "app/index.html"
 dist = "dist/en"
 
 [[hooks]]
+stage = "pre_build"
+command = "cargo"
+command_arguments = [
+  "run",
+  "--bin",
+  "gen",
+  "--",
+  "-i",
+  "en",
+  "-o",
+  "dist/en/.stage/assets"
+]
+
+[[hooks]]
 stage = "post_build"
 command = "node"
 command_arguments = [
