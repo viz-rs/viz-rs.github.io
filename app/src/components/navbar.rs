@@ -24,16 +24,23 @@ pub fn Navbar(
     };
 
     let doc_path = move || {
-        let pathname = (location.pathname)();
-        pathname
+        (location.pathname)()
             .trim_start_matches(&format!("/{}", version()))
             .to_string()
+    };
+
+    let pad_path = move || {
+        let mut doc_path = doc_path();
+        if doc_path == "/" {
+            doc_path.push_str("guide/introduction");
+        }
+        doc_path
     };
 
     let is_home = move || doc_path() == "/";
 
     let change_version = move |ev: ev::Event| {
-        let doc_path = doc_path();
+        let doc_path = pad_path();
         let value = event_target_value(&ev);
         set_version(value.clone());
         let _ = navigate(&format!("/{}{}", value, doc_path), Default::default());
@@ -86,7 +93,7 @@ pub fn Navbar(
                                         <li>
                                             <a
                                                 data-lang={l[0]}
-                                                href={move || format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), doc_path())}
+                                                href={move || format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), pad_path())}
                                                 class="flex hover:text-yellow-600" class=("text-yellow-600", move || l[0] == lang() )
                                                 on:click=change_lang.clone()
                                             >{l[1]}</a>
