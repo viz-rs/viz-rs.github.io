@@ -1,8 +1,7 @@
-mod api;
 mod components;
 mod pages;
 
-use api::*;
+pub mod api;
 use components::*;
 use leptos::*;
 use leptos_router::*;
@@ -14,6 +13,7 @@ pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct AppState {
     dark: bool,
+    home: bool,
     lang: String,
     version: String,
 }
@@ -27,6 +27,7 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
         cx,
         AppState {
             dark: false,
+            home: true,
             lang: LANGS[0][0].to_string(),
             version: VERSIONS[0].to_string(),
         },
@@ -37,21 +38,36 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
         state,
         |state| state.dark,
         |state, dark| {
-            // log::info!("{}", dark);
+            log::info!("change dark: {}", &dark);
             state.dark = dark;
+        },
+    );
+    let home_part = create_slice(
+        cx,
+        state,
+        |state| state.home,
+        |state, home| {
+            log::info!("change home: {}", &home);
+            state.home = home;
         },
     );
     let lang_part = create_slice(
         cx,
         state,
         |state| state.lang.clone(),
-        |state, lang| state.lang = lang,
+        |state, lang| {
+            log::info!("change lang: {}", &lang);
+            state.lang = lang
+        },
     );
     let version_part = create_slice(
         cx,
         state,
         |state| state.version.clone(),
-        |state, version| state.version = version,
+        |state, version| {
+            log::info!("change version: {}", &version);
+            state.version = version
+        },
     );
 
     provide_context(cx, state);
@@ -59,11 +75,11 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
     view! { cx,
         <Router>
             <div id="app" class="tracking-0.2px">
-                <Navbar dark_part=dark_part lang_part=lang_part version_part=version_part />
-                <div class="page-container flex-row pt-4.375rem" >
+                <Navbar dark_part=dark_part home_part=home_part lang_part=lang_part version_part=version_part />
+                <div class="page-container flex-row pt-4.375rem" class:opened={move || !home_part.0()}>
                     <div id="backdrop" />
 
-                    <Sidebar />
+                    <Sidebar lang_part=lang_part version_part=version_part />
 
                     <main id="page" class="flex flex-row flex-1 py-5">
                         <Routes>

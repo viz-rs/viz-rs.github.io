@@ -9,7 +9,7 @@ pub struct DocParams {
 
 #[component]
 pub fn Doc(cx: Scope, version_part: (Signal<String>, SignalSetter<String>)) -> impl IntoView {
-    let (_, set_version) = version_part;
+    // let (version, set_version) = version_part;
     let (path, set_path) = create_signal(cx, String::new());
 
     let params = use_params::<DocParams>(cx);
@@ -17,8 +17,10 @@ pub fn Doc(cx: Scope, version_part: (Signal<String>, SignalSetter<String>)) -> i
     create_effect(cx, move |_| {
         let _ = params.get().map(|params| {
             log::info!("{} {}", params.version, params.path);
-            set_version(params.version);
-            set_path(params.path);
+            // if params.version != version() {
+            //     set_version(params.version);
+            // }
+            // set_path(params.path);
         });
     });
 

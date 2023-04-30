@@ -9,6 +9,7 @@ use crate::{LANGS, VERSIONS};
 pub fn Navbar(
     cx: Scope,
     dark_part: (Signal<bool>, SignalSetter<bool>),
+    home_part: (Signal<bool>, SignalSetter<bool>),
     lang_part: (Signal<String>, SignalSetter<String>),
     version_part: (Signal<String>, SignalSetter<String>),
 ) -> impl IntoView {
@@ -16,6 +17,7 @@ pub fn Navbar(
     let location = use_location(cx);
 
     let (dark, set_dark) = dark_part;
+    let (home, set_home) = home_part;
     let (lang, set_lang) = lang_part;
     let (version, set_version) = version_part;
 
@@ -31,7 +33,11 @@ pub fn Navbar(
 
     let pad_path = move || {
         let mut doc_path = doc_path();
-        if doc_path == "/" {
+        let is_home = doc_path == "/";
+        if home() != is_home {
+            set_home(is_home);
+        }
+        if is_home {
             doc_path.push_str("guide/introduction");
         }
         doc_path
@@ -42,7 +48,9 @@ pub fn Navbar(
     let change_version = move |ev: ev::Event| {
         let doc_path = pad_path();
         let value = event_target_value(&ev);
-        set_version(value.clone());
+        if version() != value {
+            set_version(value.clone());
+        }
         let _ = navigate(&format!("/{}{}", value, doc_path), Default::default());
     };
 
@@ -56,10 +64,10 @@ pub fn Navbar(
     view! { cx,
         <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
             <div class="flex flex-row">
-                <a href="/" class="flex flex-row items-center transition-colors op75 hover:op100">
+                <A href="/" class="flex flex-row items-center transition-colors op75 hover:op100">
                     <img alt="Viz" src="/logo.svg" class="h-10 block b-neutral-100 dark:b-neutral-500 b mr-1 mr-3" />
                     <span class="font-semibold">"V"</span><span>"iz"</span>
-                </a>
+                </A>
                 <select id="versions" class="text-right font-bold select-none text-3 font-light" on:change=change_version>
                     {
                         VERSIONS.into_iter()
@@ -94,7 +102,8 @@ pub fn Navbar(
                                             <a
                                                 data-lang={l[0]}
                                                 href={move || format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), pad_path())}
-                                                class="flex hover:text-yellow-600" class=("text-yellow-600", move || l[0] == lang() )
+                                                class="flex hover:text-yellow-600"
+                                                class=("text-yellow-600", move || l[0] == lang())
                                                 on:click=change_lang.clone()
                                             >{l[1]}</a>
                                         </li>
