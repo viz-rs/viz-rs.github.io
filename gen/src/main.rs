@@ -362,7 +362,7 @@ fn parse(
         html.push_str("<div class='page-nav'>");
         // prev
         if let Some((name, link)) = navs.0 {
-            html.push_str("<a class='prev-link' href='/docs/");
+            html.push_str("<a class='prev-link' href='/");
             html.push_str(&link);
             html.push_str("'>");
             html.push_str("<span class='desc'><i class='block i-lucide-chevron-left w-3 h-3'></i>");
@@ -379,7 +379,7 @@ fn parse(
 
         // next
         if let Some((name, link)) = navs.1 {
-            html.push_str("<a class='next-link' href='/docs/");
+            html.push_str("<a class='next-link' href='/");
             html.push_str(&link);
             html.push_str("'>");
             html.push_str("<span class='desc'>");

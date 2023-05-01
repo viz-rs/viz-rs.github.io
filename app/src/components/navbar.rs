@@ -21,7 +21,8 @@ pub fn Navbar(
     let (lang, set_lang) = lang_part;
     let (version, set_version) = version_part;
 
-    let toggle_color_scheme = move |_| {
+    let toggle_color_scheme = move |e: ev::MouseEvent| {
+        log::info!("toggle {}", dark());
         set_dark(!dark());
     };
 

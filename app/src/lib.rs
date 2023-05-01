@@ -1,5 +1,6 @@
 mod components;
 mod pages;
+mod utils;
 
 pub mod api;
 use components::*;
@@ -22,6 +23,11 @@ pub struct AppState {
 pub fn MyRouter(cx: Scope) -> impl IntoView {
     log::debug!("rendering <MyRouter/>");
 
+    let dark_media = utils::media_query("(prefers-color-scheme: dark)").unwrap();
+    {
+        todo!();
+    }
+
     // contexts are passed down through the route tree
     let state = create_rw_signal(
         cx,
@@ -33,13 +39,17 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
         },
     );
 
+    provide_context(cx, state);
+
     let dark_part = create_slice(
         cx,
         state,
         |state| state.dark,
         |state, dark| {
-            log::info!("change dark: {}", &dark);
-            state.dark = dark;
+            if state.dark != dark {
+                log::info!("change dark: {}", &dark);
+                state.dark = dark;
+            }
         },
     );
     let home_part = create_slice(
@@ -70,8 +80,6 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
         },
     );
 
-    provide_context(cx, state);
-
     view! { cx,
         <Router>
             <div id="app" class="tracking-0.2px">
@@ -79,7 +87,7 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
                 <div class="page-container flex-row pt-4.375rem" class:opened={move || !home_part.0()}>
                     <div id="backdrop" />
 
-                    <Sidebar lang_part=lang_part version_part=version_part />
+                    <Sidebar version_part=version_part />
 
                     <main id="page" class="flex flex-row flex-1 py-5">
                         <Routes>
@@ -89,7 +97,7 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
                             />
                             <Route
                                 path=":version/*path"
-                                view=move |cx| view! { cx, <Doc version_part=version_part /> }
+                                view=move |cx| view! { cx, <Doc /> }
                             />
                             <Route
                                 path="redirect-home"

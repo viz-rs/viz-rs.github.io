@@ -1,6 +1,8 @@
 use leptos::*;
 use leptos_router::{use_params, IntoParam, Params};
 
+use crate::api::fetch_page;
+
 #[derive(Params, PartialEq, Clone, Debug)]
 pub struct DocParams {
     version: String,
@@ -8,25 +10,34 @@ pub struct DocParams {
 }
 
 #[component]
-pub fn Doc(cx: Scope, version_part: (Signal<String>, SignalSetter<String>)) -> impl IntoView {
-    // let (version, set_version) = version_part;
-    let (path, set_path) = create_signal(cx, String::new());
-
+pub fn Doc(cx: Scope) -> impl IntoView {
     let params = use_params::<DocParams>(cx);
 
-    create_effect(cx, move |_| {
-        let _ = params.get().map(|params| {
-            log::info!("{} {}", params.version, params.path);
-            // if params.version != version() {
-            //     set_version(params.version);
-            // }
-            // set_path(params.path);
-        });
-    });
+    let page = create_resource(
+        cx,
+        move || params.get(),
+        move |input| async move {
+            let DocParams { version, path } = input.ok()?;
+            fetch_page(version, path).await
+        },
+    );
 
-    view! { cx,
-        <div>
-        {path}
-        </div>
+    view! {
+        cx,
+        <Suspense
+            fallback=move || view! {
+                cx,
+                <div id="loader" class="i-lucide-loader w-6 h-6 animate-spin absolute" />
+            }
+        >
+        {
+            move || page.read(cx)
+                .and_then(|page| page)
+                .map(|page| view! {
+                    cx,
+                    <div class="flex flex-row flex-1" inner_html={page} />
+                })
+        }
+        </Suspense>
     }
 }

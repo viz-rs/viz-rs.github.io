@@ -210,6 +210,10 @@ flex-240 {
   overflow-y: auto;
   transform: translate(-100%);
   transition: opacity 0.5s, transform 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+
+  .i-lucide-loader {
+    left: calc((240px - 24px) / 2);
+  }
 }
 
 .page-container {
