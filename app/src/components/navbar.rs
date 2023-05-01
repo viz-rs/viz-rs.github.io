@@ -58,6 +58,8 @@ pub fn Navbar(
     };
 
     let toggle_color_scheme = move |e: ev::MouseEvent| {
+        e.prevent_default();
+        e.stop_propagation();
         log::info!("toggle {}", dark());
         set_dark(!dark());
     };
