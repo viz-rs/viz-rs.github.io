@@ -1,13 +1,7 @@
 use leptos::*;
-use leptos_router::{use_params, IntoParam, Params};
+use leptos_router::use_params;
 
-use crate::api::fetch_page;
-
-#[derive(Params, PartialEq, Clone, Debug)]
-pub struct DocParams {
-    version: String,
-    path: String,
-}
+use crate::api::{fetch_page, DocParams};
 
 #[component]
 pub fn Doc(cx: Scope) -> impl IntoView {

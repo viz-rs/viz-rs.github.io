@@ -1,5 +1,13 @@
 use gloo_net::http::Request;
+use leptos::Params;
+use leptos_router::{IntoParam, Params};
 use serde::{Deserialize, Serialize};
+
+#[derive(Params, PartialEq, Clone, Debug)]
+pub struct DocParams {
+    pub version: String,
+    pub path: String,
+}
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Section {

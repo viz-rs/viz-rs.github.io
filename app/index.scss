@@ -10,34 +10,6 @@
 @include variable.all;
 
 $palette: (
-  "mocha": (
-    "rosewater": #f5e0dc,
-    "flamingo": #f2cdcd,
-    "pink": #f5c2e7,
-    "mauve": #cba6f7,
-    "red": #f38ba8,
-    "maroon": #eba0ac,
-    "peach": #fab387,
-    "yellow": #f9e2af,
-    "green": #a6e3a1,
-    "teal": #94e2d5,
-    "sky": #89dceb,
-    "sapphire": #74c7ec,
-    "blue": #89b4fa,
-    "lavender": #b4befe,
-    "text": #cdd6f4,
-    "subtext1": #bac2de,
-    "subtext0": #a6adc8,
-    "overlay2": #9399b2,
-    "overlay1": #7f849c,
-    "overlay0": #6c7086,
-    "surface2": #585b70,
-    "surface1": #45475a,
-    "surface0": #313244,
-    "base": #1e1e2e,
-    "mantle": #181825,
-    "crust": #11111b,
-  ),
   "macchiato": (
     "rosewater": #f4dbd6,
     "flamingo": #f0c6c6,
@@ -65,34 +37,6 @@ $palette: (
     "base": #24273a,
     "mantle": #1e2030,
     "crust": #181926,
-  ),
-  "frappe": (
-    "rosewater": #f2d5cf,
-    "flamingo": #eebebe,
-    "pink": #f4b8e4,
-    "mauve": #ca9ee6,
-    "red": #e78284,
-    "maroon": #ea999c,
-    "peach": #ef9f76,
-    "yellow": #e5c890,
-    "green": #a6d189,
-    "teal": #81c8be,
-    "sky": #99d1db,
-    "sapphire": #85c1dc,
-    "blue": #8caaee,
-    "lavender": #babbf1,
-    "text": #c6d0f5,
-    "subtext1": #b5bfe2,
-    "subtext0": #a5adce,
-    "overlay2": #949cbb,
-    "overlay1": #838ba7,
-    "overlay0": #737994,
-    "surface2": #626880,
-    "surface1": #51576d,
-    "surface0": #414559,
-    "base": #303446,
-    "mantle": #292c3c,
-    "crust": #232634,
   ),
   "latte": (
     "rosewater": #dc8a78,
@@ -124,12 +68,17 @@ $palette: (
   ),
 );
 
+.dark {
+    color-scheme: dark
+}
+
 html {
   scrollbar-gutter: auto;
   scroll-behavior: smooth;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue,
     Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
   overflow-y: overlay;
+  font-feature-settings:"cv02","cv03","cv04","cv11";
 }
 
 html:lang(zh-CN) {
@@ -456,6 +405,124 @@ flex-240 {
   position: relative;
 }
 
+@mixin gen_code_theme($theme) {
+  $color: map-get($palette, $theme);
+  pre[class*="language"] {
+    code {
+      color: #{map-get($color, "text")};
+      background: #{map-get($color, "mantle")};
+    }
+
+    .keyword {
+      color: #{map-get($color, "mauve")};
+    }
+
+    .keyword\.operator {
+      color: #{map-get($color, "mauve")};
+    }
+
+    .keyword\.function {
+      color: #{map-get($color, "mauve")};
+    }
+
+    .field {
+      color: #{map-get($color, "teal")};
+    }
+
+    .property {
+      color: #{map-get($color, "teal")};
+    }
+
+    .include {
+      color: #{map-get($color, "mauve")};
+    }
+
+    .operator {
+      color: #{map-get($color, "sky")};
+    }
+
+    .float {
+      color: #{map-get($color, "peach")};
+    }
+
+    .number {
+      color: #{map-get($color, "peach")};
+    }
+
+    .boolean {
+      color: #{map-get($color, "peach")};
+    }
+
+    .string {
+      color: #{map-get($color, "green")};
+    }
+
+    .constructor {
+      color: #{map-get($color, "sapphire")};
+    }
+
+    .constant {
+      color: #{map-get($color, "peach")};
+    }
+
+    .conditional {
+      color: #{map-get($color, "mauve")};
+    }
+
+    .punctuation {
+      color: #{map-get($color, "overlay2")};
+    }
+
+    .punctuation\.special {
+      color: #{map-get($color, "sky")};
+    }
+
+    .punctuation\.delimiter {
+      color: #{map-get($color, "overlay2")};
+    }
+
+    .punctuation\.bracket {
+      color: #{map-get($color, "overlay2")};
+    }
+
+    .function {
+      color: #{map-get($color, "blue")};
+    }
+
+    .function\.macro {
+      color: #{map-get($color, "teal")};
+    }
+
+    .type {
+      color: #{map-get($color, "yellow")};
+    }
+    .type\.builtin {
+      color: #{map-get($color, "yellow")};
+    }
+
+    .attribute {
+      color: #{map-get($color, "teal")};
+      font-style: italic;
+    }
+
+    .variable {
+      color: #{map-get($color, "text")};
+    }
+
+    .variable\.builtin {
+      color: #{map-get($color, "red")};
+    }
+
+    .label {
+      color: #{map-get($color, "sapphire")};
+    }
+
+    .comment {
+      color: #{map-get($color, "surface2")};
+    }
+  }
+}
+
 pre[class*="language"] {
   text-align: left;
   white-space: pre;
@@ -495,124 +562,9 @@ pre[class*="language"] {
   // dark = macchiato
   // https://github.com/catppuccin/nvim/blob/main/lua/catppuccin/palettes/macchiato.lua
   // https://github.com/catppuccin/nvim/blob/main/lua/catppuccin/groups/integrations/treesitter.lua
-
-  @each $flavour, $color in $palette {
-    &.#{$flavour} {
-      code {
-        color: #{map-get($color, "text")};
-        background: #{map-get($color, "mantle")};
-      }
-
-      .keyword {
-        color: #{map-get($color, "mauve")};
-      }
-
-      .keyword\.operator {
-        color: #{map-get($color, "mauve")};
-      }
-
-      .keyword\.function {
-        color: #{map-get($color, "mauve")};
-      }
-
-      .field {
-        color: #{map-get($color, "teal")};
-      }
-
-      .property {
-        color: #{map-get($color, "teal")};
-      }
-
-      .include {
-        color: #{map-get($color, "mauve")};
-      }
-
-      .operator {
-        color: #{map-get($color, "sky")};
-      }
-
-      .float {
-        color: #{map-get($color, "peach")};
-      }
-
-      .number {
-        color: #{map-get($color, "peach")};
-      }
-
-      .boolean {
-        color: #{map-get($color, "peach")};
-      }
-
-      .string {
-        color: #{map-get($color, "green")};
-      }
-
-      .constructor {
-        color: #{map-get($color, "sapphire")};
-      }
-
-      .constant {
-        color: #{map-get($color, "peach")};
-      }
-
-      .conditional {
-        color: #{map-get($color, "mauve")};
-      }
-
-      .punctuation {
-        color: #{map-get($color, "overlay2")};
-      }
-
-      .punctuation\.special {
-        color: #{map-get($color, "sky")};
-      }
-
-      .punctuation\.delimiter {
-        color: #{map-get($color, "overlay2")};
-      }
-
-      .punctuation\.bracket {
-        color: #{map-get($color, "overlay2")};
-      }
-
-      .function {
-        color: #{map-get($color, "blue")};
-      }
-
-      .function\.macro {
-        color: #{map-get($color, "teal")};
-      }
-
-      .type {
-        color: #{map-get($color, "yellow")};
-      }
-      .type\.builtin {
-        color: #{map-get($color, "yellow")};
-      }
-
-      .attribute {
-        color: #{map-get($color, "teal")};
-        font-style: italic;
-      }
-
-      .variable {
-        color: #{map-get($color, "text")};
-      }
-
-      .variable\.builtin {
-        color: #{map-get($color, "red")};
-      }
-
-      .label {
-        color: #{map-get($color, "sapphire")};
-      }
-
-      .comment {
-        color: #{map-get($color, "surface2")};
-      }
-    }
-  }
 }
+
+@include gen_code_theme("latte");
 
 .dropdown-menu {
   .dropdown-list {
@@ -684,6 +636,8 @@ html.dark {
           background: #181818 !important;
         }
       }
+
+      @include gen_code_theme("macchiato");
 
       table {
         tbody {

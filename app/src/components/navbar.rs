@@ -1,45 +1,38 @@
 use leptos::*;
-use leptos_router::{use_location, use_navigate, A};
+use leptos_router::{use_params, use_navigate, A};
 use wasm_bindgen::prelude::*;
 use web_sys::{HtmlAnchorElement, HtmlElement};
 
-use crate::{LANGS, VERSIONS};
+use crate::{api::DocParams, LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar(
     cx: Scope,
     dark_part: (Signal<bool>, SignalSetter<bool>),
-    home_part: (Signal<bool>, SignalSetter<bool>),
+    sidebar_part: (Signal<bool>, SignalSetter<bool>),
     lang_part: (Signal<String>, SignalSetter<String>),
     version_part: (Signal<String>, SignalSetter<String>),
 ) -> impl IntoView {
     let navigate = use_navigate(cx);
-    let location = use_location(cx);
+    let params = use_params::<DocParams>(cx);
 
     let (dark, set_dark) = dark_part;
-    let (home, set_home) = home_part;
+    let (sidebar, set_sidebar) = sidebar_part;
     let (lang, set_lang) = lang_part;
     let (version, set_version) = version_part;
 
-    let doc_path = move || {
-        (location.pathname)()
-            .trim_start_matches(&format!("/{}", version()))
-            .to_string()
-    };
+    let doc_path = create_memo(cx, move |_| params.get().map(|DocParams { path, .. }| path).unwrap_or("/".to_string()));
+
+    let is_home = move || doc_path() == "/";
 
     let pad_path = move || {
         let mut doc_path = doc_path();
         let is_home = doc_path == "/";
-        if home() != is_home {
-            set_home(is_home);
-        }
         if is_home {
             doc_path.push_str("guide/introduction");
         }
         doc_path
     };
-
-    let is_home = move || doc_path() == "/";
 
     let change_version = move |ev: ev::Event| {
         let doc_path = pad_path();
@@ -63,6 +56,10 @@ pub fn Navbar(
         log::info!("toggle {}", dark());
         set_dark(!dark());
     };
+
+    create_effect(cx, move |_| {
+        set_sidebar(is_home());
+    });
 
     view! { cx,
         <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
@@ -117,11 +114,15 @@ pub fn Navbar(
                     </ul>
                 </div>
                 <button class="transition-colors op75 hover:op100" on:click=toggle_color_scheme>
-                    <span aria-hidden="true" class="dark:i-lucide-moon i-lucide-sun block"></span>
+                    <span aria-hidden="true" class="dark:i-lucide-moon i-lucide-sun block" />
                 </button>
             </div>
-            <button id="toggle-sidebar" class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100">
-                <span class="block i-lucide-sidebar-close"></span>
+            <button id="toggle-sidebar" class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100" on:click=move |_| set_sidebar(!sidebar())>
+                <span
+                    class="block"
+                    class=("i-lucide-sidebar-open", move || sidebar())
+                    class=("i-lucide-sidebar-close", move || !sidebar())
+                />
             </button>
         </header>
     }

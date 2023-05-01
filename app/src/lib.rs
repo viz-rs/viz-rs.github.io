@@ -7,6 +7,7 @@ use components::*;
 use leptos::*;
 use leptos_router::*;
 use pages::*;
+use web_sys::MediaQueryListEvent;
 
 pub const LANGS: [[&str; 2]; 2] = [["en", "English"], ["zh-cn", "简体中文"]];
 pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
@@ -14,7 +15,7 @@ pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct AppState {
     dark: bool,
-    home: bool,
+    sidebar: bool,
     lang: String,
     version: String,
 }
@@ -23,17 +24,31 @@ pub struct AppState {
 pub fn MyRouter(cx: Scope) -> impl IntoView {
     log::debug!("rendering <MyRouter/>");
 
-    let dark_media = utils::media_query("(prefers-color-scheme: dark)").unwrap();
-    {
-        // todo!();
-    }
+    let (dark_matches, set_dark_matches) = create_signal(cx, false);
 
-    // contexts are passed down through the route tree
+    let dark_media = utils::media_query(
+        "(prefers-color-scheme: dark)",
+        move |e: MediaQueryListEvent| {
+            set_dark_matches(e.matches());
+        },
+    )
+    .unwrap();
+
+    let mode = utils::get_color_scheme();
+
+    let dark = if dark_media.matches() {
+        mode != "light"
+    } else {
+        mode == "dark"
+    };
+
+    utils::toggle_dark(dark);
+
     let state = create_rw_signal(
         cx,
         AppState {
-            dark: false,
-            home: true,
+            dark,
+            sidebar: false,
             lang: LANGS[0][0].to_string(),
             version: VERSIONS[0].to_string(),
         },
@@ -44,21 +59,32 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
     let dark_part = create_slice(
         cx,
         state,
-        |state| state.dark,
-        |state, dark| {
+        move |state| state.dark,
+        move |state, dark| {
             if state.dark != dark {
                 log::info!("change dark: {}", &dark);
                 state.dark = dark;
+                utils::toggle_dark(state.dark);
+                utils::local_storage_set(
+                    "color-scheme",
+                    if state.dark == dark_matches() {
+                        "auto"
+                    } else if state.dark {
+                        "dark"
+                    } else {
+                        "light"
+                    },
+                );
             }
         },
     );
-    let home_part = create_slice(
+    let sidebar_part = create_slice(
         cx,
         state,
-        |state| state.home,
-        |state, home| {
-            log::info!("change home: {}", &home);
-            state.home = home;
+        |state| state.sidebar,
+        |state, sidebar| {
+            log::info!("change sidebar: {}", &sidebar);
+            state.sidebar = sidebar;
         },
     );
     let lang_part = create_slice(
@@ -83,9 +109,9 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
     view! { cx,
         <Router>
             <div id="app" class="tracking-0.2px">
-                <Navbar dark_part=dark_part home_part=home_part lang_part=lang_part version_part=version_part />
-                <div class="page-container flex-row pt-4.375rem" class:opened={move || !home_part.0()}>
-                    <div id="backdrop" />
+                <Navbar dark_part=dark_part sidebar_part=sidebar_part lang_part=lang_part version_part=version_part />
+                <div class="page-container flex-row pt-4.375rem" class:opened=move || sidebar_part.0()>
+                    <div id="backdrop" on:click=move |_| sidebar_part.1(false) />
 
                     <Sidebar version_part=version_part />
 
