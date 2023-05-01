@@ -25,7 +25,7 @@ pub fn MyRouter(cx: Scope) -> impl IntoView {
 
     let dark_media = utils::media_query("(prefers-color-scheme: dark)").unwrap();
     {
-        todo!();
+        // todo!();
     }
 
     // contexts are passed down through the route tree
