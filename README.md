@@ -1,11 +1,9 @@
-# Leptos Router Example
+# Viz.rs docs site
 
-This example demonstrates how Leptos’s router works for client side routing.
-
-## Build and Run it
+## Run and build it
 
 ```bash
-trunk serve --open
-```
+cargo make dev-en
 
-> If you don't have `trunk` installed, [click here for install instructions.](https://trunkrs.dev/)
+cargo make build-en
+```
