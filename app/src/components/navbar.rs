@@ -21,11 +21,6 @@ pub fn Navbar(
     let (lang, set_lang) = lang_part;
     let (version, set_version) = version_part;
 
-    let toggle_color_scheme = move |e: ev::MouseEvent| {
-        log::info!("toggle {}", dark());
-        set_dark(!dark());
-    };
-
     let doc_path = move || {
         (location.pathname)()
             .trim_start_matches(&format!("/{}", version()))
@@ -60,6 +55,11 @@ pub fn Navbar(
         JsCast::dyn_ref::<HtmlElement>(&element)
             .and_then(|el| el.get_attribute("data-lang"))
             .map(set_lang);
+    };
+
+    let toggle_color_scheme = move |e: ev::MouseEvent| {
+        log::info!("toggle {}", dark());
+        set_dark(!dark());
     };
 
     view! { cx,
