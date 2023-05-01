@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_router::{use_params, use_navigate, A};
+use leptos_router::{use_navigate, use_params, A};
 use wasm_bindgen::prelude::*;
 use web_sys::{HtmlAnchorElement, HtmlElement};
 
@@ -21,7 +21,12 @@ pub fn Navbar(
     let (lang, set_lang) = lang_part;
     let (version, set_version) = version_part;
 
-    let doc_path = create_memo(cx, move |_| params.get().map(|DocParams { path, .. }| path).unwrap_or("/".to_string()));
+    let doc_path = create_memo(cx, move |_| {
+        params
+            .get()
+            .map(|DocParams { path, .. }| path)
+            .unwrap_or("/".to_string())
+    });
 
     let is_home = move || doc_path() == "/";
 
