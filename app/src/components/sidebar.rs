@@ -4,9 +4,8 @@ use leptos_router::*;
 use crate::api::{fetch_toc, Section};
 
 #[component]
-pub fn Sidebar(cx: Scope, version_part: (Signal<String>, SignalSetter<String>)) -> impl IntoView {
+pub fn Sidebar(cx: Scope, version: ReadSignal<String>) -> impl IntoView {
     let location = use_location(cx);
-    let (version, _) = version_part;
     let sections = create_resource(cx, version, move |version| async move {
         log::info!("{}", &version);
         fetch_toc(version).await

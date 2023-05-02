@@ -1,55 +1,134 @@
 use leptos::*;
-use leptos_router::{use_navigate, use_params, A};
+use leptos_router::{use_location, use_navigate, A};
 use wasm_bindgen::prelude::*;
-use web_sys::{HtmlAnchorElement, HtmlElement};
+use web_sys::{HtmlAnchorElement, HtmlElement, MediaQueryListEvent};
 
-use crate::{api::DocParams, LANGS, VERSIONS};
+use crate::{utils, LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar(
     cx: Scope,
-    dark_part: (Signal<bool>, SignalSetter<bool>),
-    sidebar_part: (Signal<bool>, SignalSetter<bool>),
-    lang_part: (Signal<String>, SignalSetter<String>),
-    version_part: (Signal<String>, SignalSetter<String>),
+    dark: ReadSignal<bool>,
+    set_dark: WriteSignal<bool>,
+    sidebar: ReadSignal<bool>,
+    set_sidebar: WriteSignal<bool>,
+    lang: ReadSignal<String>,
+    set_lang: WriteSignal<String>,
+    version: ReadSignal<String>,
+    set_version: WriteSignal<String>,
 ) -> impl IntoView {
     let navigate = use_navigate(cx);
-    let params = use_params::<DocParams>(cx);
+    let location = use_location(cx);
+    let (dark_matches, set_dark_matches) = create_signal(cx, false);
+    let (path, set_path) = create_signal(cx, String::new());
 
-    let (dark, set_dark) = dark_part;
-    let (sidebar, set_sidebar) = sidebar_part;
-    let (lang, set_lang) = lang_part;
-    let (version, set_version) = version_part;
-
-    let doc_path = create_memo(cx, move |_| {
-        params
-            .get()
-            .map(|DocParams { path, .. }| path)
-            .unwrap_or("/".to_string())
+    let path_part = create_memo(cx, move |_| {
+        let path = path();
+        let empty = path.is_empty();
+        (empty, path)
     });
 
-    let is_home = move || doc_path() == "/";
-
-    let pad_path = move || {
-        let mut doc_path = doc_path();
-        let is_home = doc_path == "/";
-        if is_home {
-            doc_path.push_str("guide/introduction");
+    let pad_path = create_memo(cx, move |_| {
+        let (home, mut path) = path_part();
+        if home {
+            path.push_str("/guide/introduction");
         }
-        doc_path
-    };
+        path
+    });
 
-    let change_version = move |ev: ev::Event| {
-        let doc_path = pad_path();
-        let value = event_target_value(&ev);
+    {
+        let dark_media = utils::media_query(
+            "(prefers-color-scheme: dark)",
+            move |e: MediaQueryListEvent| {
+                set_dark_matches(e.matches());
+            },
+        )
+        .unwrap();
+
+        let mode = utils::get_color_scheme();
+
+        let dark = if dark_media.matches() {
+            mode != "light"
+        } else {
+            mode == "dark"
+        };
+
+        utils::toggle_dark(dark);
+        set_dark.update(move |val| *val = dark);
+
+        let sidebar_media =
+            utils::media_query("(min-width: 960px)", move |e: MediaQueryListEvent| {
+                let flag = e.matches();
+                if path_part().0 {
+                    set_sidebar.update(|val| {
+                        if !*val {
+                            return;
+                        }
+                        *val = false;
+                    })
+                } else {
+                    set_sidebar.update(move |val| {
+                        if flag == *val {
+                            return;
+                        }
+                        *val = true;
+                    })
+                }
+            })
+            .unwrap();
+
+        let sidebar = sidebar_media.matches();
+        set_sidebar.update(move |val| *val = sidebar);
+    }
+
+    create_effect(cx, move |_| {
+        let dark = dark();
+        log::info!("change dark: {}", &dark);
+        utils::toggle_dark(dark);
+        utils::local_storage_set(
+            "color-scheme",
+            if dark == dark_matches() {
+                "auto"
+            } else if dark {
+                "dark"
+            } else {
+                "light"
+            },
+        );
+    });
+
+    create_effect(cx, move |_| {
+        let path = location
+            .pathname
+            .get()
+            .trim_start_matches("/")
+            .trim_start_matches(&version())
+            .trim_start_matches("/")
+            .to_string();
+        log::info!("path: {} - {}", !path.is_empty(), path);
+        let opened = !path.is_empty();
+        set_sidebar.update(move |val| *val = opened);
+        set_path.update(move |val| {
+            val.clear();
+            val.push_str(&path);
+        });
+    });
+
+    let change_version = move |e: ev::Event| {
+        let path = pad_path();
+        let value = event_target_value(&e);
+        let current = value.clone();
         if version() != value {
-            set_version(value.clone());
+            set_version.update(move |val| {
+                val.clear();
+                val.push_str(&value);
+            });
         }
-        let _ = navigate(&format!("/{}{}", value, doc_path), Default::default());
+        let _ = navigate(&format!("/{}/{}", current, path), Default::default());
     };
 
-    let change_lang = move |ev: ev::MouseEvent| {
-        let element = ev.target().unwrap().unchecked_into::<HtmlAnchorElement>();
+    let change_lang = move |e: ev::MouseEvent| {
+        let element = e.target().unwrap().unchecked_into::<HtmlAnchorElement>();
         JsCast::dyn_ref::<HtmlElement>(&element)
             .and_then(|el| el.get_attribute("data-lang"))
             .map(set_lang);
@@ -59,12 +138,8 @@ pub fn Navbar(
         e.prevent_default();
         e.stop_propagation();
         log::info!("toggle {}", dark());
-        set_dark(!dark());
+        set_dark.update(move |val| *val = !*val);
     };
-
-    create_effect(cx, move |_| {
-        set_sidebar(is_home());
-    });
 
     view! { cx,
         <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
@@ -85,7 +160,11 @@ pub fn Navbar(
             </div>
             <div class="flex flex-row items-center gap-5 font-medium text-15px">
                 <A href={move || format!("/{}/guide/introduction", version())} class="transition-colors op75 hover:op100">
-                    <span class="block" class=("i-lucide-book", move || is_home()) class=("i-lucide-book-open", move || !is_home())></span>
+                    <span
+                        class="block"
+                        class=("i-lucide-book", move || path_part().0)
+                        class=("i-lucide-book-open", move || !path_part().0)
+                    ></span>
                 </A>
                 <a rel="noreferrer" target="_blank" href={move || format!("https://docs.rs/viz/{}", version())} class="transition-colors op75 hover:op100">
                     <span class="i-lucide-boxes block"></span>
@@ -122,7 +201,11 @@ pub fn Navbar(
                     <span aria-hidden="true" class="dark:i-lucide-moon i-lucide-sun block" />
                 </button>
             </div>
-            <button id="toggle-sidebar" class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100" on:click=move |_| set_sidebar(!sidebar())>
+            <button
+                id="toggle-sidebar"
+                class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100"
+                class=("!hidden", move || path_part().0)
+                on:click=move |_| set_sidebar.update(|val| *val = !*val)>
                 <span
                     class="block"
                     class=("i-lucide-sidebar-open", move || sidebar())

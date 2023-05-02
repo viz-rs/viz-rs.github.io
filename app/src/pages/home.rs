@@ -2,7 +2,7 @@ use leptos::*;
 use leptos_router::A;
 
 #[component]
-pub fn Home(cx: Scope, version: Signal<String>) -> impl IntoView {
+pub fn Home(cx: Scope, version: ReadSignal<String>) -> impl IntoView {
     cfg_if::cfg_if! {
         if #[cfg(feature = "en")] {
             view! { cx,
