@@ -92,7 +92,6 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
 }
 
 @supports (font-variation-settings: normal) {
@@ -162,6 +161,11 @@ flex-240 {
 
   .i-lucide-loader {
     left: calc((240px - 24px) / 2);
+  }
+
+  a[aria-current="page"] {
+    color: #ca8a04;;
+    opacity: 100;
   }
 }
 
@@ -350,6 +354,8 @@ flex-240 {
       font-size: 14px;
 
       a {
+        color: unset;
+
         .desc {
           align-items: center;
           font-size: 11px;
@@ -376,7 +382,7 @@ flex-240 {
     position: sticky;
     top: 90px;
     align-self: flex-start;
-    width: 240px;
+    flex: 0 0 240px;
     padding: auto 1.25rem;
 
     ul {

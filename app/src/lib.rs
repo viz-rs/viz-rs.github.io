@@ -33,7 +33,7 @@ pub fn App(cx: Scope) -> impl IntoView {
                     version=version
                     set_version=set_version
                 />
-                <div class="page-container flex-row pt-4.375rem" class:opened=sidebar>
+                <div class="page-container pt-4.375rem" class:opened=sidebar>
                     <div id="backdrop" on:click=move |_| set_sidebar(false) />
 
                     <Sidebar version=version />

@@ -13,7 +13,7 @@ en = []
 zh-cn = []
 
 [dependencies]
-anyhow = "1.0.70"
+anyhow = "1.0.71"
 globset = "0.4.10"
 pulldown-cmark = { version = "0.9.2", default-features = false }
 
@@ -29,7 +29,7 @@ tree-sitter-zig = { git = "https://github.com/maxxnino/tree-sitter-zig.git", bra
 walkdir = { version = "2.3.3" }
 minify-html = "0.10.8"
 highlighting = "0.1.2"
-clap = { version = "4.2.4", features = ["derive"] }
+clap = { version = "4.2.7", features = ["derive"] }
 serde_json.workspace = true
 serde.workspace = true
 
