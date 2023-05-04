@@ -15,6 +15,10 @@ pub fn document_element() -> web_sys::Element {
         .expect_throw("Can't find document element")
 }
 
+pub fn body() -> web_sys::HtmlElement {
+    document().body().expect_throw("Can't find body")
+}
+
 pub fn media_query<F>(key: &str, f: F) -> Option<MediaQueryList>
 where
     F: Fn(MediaQueryListEvent) + 'static,

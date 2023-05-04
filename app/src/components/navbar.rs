@@ -58,7 +58,6 @@ pub fn Navbar(
 
         let sidebar_media =
             utils::media_query("(min-width: 960px)", move |e: MediaQueryListEvent| {
-                let flag = e.matches();
                 if path_part().0 {
                     set_sidebar.update(|val| {
                         if !*val {
@@ -67,6 +66,7 @@ pub fn Navbar(
                         *val = false;
                     })
                 } else {
+                    let flag = e.matches();
                     set_sidebar.update(move |val| {
                         if flag == *val {
                             return;

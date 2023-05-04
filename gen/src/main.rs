@@ -32,6 +32,8 @@ const NAV_PREV: &str = "前一篇";
 #[cfg(all(feature = "zh-cn", not(feature = "en")))]
 const NAV_NEXT: &str = "下一篇";
 
+const SYMBOLS: [char; 4] = ['?', '!', '？', '！'];
+
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
@@ -252,12 +254,13 @@ fn parse(
             if level < HeadingLevel::H3 && heading.is_some() && id.is_none() {
                 let c = heading.take().unwrap();
                 let name = c.trim();
-                let id = name.to_lowercase().replace(' ', "-");
+                let temp = name.to_lowercase().replace(' ', "-").replace('(', "").replace(')', "");
+                let id = temp.trim_end_matches(|c| SYMBOLS.contains(&c));
                 let mut heading = String::new();
                 heading.push('<');
                 heading.push_str(&level.to_string());
                 heading.push_str(" id=");
-                heading.push_str(&id);
+                heading.push_str(id);
                 heading.push_str(" class='");
                 if !classes.is_empty() {
                     heading.push(' ');
@@ -267,7 +270,7 @@ fn parse(
                 heading.push('>');
                 heading.push_str(&name);
                 heading.push_str("<a class=anchor href=#");
-                heading.push_str(&id);
+                heading.push_str(id);
                 heading.push('>');
                 heading.push_str("#</a>");
                 heading.push_str("</");
@@ -404,11 +407,16 @@ fn parse(
         html.push_str(NAV_TITLE);
         html.push_str("</div><ul class='text-3'>");
         for (name, anchor) in &toc {
+            let temp = anchor
+                .to_lowercase()
+                .replace(' ', "-")
+                .replace('(', "")
+                .replace(')', "");
             html.push_str("<li>");
             html.push_str(
                 "<a class='block py-1 font-normal transition-colors op75 hover:op100' href='#",
             );
-            html.push_str(&anchor);
+            html.push_str(temp.trim_end_matches(|c| SYMBOLS.contains(&c)));
             html.push_str("'>");
             html.push_str(&name);
             html.push_str("</a></li>");
