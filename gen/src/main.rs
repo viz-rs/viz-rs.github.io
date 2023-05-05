@@ -414,7 +414,7 @@ fn parse(
                 .replace(')', "");
             html.push_str("<li>");
             html.push_str(
-                "<a class='block py-1 font-normal transition-colors op75 hover:op100' href='#",
+                "<a class='toc-link block py-1 font-normal transition-colors op75 hover:op100' href='#",
             );
             html.push_str(temp.trim_end_matches(|c| SYMBOLS.contains(&c)));
             html.push_str("'>");

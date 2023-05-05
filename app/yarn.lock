@@ -28,10 +28,10 @@
   resolved "https://registry.yarnpkg.com/@antfu/utils/-/utils-0.7.2.tgz#3bb6f37a6b188056fe9e2f363b6aa735ed65d7ca"
   integrity sha512-vy9fM3pIxZmX07dL+VX1aZe7ynZ+YyB0jY+jE6r3hOK6GNY2t6W8rzpFC4tgpbXUYABkFQwgJq2XYXlxbXAI0g==
 
-"@iconify-json/lucide@1.1.86":
-  version "1.1.86"
-  resolved "https://registry.yarnpkg.com/@iconify-json/lucide/-/lucide-1.1.86.tgz#2a3c89927e47bc48f96114f21dae089011e33b1b"
-  integrity sha512-st+9fZX8ekfuW7ON8rgTh+LEZ3TU6iIMdrkYxJhx2v1VUSZ3974x6F4+E35ZW40FUuxwSNVvqnY2Z889fKYX6g==
+"@iconify-json/lucide@1.1.87":
+  version "1.1.87"
+  resolved "https://registry.yarnpkg.com/@iconify-json/lucide/-/lucide-1.1.87.tgz#a23778855109900935d3390274342443e9a93689"
+  integrity sha512-UxwQtlP7G8ChNxrp7779xk3Rm+iX5AaFeoMb7S/UDJy6ogcGP0X+wWu2NDZNxK0bI/lALW5gKfNNnJlFk2UYVQ==
   dependencies:
     "@iconify/types" "*"
 

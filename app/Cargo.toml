@@ -13,10 +13,14 @@ zh-cn = []
 [dependencies]
 console_log = "1"
 log = "0.4"
-leptos = "0.3.0-alpha"
-leptos_dom = "0.3.0-alpha"
-leptos_router = { version = "0.3.0-alpha", features = ["csr"] }
-leptos_meta = { version = "0.3.0-alpha", features = ["csr"] }
+# leptos = "0.3.0-alpha"
+# leptos_dom = "0.3.0-alpha"
+# leptos_router = { version = "0.3.0-alpha", features = ["csr"] }
+# leptos_meta = { version = "0.3.0-alpha", features = ["csr"] }
+leptos = { path = "../../leptos/leptos"}
+leptos_dom = { path = "../../leptos/leptos_dom"}
+leptos_router = { path = "../../leptos/router", features = ["csr"] }
+leptos_meta = { path = "../../leptos/meta", features = ["csr"] }
 # leptos_reactive = { git = "https://github.com/leptos-rs/leptos.git", branch = "main"}
 serde = { version = "1", features = ["derive"] }
 futures = "0.3"

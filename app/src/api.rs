@@ -3,7 +3,7 @@ use leptos::Params;
 use leptos_router::{IntoParam, Params};
 use serde::{Deserialize, Serialize};
 
-#[derive(Params, PartialEq, Clone, Debug)]
+#[derive(Default, Params, PartialEq, Clone, Debug)]
 pub struct DocParams {
     pub version: String,
     pub path: String,
