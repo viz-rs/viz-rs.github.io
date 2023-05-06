@@ -101,7 +101,7 @@ pub fn Navbar(
             .trim_start_matches(&version())
             .trim_start_matches("/")
             .to_string();
-        log::info!("path: {} - {}", !path.is_empty(), path);
+        // log::info!("path: {} - {}", !path.is_empty(), path);
         let opened = !path.is_empty();
         set_sidebar.update(move |val| *val = opened);
         set_path.update(move |val| {
@@ -133,7 +133,7 @@ pub fn Navbar(
     let toggle_color_scheme = move |e: ev::MouseEvent| {
         e.prevent_default();
         e.stop_propagation();
-        log::info!("toggle {}", dark());
+        // log::info!("toggle {}", dark());
         set_dark.update(move |val| *val = !*val);
     };
 

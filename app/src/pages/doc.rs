@@ -54,7 +54,7 @@ pub fn Doc(cx: Scope) -> impl IntoView {
             let params = input?;
             set_params(params.clone());
             let DocParams { version, path } = params;
-            log::info!("version: {}, path: {}", &version, &path);
+            // log::info!("version: {}, path: {}", &version, &path);
             let result = fetch_page(version, path).await;
             set_loading(false);
             result
