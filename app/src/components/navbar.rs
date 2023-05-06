@@ -79,7 +79,7 @@ pub fn Navbar(
 
     create_effect(cx, move |_| {
         let dark = dark();
-        log::info!("change dark: {}", &dark);
+        // log::info!("change dark: {}", &dark);
         utils::toggle_dark(dark);
         utils::local_storage_set(
             "color-scheme",
@@ -184,7 +184,7 @@ pub fn Navbar(
                                                 class="flex hover:text-yellow-600"
                                                 class=("text-yellow-600", move || l[0] == lang())
                                                 on:click=change_lang.clone()
-                                                href=move || format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), pad_path())
+                                                href=move || format!("https://{}viz.rs/{}/{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), pad_path())
                                             >{l[1]}</a>
                                         </li>
                                     }
