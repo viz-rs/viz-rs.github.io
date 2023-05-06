@@ -74,12 +74,6 @@ jobs:
           command: make
           args: build-en
 
-      - name: Build zh-cn
-        uses: actions-rs/cargo@v1
-        with:
-          command: make
-          args: build-zh-cn
-
       - name: Deploy en To Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
         with:
@@ -87,6 +81,12 @@ jobs:
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
           command: |
             pages publish dist/en --project-name=viz-rs --commit-dirty=true
+
+      - name: Build zh-cn
+        uses: actions-rs/cargo@v1
+        with:
+          command: make
+          args: build-zh-cn
 
       - name: Deploy zh-cn To Cloudflare
         uses: cloudflare/wrangler-action@2.0.0
