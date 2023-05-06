@@ -60,7 +60,7 @@ jobs:
           path: trunk
 
       - name: Install Trunk
-        run: cargo install --bin trunk trunk
+        run: cargo install --path trunk
 
       - name: Install cargo-make
         uses: actions-rs/cargo@v1
