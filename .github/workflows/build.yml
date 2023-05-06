@@ -96,7 +96,7 @@ jobs:
           command: |
             pages publish dist/zh-cn --project-name=viz-rs-zh-cn --commit-dirty=true
 
-      - name: Deploy zh-cn To Cloudflare
+      - name: Deployment
         uses: cloudflare/wrangler-action@2.0.0
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
