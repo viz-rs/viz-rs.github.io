@@ -19,7 +19,7 @@ $ cargo install --force cargo-make
 > **Note**: The latest **master** branch includes the **copy-dir** feature.
 
 ```bash
-$ cargo install --locked trunk
+$ cargo install --git https://github.com/thedodd/trunk
 ```
 
 3. Serve `en`, `zh-cn` or other language
