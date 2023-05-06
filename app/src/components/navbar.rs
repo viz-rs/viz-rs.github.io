@@ -31,7 +31,7 @@ pub fn Navbar(
     let pad_path = create_memo(cx, move |_| {
         let (home, mut path) = path_part();
         if home {
-            path.push_str("/guide/introduction");
+            path.push_str("guide/introduction");
         }
         path
     });
