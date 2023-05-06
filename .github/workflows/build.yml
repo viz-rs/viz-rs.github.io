@@ -34,6 +34,27 @@ jobs:
       name: cloudflare
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Trunk
+        uses: actions/checkout@v3
+        with:
+          repository: thedodd/trunk
+          path: trunk
+
+      - name: Install Trunk
+        run: cargo install --path trunk
+
+      - name: Install cargo-make
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: --force cargo-make
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@v1  
+        with:
+          toolchain: nightly
+          target: wasm32-unknown-unknown
+
       - uses: actions/checkout@v3
 
       - name: Setup NodeJS
@@ -46,29 +67,6 @@ jobs:
         with:
           cmd: install
           dir: 'app'
-
-      - name: Setup Rust
-        uses: dtolnay/rust-toolchain@v1  
-        with:
-          toolchain: nightly
-          target: wasm32-unknown-unknown
-
-      - name: Checkout Trunk
-        uses: actions/checkout@v3
-        with:
-          repository: thedodd/trunk
-          path: ../trunk
-
-      - name: Install Trunk
-        run: |
-          cd ../trunk
-          cargo install --path .
-
-      - name: Install cargo-make
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: --force cargo-make
 
       - name: Build en
         uses: actions-rs/cargo@v1
