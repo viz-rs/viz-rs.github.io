@@ -2,10 +2,7 @@ use leptos::*;
 use leptos_dom::{helpers::location_hash, html::Div};
 use leptos_router::use_params;
 use wasm_bindgen::{prelude::*, JsCast};
-use web_sys::{
-    HtmlAnchorElement, HtmlElement, IntersectionObserver, IntersectionObserverEntry,
-    IntersectionObserverInit,
-};
+use web_sys::{Element, HtmlAnchorElement, HtmlElement, NodeList};
 
 use crate::{
     api::{fetch_page, DocParams},
@@ -45,7 +42,8 @@ fn update_ul_style(container: NodeRef<Div>, a: Option<HtmlAnchorElement>, id: Op
 #[component]
 pub fn Doc(cx: Scope) -> impl IntoView {
     let (params, set_params) = create_signal(cx, DocParams::default());
-    let (ancestor, set_ancestor) = create_signal(cx, String::new());
+    let (anchors, set_anchors) = create_signal(cx, Option::<NodeList>::None);
+    let (disabled, set_disabled) = create_signal(cx, false);
     let (loading, set_loading) = create_signal(cx, false);
     let current_params = use_params::<DocParams>(cx);
     let page = create_resource(
@@ -63,79 +61,11 @@ pub fn Doc(cx: Scope) -> impl IntoView {
         },
     );
     let container = create_node_ref::<Div>(cx);
-    let observer = create_memo(cx, move |_| {
-        let cb: Closure<dyn Fn(Vec<IntersectionObserverEntry>)> =
-            Closure::new(move |es: Vec<IntersectionObserverEntry>| {
-                let items = es.iter()
-                        .filter_map(|e| if e.is_intersecting() || e.intersection_ratio() > 0 { Some((e.target().id(), e.bounding_client_rect())) } else { None })
-                        .collect::<Vec<_>>();
-
-                let scroll_top = utils::document_element().scroll_top();
-
-                for (id, rect) in items {
-                    log::info!("id:{}, top: {}, scroll_top: {}", id, rect.top(), scroll_top);
-                }
-
-                // let nav = container
-                //     .get_untracked()
-                //     .unwrap_throw()
-                //     .query_selector("article + nav")
-                //     .ok()
-                //     .flatten()
-                //     .unwrap_throw();
-                //
-                // ancestors
-                //     .iter()
-                //     .rev()
-                //     .filter_map(|(k, v)| if *v { Some(k) } else { None })
-                //     .next()
-                //     .map(|id| {
-                //         let mut selector = String::new();
-                //         selector.push_str("a[href='#");
-                //         selector.push_str(id);
-                //         selector.push_str("']");
-                //
-                //         if let Some(node) = nav
-                //             .query_selector(&selector)
-                //             .unwrap_throw()
-                //             .and_then(|node| node.dyn_into::<HtmlAnchorElement>().ok())
-                //         {
-                //             let top = node.offset_top();
-                //             let height = node.offset_height();
-                //
-                //             if let Some(node) = nav
-                //                 .query_selector("ul")
-                //                 .unwrap_throw()
-                //                 .and_then(|node| node.dyn_into::<HtmlElement>().ok())
-                //             {
-                //                 let _ = node.style().set_property("--top", &format!("{}px", top));
-                //                 let _ = node
-                //                     .style()
-                //                     .set_property("--height", &format!("{}px", height - 4));
-                //             }
-                //         }
-                //     });
-                //
-            });
-
-        let mut options = IntersectionObserverInit::new();
-        options.root_margin("-71px 0px 0px 0px");
-
-        let observer =
-            IntersectionObserver::new_with_options(cb.as_ref().unchecked_ref(), &options).unwrap();
-
-        cb.forget();
-
-        observer
-    });
 
     create_effect(cx, move |_| {
         let page = page.read(cx)??;
         let root = container.get()?;
         root.set_inner_html(&page);
-
-        let observer = observer();
-        observer.disconnect();
 
         let hash = location_hash();
         let hashtag = hash.as_ref();
@@ -145,16 +75,14 @@ pub fn Doc(cx: Scope) -> impl IntoView {
         let mut found = None;
 
         for idx in 0..nodes.length() {
+            if found.is_some() {
+                break;
+            }
             nodes
                 .get(idx)
                 .as_ref()
                 .and_then(JsCast::dyn_ref::<HtmlElement>)
-                .map(|node| {
-                    observer.observe(node);
-                    if found.is_none() {
-                        found = hashtag.filter(|h| **h == node.id()).map(|_| idx);
-                    }
-                });
+                .map(|node| found = hashtag.filter(|h| **h == node.id()).map(|_| idx));
         }
 
         let idx = found.unwrap_or(0);
@@ -164,17 +92,17 @@ pub fn Doc(cx: Scope) -> impl IntoView {
             .as_ref()
             .and_then(JsCast::dyn_ref::<HtmlElement>)
             .map(|node| {
-                let id = node.id();
-                set_ancestor(id.clone());
                 if idx == 0 {
                     utils::document_element().set_scroll_top(0);
                 } else {
                     node.scroll_into_view();
                 }
 
-                update_ul_style(container, None, Some(id));
+                update_ul_style(container, None, Some(node.id()));
             });
 
+        set_disabled(true);
+        set_anchors(Some(nodes));
         Some(())
     });
 
@@ -209,24 +137,48 @@ pub fn Doc(cx: Scope) -> impl IntoView {
             } else if target.matches("a.toc-link").unwrap_or(false) {
                 e.stop_immediate_propagation();
 
-                update_ul_style(
-                    container,
-                    target.dyn_into::<HtmlAnchorElement>().ok().map(|a| {
-                        let href = a.href();
-                        let (_, s) = href.split_once('#').unwrap();
-                        set_ancestor(s.to_string());
+                update_ul_style(container, target.dyn_into::<HtmlAnchorElement>().ok(), None);
 
-                        a
-                    }),
-                    None,
-                );
+                set_disabled(true);
             }
         }
     };
 
-    // on_cleanup(cx, move || {
-    //     observer.dispose();
-    // });
+    let listener = gloo_events::EventListener::new(&utils::document(), "scroll", move |_| {
+        if disabled.get_untracked() {
+            set_disabled(false);
+            return;
+        }
+
+        if let Some(nodes) = anchors.get_untracked() {
+            let mut id = None;
+
+            for idx in 0..nodes.length() {
+                if let Some(e) = nodes
+                    .get(idx)
+                    .and_then(|node| node.dyn_into::<Element>().ok())
+                {
+                    let rect = e.get_bounding_client_rect();
+                    if rect.top() - 106. > 0. {
+                        break;
+                    }
+                    id.replace(e.id());
+                }
+            }
+
+            if id.is_some() {
+                let _ = utils::window()
+                    .location()
+                    .set_hash(id.clone().unwrap_or_default().as_ref());
+            } else if utils::document_element().scroll_top() <= 0 {
+                let _ = utils::window().location().set_hash("");
+            }
+
+            update_ul_style(container, None, id);
+        }
+    });
+
+    on_cleanup(cx, move || drop(listener));
 
     view! {
         cx,

@@ -39,9 +39,7 @@ pub fn Navbar(
     {
         let dark_media = utils::media_query(
             "(prefers-color-scheme: dark)",
-            move |e: MediaQueryListEvent| {
-                set_dark_matches(e.matches());
-            },
+            move |e: MediaQueryListEvent| set_dark_matches(e.matches()),
         )
         .unwrap();
 
@@ -54,31 +52,29 @@ pub fn Navbar(
         };
 
         utils::toggle_dark(dark);
-        set_dark.update(move |val| *val = dark);
+        set_dark(dark);
 
         let sidebar_media =
             utils::media_query("(min-width: 960px)", move |e: MediaQueryListEvent| {
-                if path_part().0 {
+                if path_part.get_untracked().0 {
                     set_sidebar.update(|val| {
                         if !*val {
                             return;
                         }
-                        *val = false;
+                        *val = false
                     })
                 } else {
-                    let flag = e.matches();
                     set_sidebar.update(move |val| {
-                        if flag == *val {
+                        if *val == e.matches() {
                             return;
                         }
-                        *val = true;
+                        *val = true
                     })
                 }
             })
             .unwrap();
 
-        let sidebar = sidebar_media.matches();
-        set_sidebar.update(move |val| *val = sidebar);
+        set_sidebar(sidebar_media.matches());
     }
 
     create_effect(cx, move |_| {
@@ -110,7 +106,7 @@ pub fn Navbar(
         set_sidebar.update(move |val| *val = opened);
         set_path.update(move |val| {
             val.clear();
-            val.push_str(&path);
+            val.push_str(&path)
         });
     });
 
@@ -121,7 +117,7 @@ pub fn Navbar(
         if version() != value {
             set_version.update(move |val| {
                 val.clear();
-                val.push_str(&value);
+                val.push_str(&value)
             });
         }
         let _ = navigate(&format!("/{}/{}", current, path), Default::default());
@@ -159,14 +155,14 @@ pub fn Navbar(
                 </select>
             </div>
             <div class="flex flex-row items-center gap-5 font-medium text-15px">
-                <A href={move || format!("/{}/guide/introduction", version())} class="transition-colors op75 hover:op100">
+                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/guide/introduction", version())>
                     <span
                         class="block"
                         class=("i-lucide-book", move || path_part().0)
                         class=("i-lucide-book-open", move || !path_part().0)
                     ></span>
                 </A>
-                <a rel="noreferrer" target="_blank" href={move || format!("https://docs.rs/viz/{}", version())} class="transition-colors op75 hover:op100">
+                <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", version())>
                     <span class="i-lucide-boxes block"></span>
                 </a>
                 <a target="_blank" rel="noreferrer" href="https://github.com/viz-rs/viz" class="transition-colors op75 hover:op100">
@@ -185,10 +181,10 @@ pub fn Navbar(
                                         <li>
                                             <a
                                                 data-lang={l[0]}
-                                                href={move || format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), pad_path())}
                                                 class="flex hover:text-yellow-600"
                                                 class=("text-yellow-600", move || l[0] == lang())
                                                 on:click=change_lang.clone()
+                                                href=move || format!("https://{}viz.rs/{}{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), pad_path())
                                             >{l[1]}</a>
                                         </li>
                                     }

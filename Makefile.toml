@@ -3,26 +3,38 @@ RUSTFLAGS = "--cfg=web_sys_unstable_apis"
 [config]
 default_to_workspace = false
 
-[tasks.init]
+[tasks.init-en]
 command = "mkdir"
-args = ["-p", "dist/{en,zh-cn}"]
+args = ["-p", "dist/en/"]
+
+[tasks.init-zh-cn]
+command = "mkdir"
+args = ["-p", "dist/zh-cn/"]
+
+[tasks.doc-en]
+command = "cargo"
+args = ["run", "--bin", "gen", "--", "-i", "en", "-o", "app/docs/en"]
+
+[tasks.doc-zh-cn]
+command = "cargo"
+args = ["run", "--bin", "gen", "--", "-i", "zh-cn", "-o", "app/docs/zh-cn"]
 
 [tasks.dev-en]
-dependencies = ["init"]
+dependencies = ["init-en", "doc-en"]
 command = "trunk"
 args = ["--config", "Trunk.toml", "serve", "--open"]
 
 [tasks.dev-zh-cn]
-dependencies = ["init"]
+dependencies = ["init-zh-cn", "doc-zh-cn"]
 command = "trunk"
 args = ["--config", "Trunk.zh-cn.toml", "serve", "--open"]
 
 [tasks.build-en]
-dependencies = ["init"]
+dependencies = ["init-en", "doc-en"]
 command = "trunk"
 args = ["--config", "Trunk.toml", "build", "--release"]
 
 [tasks.build-zh-cn]
-dependencies = ["init"]
+dependencies = ["init-zh-cn", "doc-zh-cn"]
 command = "trunk"
 args = ["--config", "Trunk.zh-cn.toml", "build", "--release"]

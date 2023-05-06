@@ -17,7 +17,7 @@ pub fn Sidebar(cx: Scope, version: ReadSignal<String>) -> impl IntoView {
             >
             {
                 move || sections.read(cx)
-                    .and_then(|sections| sections)
+                    .flatten()
                     .map(move |sections| {
                         view! {
                             cx,
@@ -33,11 +33,12 @@ pub fn Sidebar(cx: Scope, version: ReadSignal<String>) -> impl IntoView {
                                             each=move || items.clone()
                                             key=|item| item.0.clone()
                                             view=move |cx, (text, path)| {
+                                                let prefix = prefix.clone();
                                                 view! {
                                                     cx,
                                                     <li>
                                                         <A
-                                                            href=format!("/{}/{}/{}", version(), prefix, path)
+                                                            href=move || format!("/{}/{}/{}", version(), prefix, path)
                                                             class="inline-block py-1 font-normal transition-colors hover:op100 op61.8"
                                                         >
                                                             {text}

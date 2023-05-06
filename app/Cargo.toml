@@ -13,43 +13,37 @@ zh-cn = []
 [dependencies]
 console_log = "1"
 log = "0.4"
-# leptos = "0.3.0-alpha"
-# leptos_dom = "0.3.0-alpha"
-# leptos_router = { version = "0.3.0-alpha", features = ["csr"] }
-# leptos_meta = { version = "0.3.0-alpha", features = ["csr"] }
-leptos = { path = "../../leptos/leptos"}
-leptos_dom = { path = "../../leptos/leptos_dom"}
-leptos_router = { path = "../../leptos/router", features = ["csr"] }
-leptos_meta = { path = "../../leptos/meta", features = ["csr"] }
-# leptos_reactive = { git = "https://github.com/leptos-rs/leptos.git", branch = "main"}
+leptos = "0.3.0-alpha"
+leptos_dom = "0.3.0-alpha"
+leptos_router = { version = "0.3.0-alpha", features = ["csr"] }
+leptos_meta = { version = "0.3.0-alpha", features = ["csr"] }
 serde = { version = "1", features = ["derive"] }
 futures = "0.3"
 console_error_panic_hook = "0.1.7"
 web-sys = { version = "0.3.61", features = [
+  "Clipboard",
   "CssStyleDeclaration",
+  "DomRect",
   "DomRectReadOnly",
-  "InputEvent",
-  "IntersectionObserver",
-  "IntersectionObserverEntry",
-  "IntersectionObserverInit",
-  "KeyboardEvent",
-  "Location",
-  "Storage",
-  "MediaQueryList",
-  "MediaQueryListEvent",
-  "Window",
-  "Event",
-  "Element",
   "DomTokenList",
+  "Element",
   "Event",
   "HtmlAnchorElement",
   "HtmlSelectElement",
-  "Clipboard",
+  "Location",
+  "MediaQueryList",
+  "MediaQueryListEvent",
   "Navigator",
+  "Storage",
+  "Window",
+  # "IntersectionObserver",
+  # "IntersectionObserverEntry",
+  # "IntersectionObserverInit",
 ] }
 wasm-bindgen = "0.2.84"
 cfg-if = "1.0"
 gloo-net = "0.2.6"
+gloo-events = "0.1.2"
 wasm-bindgen-futures = "0.4.34"
 
 [dev-dependencies]

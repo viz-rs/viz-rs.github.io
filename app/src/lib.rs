@@ -9,12 +9,11 @@ use leptos_router::*;
 use pages::*;
 
 pub const LANGS: [[&str; 2]; 2] = [["en", "English"], ["zh-cn", "简体中文"]];
-pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
+pub const VERSIONS: [&str; 1] = ["0.4.x"];
+// pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
 
 #[component]
 pub fn App(cx: Scope) -> impl IntoView {
-    log::debug!("rendering <App />");
-
     let (dark, set_dark) = create_signal(cx, false);
     let (sidebar, set_sidebar) = create_signal(cx, false);
     let (lang, set_lang) = create_signal(cx, LANGS[0][0].to_string());
