@@ -1,5 +1,6 @@
 use leptos::*;
 use leptos_dom::{helpers::location_hash, html::Div};
+// use leptos_router::{use_navigate, use_params, NavigateOptions, State};
 use leptos_router::use_params;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{Element, HtmlAnchorElement, HtmlElement, NodeList};
@@ -9,38 +10,38 @@ use crate::{
     utils,
 };
 
-fn update_ul_style(container: NodeRef<Div>, a: Option<HtmlAnchorElement>, id: Option<String>) {
+fn update_ul_style(
+    container: NodeRef<Div>,
+    a: Option<HtmlAnchorElement>,
+    id: Option<String>,
+) -> Result<(), JsValue> {
     let ul = container
         .get_untracked()
-        .unwrap_throw()
-        .query_selector("article + nav ul")
-        .ok()
-        .flatten()
+        .ok_or(JsValue::NULL)?
+        .query_selector("article + nav ul")?
         .and_then(|node| node.dyn_into::<HtmlElement>().ok())
-        .unwrap_throw();
+        .ok_or(JsValue::NULL)?;
 
-    if let Some(a) = a.or_else(|| {
-        id.and_then(|id| {
-            let mut selector = String::new();
-            selector.push_str("a[href='#");
-            selector.push_str(&id);
-            selector.push_str("']");
-
-            ul.query_selector(&selector)
-                .unwrap_throw()
-                .and_then(|node| node.dyn_into::<HtmlAnchorElement>().ok())
+    let a = a
+        .or_else(|| {
+            id.and_then(|id| {
+                ul.query_selector(&format!("a[href='#{}']", id))
+                    .ok()
+                    .flatten()
+                    .and_then(|node| node.dyn_into::<HtmlAnchorElement>().ok())
+            })
         })
-    }) {
-        let (top, height) = (a.offset_top(), a.offset_height());
-        let _ = ul.style().set_property("--top", &format!("{}px", top));
-        let _ = ul
-            .style()
-            .set_property("--height", &format!("{}px", height - 4));
-    }
+        .ok_or(JsValue::NULL)?;
+
+    let (top, height) = (a.offset_top(), a.offset_height());
+    ul.style().set_property("--top", &format!("{}px", top))?;
+    ul.style()
+        .set_property("--height", &format!("{}px", height - 4))
 }
 
 #[component]
 pub fn Doc(cx: Scope) -> impl IntoView {
+    // let navigate = use_navigate(cx);
     let (params, set_params) = create_signal(cx, DocParams::default());
     let (anchors, set_anchors) = create_signal(cx, Option::<NodeList>::None);
     let (disabled, set_disabled) = create_signal(cx, false);
@@ -87,6 +88,8 @@ pub fn Doc(cx: Scope) -> impl IntoView {
 
         let idx = found.unwrap_or(0);
 
+        set_disabled(true);
+
         nodes
             .get(idx)
             .as_ref()
@@ -98,11 +101,11 @@ pub fn Doc(cx: Scope) -> impl IntoView {
                     node.scroll_into_view();
                 }
 
-                update_ul_style(container, None, Some(node.id()));
+                let _ = update_ul_style(container, None, Some(node.id()));
             });
 
-        set_disabled(true);
         set_anchors(Some(nodes));
+
         Some(())
     });
 
@@ -137,7 +140,8 @@ pub fn Doc(cx: Scope) -> impl IntoView {
             } else if target.matches("a.toc-link").unwrap_or(false) {
                 e.stop_immediate_propagation();
 
-                update_ul_style(container, target.dyn_into::<HtmlAnchorElement>().ok(), None);
+                let _ =
+                    update_ul_style(container, target.dyn_into::<HtmlAnchorElement>().ok(), None);
 
                 set_disabled(true);
             }
@@ -166,15 +170,45 @@ pub fn Doc(cx: Scope) -> impl IntoView {
                 }
             }
 
-            if id.is_some() {
-                let _ = utils::window()
-                    .location()
-                    .set_hash(id.clone().unwrap_or_default().as_ref());
-            } else if utils::document_element().scroll_top() <= 0 {
-                let _ = utils::window().location().set_hash("");
-            }
+            let _ = update_ul_style(container, None, id);
 
-            update_ul_style(container, None, id);
+            /*
+            // https://stackoverflow.com/questions/3870057/how-can-i-update-window-location-hash-without-jumping-the-document
+            let hash = utils::window().location().hash().ok().unwrap_or_default();
+            let prev = hash.trim_start_matches('#').to_string();
+            let anchor = id.clone().unwrap_or_default();
+
+            (prev != anchor)
+                .then(|| current_params.get_untracked().ok())
+                .flatten()
+                .map(|DocParams { version, path }| {
+                    {
+                        if utils::document_element().scroll_top() <= 106 / 2 {
+                            Some(format!("/{}/{}", version, path))
+                        } else if !anchor.is_empty() {
+                            Some(format!("/{}/{}#{}", version, path, anchor))
+                        } else {
+                            None
+                        }
+                    }
+                    .and_then(|to| {
+                        set_disabled(true);
+                        utils::window().history()
+                            .and_then(|history| history.replace_state_with_url(&JsValue::NULL, "", Some(&to)))
+                            .ok()
+                        // navigate(
+                        //     &to,
+                        //     NavigateOptions {
+                        //         resolve: false,
+                        //         replace: true,
+                        //         scroll: false,
+                        //         state: State(None),
+                        //     },
+                        // )
+                        // .ok()
+                    })
+                });
+            */
         }
     });
 
