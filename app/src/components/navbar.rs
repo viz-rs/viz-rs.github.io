@@ -102,12 +102,8 @@ pub fn Navbar(
             .trim_start_matches("/")
             .to_string();
         // log::info!("path: {} - {}", !path.is_empty(), path);
-        let opened = !path.is_empty();
-        set_sidebar.update(move |val| *val = opened);
-        set_path.update(move |val| {
-            val.clear();
-            val.push_str(&path)
-        });
+        set_sidebar(!path.is_empty());
+        set_path(path);
     });
 
     let change_version = move |e: ev::Event| {
@@ -115,10 +111,7 @@ pub fn Navbar(
         let value = event_target_value(&e);
         let current = value.clone();
         if version() != value {
-            set_version.update(move |val| {
-                val.clear();
-                val.push_str(&value)
-            });
+            set_version(value);
         }
         let _ = navigate(&format!("/{}/{}", current, path), Default::default());
     };

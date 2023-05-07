@@ -1,3 +1,5 @@
+#![allow(clippy::too_many_lines)]
+
 use std::{cmp::Ordering, fs, path::Path};
 
 use anyhow::Result;
@@ -17,6 +19,8 @@ pub struct Section {
     prefix: String,
     items: Vec<(String, String)>,
 }
+
+type Navs = (Option<(String, String)>, Option<(String, String)>, String);
 
 #[cfg(all(feature = "en", not(feature = "zh-cn")))]
 const NAV_TITLE: &str = "On this page";
@@ -161,6 +165,9 @@ fn main() -> Result<()> {
     let mut minify_cfg = minify_html::Cfg::new();
     minify_cfg.keep_closing_tags = true;
 
+    let mut minify_cfg_js = minify_html::Cfg::new();
+    minify_cfg_js.minify_js = true;
+
     // let root = Path::new("..").join(i18n);
     let root = i18n;
     let dist = Path::new(&output);
@@ -203,7 +210,7 @@ fn main() -> Result<()> {
                 let raw = fs::read_to_string(entry.path())?;
                 toc.replace(serde_json::from_str(&raw)?);
                 fp.set_extension("json");
-                fs::write(&fp, raw)?;
+                fs::write(&fp, minify_html::minify(raw.as_bytes(), &minify_cfg_js))?;
             } else {
                 let raw = fs::read_to_string(entry.path())?;
                 let parent = file
@@ -218,11 +225,14 @@ fn main() -> Result<()> {
                     toc.as_ref().unwrap(),
                     components[0],
                     components[1],
-                    fp.file_name().and_then(|s| s.to_str()).unwrap(),
+                    fp.file_name().and_then(std::ffi::OsStr::to_str).unwrap(),
                 );
-                let doc = parse(&languages, navs, raw)?;
+                let document = parse(&languages, navs, &raw);
                 fp.set_extension("html");
-                fs::write(&fp, minify_html::minify(doc.html.as_bytes(), &minify_cfg))?;
+                fs::write(
+                    &fp,
+                    minify_html::minify(document.html.as_bytes(), &minify_cfg),
+                )?;
             }
             println!("{:?}", fp.canonicalize()?);
         }
@@ -231,17 +241,13 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn parse(
-    languages: &Languages,
-    navs: (Option<(String, String)>, Option<(String, String)>, String),
-    raw: String,
-) -> Result<Document> {
+fn parse(languages: &Languages, navs: Navs, raw: &str) -> Document {
     let options = Options::all();
     let mut toc = Vec::new();
     let mut heading = None;
     let mut code = None;
     let mut img = None;
-    let parser = MarkParser::new_ext(&raw, options).filter_map(|event| match event {
+    let parser = MarkParser::new_ext(raw, options).filter_map(|event| match event {
         Event::Start(Tag::Heading(level, id, ..)) => {
             if id.is_none() && level < HeadingLevel::H3 {
                 heading = Some(String::new());
@@ -254,7 +260,7 @@ fn parse(
             if level < HeadingLevel::H3 && heading.is_some() && id.is_none() {
                 let c = heading.take().unwrap();
                 let name = c.trim();
-                let temp = name.to_lowercase().replace(' ', "-").replace('(', "").replace(')', "");
+                let temp = name.to_lowercase().replace(' ', "-").replace(['(', ')'], "");
                 let id = temp.trim_end_matches(|c| SYMBOLS.contains(&c));
                 let mut heading = String::new();
                 heading.push('<');
@@ -264,11 +270,11 @@ fn parse(
                 heading.push_str(" class='");
                 if !classes.is_empty() {
                     heading.push(' ');
-                    heading.push_str(&classes.to_vec().join(" "));
+                    heading.push_str(&classes.clone().join(" "));
                 }
                 heading.push('\'');
                 heading.push('>');
-                heading.push_str(&name);
+                heading.push_str(name);
                 heading.push_str("<a class=anchor href=#");
                 heading.push_str(id);
                 heading.push('>');
@@ -410,30 +416,24 @@ fn parse(
             let temp = anchor
                 .to_lowercase()
                 .replace(' ', "-")
-                .replace('(', "")
-                .replace(')', "");
+                .replace(['(', ')'], "");
             html.push_str("<li>");
             html.push_str(
                 "<a class='toc-link block py-1 font-normal transition-colors op75 hover:op100' href='#",
             );
             html.push_str(temp.trim_end_matches(|c| SYMBOLS.contains(&c)));
             html.push_str("'>");
-            html.push_str(&name);
+            html.push_str(name);
             html.push_str("</a></li>");
         }
 
         html.push_str("</ul></nav>");
     }
 
-    Ok(Document { html })
+    Document { html }
 }
 
-fn find_prev_and_next(
-    toc: &Vec<Section>,
-    version: &str,
-    dir: &str,
-    current: &str,
-) -> (Option<(String, String)>, Option<(String, String)>, String) {
+fn find_prev_and_next(toc: &Vec<Section>, version: &str, dir: &str, current: &str) -> Navs {
     let mut prev = None;
     let mut next = None;
 
@@ -446,49 +446,27 @@ fn find_prev_and_next(
                 .find_map(|(i, e)| if e.1 == current { Some(i) } else { None })
         {
             if index > 0 {
-                prev = section.items.get(index - 1).cloned().map(|(name, link)| {
-                    let mut new_link = String::new();
-                    new_link.push_str(&version);
-                    new_link.push('/');
-                    new_link.push_str(&section.prefix);
-                    new_link.push('/');
-                    new_link.push_str(&link);
-                    (name, new_link)
-                });
+                prev =
+                    section.items.get(index - 1).cloned().map(|(name, link)| {
+                        (name, format!("{}/{}/{}", version, section.prefix, link))
+                    });
             } else if pos > 0 {
                 prev = toc.get(pos - 1).and_then(|section| {
                     section.items.last().cloned().map(|(name, link)| {
-                        let mut new_link = String::new();
-                        new_link.push_str(&version);
-                        new_link.push('/');
-                        new_link.push_str(&section.prefix);
-                        new_link.push('/');
-                        new_link.push_str(&link);
-                        (name, new_link)
+                        (name, format!("{}/{}/{}", version, section.prefix, link))
                     })
                 });
             }
 
             if index + 1 < section.items.len() {
-                next = section.items.get(index + 1).cloned().map(|(name, link)| {
-                    let mut new_link = String::new();
-                    new_link.push_str(&version);
-                    new_link.push('/');
-                    new_link.push_str(&section.prefix);
-                    new_link.push('/');
-                    new_link.push_str(&link);
-                    (name, new_link)
-                });
+                next =
+                    section.items.get(index + 1).cloned().map(|(name, link)| {
+                        (name, format!("{}/{}/{}", version, section.prefix, link))
+                    });
             } else if pos + 1 < toc.len() {
                 next = toc.get(pos + 1).and_then(|section| {
                     section.items.first().cloned().map(|(name, link)| {
-                        let mut new_link = String::new();
-                        new_link.push_str(&version);
-                        new_link.push('/');
-                        new_link.push_str(&section.prefix);
-                        new_link.push('/');
-                        new_link.push_str(&link);
-                        (name, new_link)
+                        (name, format!("{}/{}/{}", version, section.prefix, link))
                     })
                 });
             }
