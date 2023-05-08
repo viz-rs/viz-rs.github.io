@@ -151,8 +151,7 @@ pub fn Navbar(
                 <A class="transition-colors op75 hover:op100" href=move || format!("/{}/guide/introduction", version())>
                     <span
                         class="block"
-                        class=("i-lucide-book", move || path_part().0)
-                        class=("i-lucide-book-open", move || !path_part().0)
+                        class=move || format!("i-lucide-book{}", (!path_part().0).then(|| "-open".to_string()).unwrap_or_default())
                     ></span>
                 </A>
                 <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", version())>
@@ -197,8 +196,7 @@ pub fn Navbar(
                 on:click=move |_| set_sidebar.update(|val| *val = !*val)>
                 <span
                     class="block"
-                    class=("i-lucide-sidebar-open", move || sidebar())
-                    class=("i-lucide-sidebar-close", move || !sidebar())
+                    class=move || format!("i-lucide-sidebar-{}", sidebar().then(|| "open".to_string()).unwrap_or("close".to_string()))
                 />
             </button>
         </header>
