@@ -13,14 +13,14 @@ zh-cn = []
 [dependencies]
 console_log = "1"
 log = "0.4"
-leptos = "0.3.0-alpha"
-leptos_dom = "0.3.0-alpha"
-leptos_router = { version = "0.3.0-alpha", features = ["csr"] }
-leptos_meta = { version = "0.3.0-alpha", features = ["csr"] }
+leptos = "0.3.0"
+leptos_dom = "0.3.0"
+leptos_router = { version = "0.3.0", features = ["csr"] }
+leptos_meta = { version = "0.3.0", features = ["csr"] }
 serde = { version = "1", features = ["derive"] }
 futures = "0.3"
-console_error_panic_hook = "0.1.7"
-web-sys = { version = "0.3.61", features = [
+console_error_panic_hook = "0.1"
+web-sys = { version = "0.3", features = [
   "Clipboard",
   "CssStyleDeclaration",
   "DomRect",
@@ -40,14 +40,14 @@ web-sys = { version = "0.3.61", features = [
   # "IntersectionObserverEntry",
   # "IntersectionObserverInit",
 ] }
-wasm-bindgen = "0.2.84"
+wasm-bindgen = "0.2"
 cfg-if = "1.0"
-gloo-net = "0.2.6"
-gloo-events = "0.1.2"
-wasm-bindgen-futures = "0.4.34"
+gloo-net = "0.2"
+gloo-events = "0.1"
+wasm-bindgen-futures = "0.4"
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.34"
+wasm-bindgen-test = "0.3"
 
 [profile.release]
 codegen-units = 1
