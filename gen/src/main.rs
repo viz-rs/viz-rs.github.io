@@ -347,7 +347,7 @@ fn parse(languages: &Languages, navs: Navs, raw: &str) -> Document {
 
                     if src.starts_with("..") {
                         let mut prefix = String::new();
-                        prefix.push_str("/assets/");
+                        prefix.push_str("/docs/");
                         prefix.push_str(navs.2.as_str());
                         src.replace_range(0..2, &prefix);
                     }
