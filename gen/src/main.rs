@@ -274,11 +274,11 @@ fn parse(languages: &Languages, navs: Navs, raw: &str) -> Document {
                 }
                 heading.push('\'');
                 heading.push('>');
-                heading.push_str(name);
                 heading.push_str("<a class=anchor href=#");
                 heading.push_str(id);
                 heading.push('>');
                 heading.push_str("#</a>");
+                heading.push_str(name);
                 heading.push_str("</");
                 heading.push_str(&level.to_string());
                 heading.push('>');
