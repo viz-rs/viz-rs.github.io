@@ -1,6 +1,6 @@
 use gloo_net::http::Request;
-use leptos::Params;
-use leptos_router::{IntoParam, Params};
+use leptos::*;
+use leptos_router::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Default, Params, PartialEq, Clone, Debug)]
@@ -21,7 +21,7 @@ pub async fn fetch_toc(version: String) -> Option<Vec<Section>> {
     url.push_str("/docs/");
     url.push_str(&version);
     url.push_str("/toc.json");
-    Request::new(&url).send().await.ok()?.json().await.ok()
+    Request::get(&url).send().await.ok()?.json().await.ok()
 }
 
 pub async fn fetch_page(version: String, path: String) -> Option<String> {
@@ -31,5 +31,5 @@ pub async fn fetch_page(version: String, path: String) -> Option<String> {
     url.push('/');
     url.push_str(&path);
     url.push_str(".html");
-    Request::new(&url).send().await.ok()?.text().await.ok()
+    Request::get(&url).send().await.ok()?.text().await.ok()
 }

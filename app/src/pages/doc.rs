@@ -49,15 +49,15 @@ pub fn Doc(cx: Scope) -> impl IntoView {
     let current_params = use_params::<DocParams>(cx);
     let page = create_resource(
         cx,
-        move || current_params.get().ok().filter(|p| p != &params()),
+        move || current_params.get().ok().filter(|p| p != &params.get()),
         move |input| async move {
-            set_loading(true);
+            set_loading.set(true);
             let params = input?;
-            set_params(params.clone());
+            set_params.set(params.clone());
             let DocParams { version, path } = params;
             // log::info!("version: {}, path: {}", &version, &path);
             let result = fetch_page(version, path).await;
-            set_loading(false);
+            set_loading.set(false);
             result
         },
     );
@@ -88,7 +88,7 @@ pub fn Doc(cx: Scope) -> impl IntoView {
 
         let idx = found.unwrap_or(0);
 
-        set_disabled(true);
+        set_disabled.set(true);
 
         nodes
             .get(idx)
@@ -104,7 +104,7 @@ pub fn Doc(cx: Scope) -> impl IntoView {
                 let _ = update_ul_style(container, None, Some(node.id()));
             });
 
-        set_anchors(Some(nodes));
+        set_anchors.set(Some(nodes));
 
         Some(())
     });
@@ -143,14 +143,14 @@ pub fn Doc(cx: Scope) -> impl IntoView {
                 let _ =
                     update_ul_style(container, target.dyn_into::<HtmlAnchorElement>().ok(), None);
 
-                set_disabled(true);
+                set_disabled.set(true);
             }
         }
     };
 
     let listener = gloo_events::EventListener::new(&utils::document(), "scroll", move |_| {
         if disabled.get_untracked() {
-            set_disabled(false);
+            set_disabled.set(false);
             return;
         }
 
@@ -217,7 +217,7 @@ pub fn Doc(cx: Scope) -> impl IntoView {
     view! {
         cx,
         <div class="flex flex-row flex-1">
-            <div id="loader" class="i-lucide-loader w-6 h-6 animate-spin absolute" class:hidden=move || !loading() />
+            <div id="loader" class="i-lucide-loader w-6 h-6 animate-spin absolute" class:hidden=move || !loading.get() />
             <div
                 class="flex flex-row flex-1"
                 _ref=container

@@ -4,8 +4,8 @@ use leptos_router::*;
 use crate::api::{fetch_toc, Section};
 
 #[component]
-pub fn Sidebar(cx: Scope, version: ReadSignal<String>) -> impl IntoView {
-    let sections = create_resource(cx, version, fetch_toc);
+pub fn Sidebar(cx: Scope, #[prop(into)] version: ReadSignal<String>) -> impl IntoView {
+    let sections = create_resource(cx, move || version.get(), fetch_toc);
 
     view! { cx,
         <aside class="fixed z-35 flex flex-col p-5 gap-4 sidebar top-4.375rem bottom-0">
@@ -38,7 +38,7 @@ pub fn Sidebar(cx: Scope, version: ReadSignal<String>) -> impl IntoView {
                                                     cx,
                                                     <li>
                                                         <A
-                                                            href=move || format!("/{}/{}/{}", version(), prefix, path)
+                                                            href=move || format!("/{}/{}/{}", version.get(), prefix, path)
                                                             class="inline-block py-1 font-normal transition-colors hover:op100 op61.8"
                                                         >
                                                             {text}

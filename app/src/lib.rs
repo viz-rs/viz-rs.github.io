@@ -32,8 +32,8 @@ pub fn App(cx: Scope) -> impl IntoView {
                     version=version
                     set_version=set_version
                 />
-                <div class="page-container pt-4.375rem" class:opened=sidebar>
-                    <div id="backdrop" on:pointerdown=move |_| set_sidebar(false) />
+                <div class="page-container pt-4.375rem" class:opened=sidebar.get()>
+                    <div id="backdrop" on:pointerdown=move |_| set_sidebar.set(false) />
 
                     <Sidebar version=version />
 
@@ -41,7 +41,7 @@ pub fn App(cx: Scope) -> impl IntoView {
                         <Routes>
                             <Route
                                 path=""
-                                view=move |cx| view! { cx,  <Home version=version /> }
+                                view=move |cx| view! { cx,  <Home version=version.get() /> }
                             />
                             <Route
                                 path=":version/*path"

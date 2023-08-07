@@ -23,13 +23,13 @@ pub fn Navbar(
     let (path, set_path) = create_signal(cx, String::new());
 
     let path_part = create_memo(cx, move |_| {
-        let path = path();
+        let path = path.get();
         let empty = path.is_empty();
         (empty, path)
     });
 
     let pad_path = create_memo(cx, move |_| {
-        let (home, mut path) = path_part();
+        let (home, mut path) = path_part.get();
         if home {
             path.push_str("guide/introduction");
         }
@@ -39,7 +39,7 @@ pub fn Navbar(
     {
         let dark_media = utils::media_query(
             "(prefers-color-scheme: dark)",
-            move |e: MediaQueryListEvent| set_dark_matches(e.matches()),
+            move |e: MediaQueryListEvent| set_dark_matches.set(e.matches()),
         )
         .unwrap();
 
@@ -52,7 +52,7 @@ pub fn Navbar(
         };
 
         utils::toggle_dark(dark);
-        set_dark(dark);
+        set_dark.set(dark);
 
         let sidebar_media =
             utils::media_query("(min-width: 960px)", move |e: MediaQueryListEvent| {
@@ -74,16 +74,16 @@ pub fn Navbar(
             })
             .unwrap();
 
-        set_sidebar(sidebar_media.matches());
+        set_sidebar.set(sidebar_media.matches());
     }
 
     create_effect(cx, move |_| {
-        let dark = dark();
+        let dark = dark.get();
         // log::info!("change dark: {}", &dark);
         utils::toggle_dark(dark);
         utils::local_storage_set(
             "color-scheme",
-            if dark == dark_matches() {
+            if dark == dark_matches.get() {
                 "auto"
             } else if dark {
                 "dark"
@@ -98,20 +98,20 @@ pub fn Navbar(
             .pathname
             .get()
             .trim_start_matches("/")
-            .trim_start_matches(&version())
+            .trim_start_matches(&version.get())
             .trim_start_matches("/")
             .to_string();
         // log::info!("path: {} - {}", !path.is_empty(), path);
-        set_sidebar(!path.is_empty());
-        set_path(path);
+        set_sidebar.set(!path.is_empty());
+        set_path.set(path);
     });
 
     let change_version = move |e: ev::Event| {
-        let path = pad_path();
+        let path = pad_path.get();
         let value = event_target_value(&e);
         let current = value.clone();
-        if version() != value {
-            set_version(value);
+        if version.get() != value {
+            set_version.set(value);
         }
         let _ = navigate(&format!("/{}/{}", current, path), Default::default());
     };
@@ -120,7 +120,7 @@ pub fn Navbar(
         let element = e.target().unwrap().unchecked_into::<HtmlAnchorElement>();
         JsCast::dyn_ref::<HtmlElement>(&element)
             .and_then(|el| el.get_attribute("data-lang"))
-            .map(set_lang);
+            .map(|value| set_lang.set(value));
     };
 
     let toggle_color_scheme = move |e: ev::MouseEvent| {
@@ -141,17 +141,17 @@ pub fn Navbar(
                     {
                         VERSIONS.into_iter()
                             .map(|v| view! { cx,
-                                <option value=v selected={move || v == version()}>"v"{v}</option>
+                                <option value=v selected={move || v == version.get()}>"v"{v}</option>
                             })
                             .collect::<Vec<_>>()
                     }
                 </select>
             </div>
             <div class="flex flex-row items-center gap-5 font-medium text-15px">
-                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/guide/introduction", version())>
-                    <span class=move || if path_part().0 { "i-lucide-book block" } else { "i-lucide-book-open block" } />
+                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/guide/introduction", version.get())>
+                    <span class=move || if path_part.get().0 { "i-lucide-book block" } else { "i-lucide-book-open block" } />
                 </A>
-                <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", version())>
+                <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", version.get())>
                     <span class="i-lucide-boxes block" />
                 </a>
                 <a target="_blank" rel="noreferrer" href="https://github.com/viz-rs/viz" class="transition-colors op75 hover:op100">
@@ -171,9 +171,9 @@ pub fn Navbar(
                                             <a
                                                 data-lang={l[0]}
                                                 class="flex hover:text-yellow-600"
-                                                class=("text-yellow-600", move || l[0] == lang())
+                                                class=("text-yellow-600", move || l[0] == lang.get())
                                                 on:click=change_lang.clone()
-                                                href=move || format!("https://{}viz.rs/{}/{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version(), pad_path())
+                                                href=move || format!("https://{}viz.rs/{}/{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version.get(), pad_path.get())
                                             >{l[1]}</a>
                                         </li>
                                     }
@@ -189,11 +189,11 @@ pub fn Navbar(
             <button
                 id="toggle-sidebar"
                 class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100"
-                class=("!hidden", move || path_part().0)
+                class=("!hidden", move || path_part.get().0)
                 on:click=move |_| set_sidebar.update(|val| *val = !*val)>
                 <span
                     class="block"
-                    class=move || if sidebar() { "i-lucide-sidebar-open" } else { "i-lucide-sidebar-close" }
+                    class=move || if sidebar.get() { "i-lucide-sidebar-open" } else { "i-lucide-sidebar-close" }
                 />
             </button>
         </header>
