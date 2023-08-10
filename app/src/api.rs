@@ -5,8 +5,8 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Default, Params, PartialEq, Clone, Debug)]
 pub struct DocParams {
-    pub version: String,
-    pub path: String,
+    pub version: Option<String>,
+    pub path: Option<String>,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]

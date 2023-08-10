@@ -42,28 +42,26 @@ fn update_ul_style(
 #[component]
 pub fn Doc(cx: Scope) -> impl IntoView {
     // let navigate = use_navigate(cx);
-    let (params, set_params) = create_signal(cx, DocParams::default());
     let (anchors, set_anchors) = create_signal(cx, Option::<NodeList>::None);
     let (disabled, set_disabled) = create_signal(cx, false);
     let (loading, set_loading) = create_signal(cx, false);
     let current_params = use_params::<DocParams>(cx);
+    let container = create_node_ref::<Div>(cx);
     let page = create_resource(
         cx,
-        move || current_params.get().ok().filter(|p| p != &params.get()),
+        move || current_params.get().ok(),
         move |input| async move {
-            set_loading.set(true);
+        set_loading.set(true);
             let params = input?;
-            set_params.set(params.clone());
             let DocParams { version, path } = params;
-            // log::info!("version: {}, path: {}", &version, &path);
-            let result = fetch_page(version, path).await;
-            set_loading.set(false);
-            result
+            let v = version.unwrap_or_default();
+            let p = path.unwrap_or_default();
+            fetch_page(v, p).await
         },
     );
-    let container = create_node_ref::<Div>(cx);
 
     create_effect(cx, move |_| {
+        set_loading.set(false);
         let page = page.read(cx)??;
         let root = container.get()?;
         root.set_inner_html(&page);
