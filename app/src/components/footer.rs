@@ -1,10 +1,10 @@
 use leptos::*;
 
 #[component]
-pub fn Footer(cx: Scope) -> impl IntoView {
+pub fn Footer() -> impl IntoView {
     cfg_if::cfg_if! {
         if #[cfg(feature = "en")] {
-            view! { cx,
+            view! {
                 <footer class="footer text-center text-neutral-400 text-sm p-5">
                     <p>
                         "Built with "<a href="https://github.com/leptos-rs/leptos" target="_blank" class="text-neutral-500">"Leptos"</a>
@@ -14,7 +14,7 @@ pub fn Footer(cx: Scope) -> impl IntoView {
                 </footer>
             }
         } else {
-            view! { cx,
+            view! {
                 <footer class="footer text-center text-neutral-400 text-sm p-5">
                     <p>
                         "构建于 "<a href="https://github.com/leptos-rs/leptos" target="_blank" class="text-neutral-500">"Leptos"</a>

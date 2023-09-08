@@ -40,15 +40,14 @@ fn update_ul_style(
 }
 
 #[component]
-pub fn Doc(cx: Scope) -> impl IntoView {
-    // let navigate = use_navigate(cx);
-    let (anchors, set_anchors) = create_signal(cx, Option::<NodeList>::None);
-    let (disabled, set_disabled) = create_signal(cx, false);
-    let (loading, set_loading) = create_signal(cx, false);
-    let current_params = use_params::<DocParams>(cx);
-    let container = create_node_ref::<Div>(cx);
+pub fn Doc() -> impl IntoView {
+    // let navigate = use_navigate();
+    let (anchors, set_anchors) = create_signal(Option::<NodeList>::None);
+    let (disabled, set_disabled) = create_signal(false);
+    let (loading, set_loading) = create_signal(false);
+    let current_params = use_params::<DocParams>();
+    let container = create_node_ref::<Div>();
     let page = create_resource(
-        cx,
         move || current_params.get().ok(),
         move |input| async move {
         set_loading.set(true);
@@ -60,9 +59,9 @@ pub fn Doc(cx: Scope) -> impl IntoView {
         },
     );
 
-    create_effect(cx, move |_| {
+    create_effect(move |_| {
         set_loading.set(false);
-        let page = page.read(cx)??;
+        let page = page.read()??;
         let root = container.get()?;
         root.set_inner_html(&page);
 
@@ -210,10 +209,9 @@ pub fn Doc(cx: Scope) -> impl IntoView {
         }
     });
 
-    on_cleanup(cx, move || drop(listener));
+    on_cleanup(move || drop(listener));
 
     view! {
-        cx,
         <div class="flex flex-row flex-1">
             <div id="loader" class="i-lucide-loader w-6 h-6 animate-spin absolute" class:hidden=move || !loading.get() />
             <div

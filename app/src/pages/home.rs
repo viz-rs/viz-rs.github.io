@@ -2,10 +2,10 @@ use leptos::*;
 use leptos_router::A;
 
 #[component]
-pub fn Home(cx: Scope, #[prop(into)] version: String) -> impl IntoView {
+pub fn Home(#[prop(into)] version: String) -> impl IntoView {
     cfg_if::cfg_if! {
         if #[cfg(feature = "en")] {
-            view! { cx,
+            view! {
                 <section class="w-full hero text-center p-5 sm:py-19">
                     <h1 class="text-8 sm:text-10 font-medium">"Fast, robust, flexible, lightweight web framework for Rust"</h1>
                     <p class="text-4 sm:text-5 mt-4.5 mb-7.5 sm:mt-6 sm:mb-8 op-61.8 font-light">
@@ -15,7 +15,7 @@ pub fn Home(cx: Scope, #[prop(into)] version: String) -> impl IntoView {
                 </section>
             }
         } else {
-            view! { cx,
+            view! {
                 <section class="w-full hero text-center p-5 sm:py-19">
                     <h1 class="text-8 sm:text-10 font-medium">"快速、轻量、灵活、健壮的 Rust Web 框架"</h1>
                     <p class="text-4 sm:text-5 mt-4.5 mb-7.5 sm:mt-6 sm:mb-8 op-61.8 font-light">

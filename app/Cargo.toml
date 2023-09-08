@@ -13,10 +13,10 @@ zh-cn = []
 [dependencies]
 console_log = "1"
 log = "0.4"
-leptos = "0.4"
-leptos_dom = "0.4"
-leptos_router = { version = "0.4", features = ["csr"] }
-leptos_meta = { version = "0.4", features = ["csr"] }
+leptos = "0.5.0-beta2"
+leptos_dom = "0.5.0-beta2"
+leptos_router = { version = "0.5.0-beta2", features = ["csr"] }
+leptos_meta = { version = "0.5.0-beta2", features = ["csr"] }
 serde = { version = "1", features = ["derive"] }
 futures = "0.3"
 console_error_panic_hook = "0.1"
@@ -40,7 +40,7 @@ web-sys = { version = "0.3", features = [
   # "IntersectionObserverEntry",
   # "IntersectionObserverInit",
 ] }
-wasm-bindgen = "0.2"
+wasm-bindgen = "=0.2.84"
 cfg-if = "1.0"
 gloo-net = "0.4"
 gloo-events = "0.2"

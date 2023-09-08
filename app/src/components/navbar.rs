@@ -7,7 +7,6 @@ use crate::{utils, LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar(
-    cx: Scope,
     dark: ReadSignal<bool>,
     set_dark: WriteSignal<bool>,
     sidebar: ReadSignal<bool>,
@@ -17,18 +16,18 @@ pub fn Navbar(
     version: ReadSignal<String>,
     set_version: WriteSignal<String>,
 ) -> impl IntoView {
-    let navigate = use_navigate(cx);
-    let location = use_location(cx);
-    let (dark_matches, set_dark_matches) = create_signal(cx, false);
-    let (path, set_path) = create_signal(cx, String::new());
+    let navigate = use_navigate();
+    let location = use_location();
+    let (dark_matches, set_dark_matches) = create_signal(false);
+    let (path, set_path) = create_signal(String::new());
 
-    let path_part = create_memo(cx, move |_| {
+    let path_part = create_memo(move |_| {
         let path = path.get();
         let empty = path.is_empty();
         (empty, path)
     });
 
-    let pad_path = create_memo(cx, move |_| {
+    let pad_path = create_memo(move |_| {
         let (home, mut path) = path_part.get();
         if home {
             path.push_str("guide/introduction");
@@ -77,7 +76,7 @@ pub fn Navbar(
         set_sidebar.set(sidebar_media.matches());
     }
 
-    create_effect(cx, move |_| {
+    create_effect(move |_| {
         let dark = dark.get();
         // log::info!("change dark: {}", &dark);
         utils::toggle_dark(dark);
@@ -93,7 +92,7 @@ pub fn Navbar(
         );
     });
 
-    create_effect(cx, move |_| {
+    create_effect(move |_| {
         let path = location
             .pathname
             .get()
@@ -130,7 +129,7 @@ pub fn Navbar(
         set_dark.update(move |val| *val = !*val);
     };
 
-    view! { cx,
+    view! {
         <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
             <div class="flex flex-row">
                 <A href="/" class="flex flex-row items-center transition-colors op75 hover:op100">
@@ -140,7 +139,7 @@ pub fn Navbar(
                 <select id="versions" class="text-right font-bold select-none text-3 font-light" on:change=change_version>
                     {
                         VERSIONS.into_iter()
-                            .map(|v| view! { cx,
+                            .map(|v| view! {
                                 <option value=v selected={move || v == version.get()}>"v"{v}</option>
                             })
                             .collect::<Vec<_>>()
@@ -166,7 +165,7 @@ pub fn Navbar(
                         {
                             LANGS.into_iter()
                                 .map(|l|
-                                    view! { cx,
+                                    view! {
                                         <li>
                                             <a
                                                 data-lang={l[0]}

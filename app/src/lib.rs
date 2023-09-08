@@ -13,11 +13,11 @@ pub const VERSIONS: [&str; 1] = ["0.4.x"];
 // pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
 
 #[component]
-pub fn App(cx: Scope) -> impl IntoView {
-    let (dark, set_dark) = create_signal(cx, false);
-    let (sidebar, set_sidebar) = create_signal(cx, false);
-    let (lang, set_lang) = create_signal(cx, LANGS[0][0].to_string());
-    let (version, set_version) = create_signal(cx, VERSIONS[0].to_string());
+pub fn App() -> impl IntoView {
+    let (dark, set_dark) = create_signal(false);
+    let (sidebar, set_sidebar) = create_signal(false);
+    let (lang, set_lang) = create_signal(LANGS[0][0].to_string());
+    let (version, set_version) = create_signal(VERSIONS[0].to_string());
 
     view! { cx,
         <Router>
@@ -41,15 +41,15 @@ pub fn App(cx: Scope) -> impl IntoView {
                         <Routes>
                             <Route
                                 path=""
-                                view=move |cx| view! { cx,  <Home version=version.get() /> }
+                                view=move || view! { <Home version=version.get() /> }
                             />
                             <Route
                                 path=":version/*path"
-                                view=move |cx| view! { cx, <Doc /> }
+                                view=move || view! { <Doc /> }
                             />
                             <Route
                                 path="redirect-home"
-                                view=move |cx| view! { cx, <Redirect path="/"/> }
+                                view=move || view! { <Redirect path="/"/> }
                             />
                         </Routes>
                     </main>
