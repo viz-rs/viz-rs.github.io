@@ -34,9 +34,6 @@ jobs:
       name: cloudflare
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Trunk
-        uses: actions/checkout@v3
-
       - name: Install Trunk
         uses: actions-rs/cargo@v1
         with:
