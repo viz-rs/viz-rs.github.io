@@ -13,10 +13,10 @@ zh-cn = []
 [dependencies]
 console_log = "1"
 log = "0.4"
-leptos = "0.5.0-rc1"
-leptos_dom = "0.5.0-rc1"
-leptos_router = { version = "0.5.0-rc1", features = ["csr"] }
-leptos_meta = { version = "0.5.0-rc1", features = ["csr"] }
+leptos = "0.5.0"
+leptos_dom = "0.5.0"
+leptos_router = { version = "0.5.0", features = ["csr"] }
+leptos_meta = { version = "0.5.0", features = ["csr"] }
 serde = { version = "1", features = ["derive"] }
 futures = "0.3"
 console_error_panic_hook = "0.1"

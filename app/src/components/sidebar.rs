@@ -15,21 +15,21 @@ pub fn Sidebar(#[prop(into)] version: ReadSignal<String>) -> impl IntoView {
                 }
             >
             {
-                move || sections.read()
+                move || sections.get()
                     .flatten()
                     .map(move |sections| {
                         view! {
                             <For
                                 each=move || sections.clone()
                                 key=|section| section.text.clone()
-                                view=move |Section { text, prefix, items }| view! {
+                                children=move |Section { text, prefix, items }| view! {
                                     <section>
                                         <h3 class="py-1 text-4 font-medium">{text}</h3>
                                         <ul class="text-3.5">
                                         <For
                                             each=move || items.clone()
                                             key=|item| item.0.clone()
-                                            view=move |(text, path)| {
+                                            children=move |(text, path)| {
                                                 let prefix = prefix.clone();
                                                 view! {
                                                     <li>

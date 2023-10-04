@@ -50,7 +50,7 @@ pub fn Doc() -> impl IntoView {
     let page = create_resource(
         move || current_params.get().ok(),
         move |input| async move {
-        set_loading.set(true);
+            set_loading.set(true);
             let params = input?;
             let DocParams { version, path } = params;
             let v = version.unwrap_or_default();
@@ -61,7 +61,7 @@ pub fn Doc() -> impl IntoView {
 
     create_effect(move |_| {
         set_loading.set(false);
-        let page = page.read()??;
+        let page = page.get()??;
         let root = container.get()?;
         root.set_inner_html(&page);
 

@@ -19,7 +19,7 @@ pub fn App() -> impl IntoView {
     let (lang, set_lang) = create_signal(LANGS[0][0].to_string());
     let (version, set_version) = create_signal(VERSIONS[0].to_string());
 
-    view! { cx,
+    view! {
         <Router>
             <div id="app" class="tracking-0.2px">
                 <Navbar
