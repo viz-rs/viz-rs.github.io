@@ -38,13 +38,6 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@nightly
-        with:
-          target: wasm32-unknown-unknown
-      - name: Install tools
-        run: cargo install trunk cargo-make
-
       - uses: Swatinem/rust-cache@v2
 
       - name: Setup NodeJS
@@ -58,8 +51,16 @@ jobs:
           cmd: install
           dir: 'app'
 
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@nightly
+        with:
+          target: wasm32-unknown-unknown
+
+      - name: Install tools
+        run: cargo install trunk cargo-make
+
       - name: Build Pages
-        run: make build-en
+        run: cargo make build-en
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
