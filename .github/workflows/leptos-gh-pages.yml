@@ -42,7 +42,6 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
         with:
           target: wasm32-unknown-unknown
-      - name: Install rust tools
         run: cargo install trunk cargo-make
 
       - uses: Swatinem/rust-cache@v2
