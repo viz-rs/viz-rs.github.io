@@ -53,6 +53,7 @@ jobs:
         uses: dtolnay/rust-toolchain@nightly
         with:
           target: wasm32-unknown-unknown
+      - name: Build pages
         run: |
           cargo install trunk cargo-make
           make build-en
