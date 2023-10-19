@@ -38,10 +38,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - name: Install Trunk & cargo-make
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@nightly
         with:
           target: wasm32-unknown-unknown
+      - name: Install tools
         run: cargo install trunk cargo-make
 
       - uses: Swatinem/rust-cache@v2
