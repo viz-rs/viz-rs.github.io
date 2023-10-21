@@ -1,3 +1,5 @@
+leptos_i18n::load_locales!();
+
 mod components;
 mod pages;
 mod utils;
@@ -8,12 +10,19 @@ use leptos::*;
 use leptos_router::*;
 use pages::*;
 
+#[cfg(feature = "github")]
+pub const DOMAIN: &str = "viz-rs.github.io";
+#[cfg(not(feature = "github"))]
+pub const DOMAIN: &str = "viz.rs";
 pub const LANGS: [[&str; 2]; 2] = [["en", "English"], ["zh-cn", "简体中文"]];
 pub const VERSIONS: [&str; 1] = ["0.4.x"];
 // pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
 
 #[component]
 pub fn App() -> impl IntoView {
+    leptos_meta::provide_meta_context();
+    crate::i18n::provide_i18n_context();
+
     let (dark, set_dark) = create_signal(false);
     let (sidebar, set_sidebar) = create_signal(false);
     let (lang, set_lang) = create_signal(LANGS[0][0].to_string());
@@ -35,7 +44,7 @@ pub fn App() -> impl IntoView {
                 <div class="page-container pt-4.375rem" class:opened=move || sidebar.get()>
                     <div id="backdrop" on:pointerdown=move |_| set_sidebar.set(false) />
 
-                    <Sidebar version=version />
+                    <Sidebar lang=lang version=version />
 
                     <main id="page" class="flex flex-row flex-1 py-5">
                         <Routes>
@@ -44,7 +53,7 @@ pub fn App() -> impl IntoView {
                                 view=move || view! { <Home version=version.get() /> }
                             />
                             <Route
-                                path=":version/*path"
+                                path=":lang/:version/*path"
                                 view=move || view! { <Doc /> }
                             />
                             <Route

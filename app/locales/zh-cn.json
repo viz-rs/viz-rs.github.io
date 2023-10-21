@@ -1,0 +1,8 @@
+{
+  "description": "快速、轻量、灵活、健壮的 Rust Web 框架",
+  "builts_on": "<strong class=\"font-normal\">Viz</strong> 构建在 <a href=\"https://tokio.rs/\" target=\"_bank\" class=\"text-yellow-600 font-normal\">Tokio</a> 和 <a href=\"https://hyper.rs/\" target=\"_bank\" class=\"text-yellow-600 font-normal\">Hyper</a> 之上。",
+  "get_started": "快速上手",
+
+  "builds_with": "构建与",
+  "deploys_in": "部署在"
+}

@@ -52,10 +52,15 @@ pub fn Doc() -> impl IntoView {
         move |input| async move {
             set_loading.set(true);
             let params = input?;
-            let DocParams { version, path } = params;
+            let DocParams {
+                lang,
+                version,
+                path,
+            } = params;
+            let l = lang.unwrap_or_default();
             let v = version.unwrap_or_default();
             let p = path.unwrap_or_default();
-            fetch_page(v, p).await
+            fetch_page(l, v, p).await
         },
     );
 

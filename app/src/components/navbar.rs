@@ -1,9 +1,11 @@
 use leptos::*;
+use leptos_i18n::{use_i18n_context, Locale};
 use leptos_router::{use_location, use_navigate, A};
 use wasm_bindgen::prelude::*;
 use web_sys::{HtmlAnchorElement, HtmlElement, MediaQueryListEvent};
 
-use crate::{utils, LANGS, VERSIONS};
+use crate::i18n::{self, *};
+use crate::{utils, DOMAIN, LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar(
@@ -16,6 +18,18 @@ pub fn Navbar(
     version: ReadSignal<String>,
     set_version: WriteSignal<String>,
 ) -> impl IntoView {
+    let i18n = use_i18n_context::<i18n::Locale>();
+
+    let on_switch = move |e: ev::MouseEvent| {
+        let element = e.target().unwrap().unchecked_into::<HtmlAnchorElement>();
+        JsCast::dyn_ref::<HtmlElement>(&element)
+            .and_then(|el| el.get_attribute("data-lang"))
+            .filter(|lang| lang != i18n.get_locale().as_str())
+            .as_ref()
+            .and_then(|lang| i18n::Locale::from_str(lang))
+            .map(|lang| i18n.set_locale(lang));
+    };
+
     let navigate = use_navigate();
     let location = use_location();
     let (dark_matches, set_dark_matches) = create_signal(false);
@@ -147,7 +161,7 @@ pub fn Navbar(
                 </select>
             </div>
             <div class="flex flex-row items-center gap-5 font-medium text-15px">
-                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/guide/introduction", version.get())>
+                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/{}/guide/introduction", i18n.get_locale().as_str(), version.get())>
                     <span class=move || if path_part.get().0 { "i-lucide-book block" } else { "i-lucide-book-open block" } />
                 </A>
                 <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", version.get())>
@@ -171,8 +185,7 @@ pub fn Navbar(
                                                 data-lang={l[0]}
                                                 class="flex hover:text-yellow-600"
                                                 class=("text-yellow-600", move || l[0] == lang.get())
-                                                on:click=change_lang.clone()
-                                                href=move || format!("https://{}viz.rs/{}/{}", if l[0] == "en" { "".to_string() } else { l[0].to_string() + "." }, version.get(), pad_path.get())
+                                                on:click=on_switch.clone()
                                             >{l[1]}</a>
                                         </li>
                                     }
