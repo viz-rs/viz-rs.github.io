@@ -1,13 +1,18 @@
 use leptos::*;
 use leptos_router::{Route, Router, Routes};
 
-use crate::components::{Navbar, Sidebar};
+use crate::components::{Footer, Navbar, Sidebar};
 use crate::pages::Home;
 use crate::GlobalState;
 
 #[component]
 pub fn Layout() -> impl IntoView {
     let state = expect_context::<GlobalState>();
+
+    create_effect(move |_| {
+        let dark = state.dark.get();
+        log::info!("color {}", dark);
+    });
 
     view! {
         <Router>
@@ -27,6 +32,8 @@ pub fn Layout() -> impl IntoView {
                         </Routes>
                     </main>
                 </div>
+
+                <Footer />
             </div>
         </Router>
     }

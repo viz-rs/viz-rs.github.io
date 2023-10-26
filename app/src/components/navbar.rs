@@ -31,6 +31,13 @@ pub fn Navbar() -> impl IntoView {
             });
     };
 
+    let on_switch_color_scheme = move |e: ev::MouseEvent| {
+        e.prevent_default();
+        e.stop_propagation();
+        log::info!("switch to {}", !state.dark.get());
+        state.dark.update(|v| *v = !*v);
+    };
+
     view! {
         <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">
             <div class="flex flex-row">
@@ -82,7 +89,7 @@ pub fn Navbar() -> impl IntoView {
                         }
                     </ul>
                 </div>
-                <button class="transition-colors op75 hover:op100">
+                <button class="transition-colors op75 hover:op100" on:click=on_switch_color_scheme>
                     <span aria-hidden="true" class="dark:i-lucide-moon i-lucide-sun block" />
                 </button>
             </div>

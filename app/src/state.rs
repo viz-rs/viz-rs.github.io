@@ -1,6 +1,10 @@
 use leptos::{create_rw_signal, RwSignal};
 
-pub const LANGS: [[&str; 2]; 2] = [["en", "English"], ["zh-cn", "简体中文"]];
+pub const LANGS: [[&str; 2]; 3] = [
+    ["en", "English"],
+    ["zh-CN", "简体中文"],
+    ["zh-TW", "繁體中文"],
+];
 pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
 
 #[derive(Copy, Clone, Debug)]
