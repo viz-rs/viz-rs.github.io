@@ -15,7 +15,7 @@ pub fn Navbar() -> impl IntoView {
 
     let on_switch_version = move |e: ev::Event| {
         let value = event_target_value(&e);
-        log::debug!("switch version to {}", &value);
+        log::debug!("version: {}", &value);
         state.version.update(|v| *v = value);
     };
 
@@ -27,6 +27,7 @@ pub fn Navbar() -> impl IntoView {
             .as_ref()
             .and_then(|lang| i18n::Locale::from_str(lang))
             .map(|lang| {
+                log::debug!("lang: {:?}", &lang);
                 i18n.set_locale(lang);
             });
     };
@@ -34,7 +35,7 @@ pub fn Navbar() -> impl IntoView {
     let on_switch_color_scheme = move |e: ev::MouseEvent| {
         e.prevent_default();
         e.stop_propagation();
-        log::info!("switch to {}", !state.dark.get());
+        log::debug!("color scheme: {}", !state.dark.get());
         state.dark.update(|v| *v = !*v);
     };
 
