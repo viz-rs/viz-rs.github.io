@@ -1,9 +1,9 @@
 use leptos::*;
-use leptos_router::{Route, Router, Routes};
+use leptos_router::{Redirect, Route, Router, Routes};
 use web_sys::MediaQueryListEvent;
 
 use crate::components::{Footer, Navbar, Sidebar};
-use crate::pages::Home;
+use crate::pages::{Document, Home};
 use crate::utils;
 use crate::GlobalState;
 
@@ -13,41 +13,32 @@ pub fn Layout() -> impl IntoView {
     let dark_matched = RwSignal::new(false);
 
     {
+        let min_width_media_query =
+            utils::media_query("(min-width: 960px)", move |e: MediaQueryListEvent| {
+                state.sidebar.set(e.matches())
+            })
+            .unwrap();
+
         let color_scheme_media_query = utils::media_query(
             "(prefers-color-scheme: dark)",
-            move |e: MediaQueryListEvent| {
-                let dark = e.matches();
-                log::debug!("prefers-color-scheme dark: {}", dark);
-                dark_matched.set(dark);
-            },
+            move |e: MediaQueryListEvent| dark_matched.set(e.matches()),
         )
         .unwrap();
-
-        let current_mode = utils::local_storage::get_color_scheme();
         let current_dark_matched = color_scheme_media_query.matches();
-
-        log::debug!(
-            "curent color scheme: {}",
-            color_scheme_media_query.matches()
-        );
-
-        let dark = match current_mode {
-            Some(mode) => {
-                if current_dark_matched {
-                    mode != "light"
-                } else {
-                    mode == "dark"
-                }
+        let dark = utils::local_storage::get_color_scheme().map_or(current_dark_matched, |mode| {
+            if current_dark_matched {
+                mode != "light"
+            } else {
+                mode == "dark"
             }
-            None => current_dark_matched,
-        };
+        });
 
         state.dark.set(dark);
+        state.sidebar.set(min_width_media_query.matches());
     }
 
     create_effect(move |_| {
         let dark = state.dark.get();
-        log::info!("color {}", dark);
         utils::toggle_dark(dark);
         utils::local_storage::set_color_scheme(if dark == dark_matched.get() {
             "auto"
@@ -72,6 +63,14 @@ pub fn Layout() -> impl IntoView {
                             <Route
                                 path=""
                                 view=move || view! { <Home version=state.version /> }
+                            />
+                            <Route
+                                path=":lang/:version/*path"
+                                view=move || view! { <Document /> }
+                            />
+                            <Route
+                                path="*"
+                                view=move || view! { <Redirect path="/"/> }
                             />
                         </Routes>
                     </main>

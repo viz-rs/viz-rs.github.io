@@ -1,8 +1,8 @@
 use leptos::*;
 use leptos_i18n::Locale;
-use leptos_router::A;
+use leptos_router::{use_location, A};
 use wasm_bindgen::prelude::*;
-use web_sys::{HtmlAnchorElement, HtmlElement, MediaQueryListEvent};
+use web_sys::{HtmlAnchorElement, HtmlElement};
 
 use crate::i18n::{self, use_i18n};
 use crate::GlobalState;
@@ -10,8 +10,14 @@ use crate::{LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar() -> impl IntoView {
-    let i18n = use_i18n();
     let state = expect_context::<GlobalState>();
+    let location = use_location();
+    let i18n = use_i18n();
+
+    create_effect(move |_| {
+        log::debug!("home: {}", location.pathname.get() == "/");
+        state.home.set(location.pathname.get() == "/");
+    });
 
     let on_switch_version = move |e: ev::Event| {
         let value = event_target_value(&e);
@@ -37,6 +43,18 @@ pub fn Navbar() -> impl IntoView {
         e.stop_propagation();
         log::debug!("color scheme: {}", !state.dark.get());
         state.dark.update(|v| *v = !*v);
+    };
+
+    let on_switch_sidebar = move |_| {
+        state.sidebar.update(|v| *v = !*v);
+    };
+
+    let toggle_class_sidebar = move || {
+        if state.sidebar.get() {
+            "i-lucide-sidebar-open"
+        } else {
+            "i-lucide-sidebar-close"
+        }
     };
 
     view! {
@@ -97,12 +115,9 @@ pub fn Navbar() -> impl IntoView {
             <button
                 id="toggle-sidebar"
                 class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100"
-                class=("!hidden", move || false)
-                on:click=move |_| {}>
-                <span
-                    class="block"
-                    class=move || if true { "i-lucide-sidebar-open" } else { "i-lucide-sidebar-close" }
-                />
+                class=("!hidden", move || state.home.get())
+                on:click=on_switch_sidebar>
+                <span class="block" class=toggle_class_sidebar />
             </button>
         </header>
     }
