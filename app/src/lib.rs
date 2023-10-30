@@ -8,6 +8,7 @@ pub use app::App;
 pub use layout::Layout;
 pub use state::*;
 
+pub mod api;
 pub mod components;
 pub mod pages;
 pub mod utils;

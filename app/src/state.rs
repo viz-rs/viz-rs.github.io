@@ -1,4 +1,5 @@
-use leptos::{create_rw_signal, RwSignal};
+use leptos::{create_rw_signal, Params, RwSignal};
+use leptos_router::{IntoParam, Params};
 
 pub const LANGS: [[&str; 2]; 3] = [
     ["en", "English"],
@@ -26,4 +27,11 @@ impl GlobalState {
             version: create_rw_signal(VERSIONS[0].to_string()),
         }
     }
+}
+
+#[derive(Clone, Debug, Default, Params, PartialEq)]
+pub struct DocumentParams {
+    pub lang: Option<String>,
+    pub version: Option<String>,
+    pub tail: Option<String>,
 }

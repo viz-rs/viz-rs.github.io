@@ -18,7 +18,6 @@ pub fn Layout() -> impl IntoView {
                 state.sidebar.set(e.matches())
             })
             .unwrap();
-
         let color_scheme_media_query = utils::media_query(
             "(prefers-color-scheme: dark)",
             move |e: MediaQueryListEvent| dark_matched.set(e.matches()),
@@ -53,10 +52,13 @@ pub fn Layout() -> impl IntoView {
         <Router>
             <div id="app" class="tracking-0.2px">
                 <Navbar />
+
                 <div class="page-container pt-4.375rem" class:opened=state.sidebar>
                     <div id="backdrop" on:pointerdown=move |_| state.sidebar.update(|v| *v = false) />
 
-                    <Sidebar />
+                    <Show when=move || !state.home.get()>
+                        <Sidebar />
+                    </Show>
 
                     <main id="page" class="flex flex-row flex-1 py-5">
                         <Routes>
@@ -65,7 +67,7 @@ pub fn Layout() -> impl IntoView {
                                 view=move || view! { <Home version=state.version /> }
                             />
                             <Route
-                                path=":lang/:version/*path"
+                                path=":lang/:version/*tail"
                                 view=move || view! { <Document /> }
                             />
                             <Route
@@ -75,6 +77,7 @@ pub fn Layout() -> impl IntoView {
                         </Routes>
                     </main>
                 </div>
+
                 <Footer />
             </div>
         </Router>
