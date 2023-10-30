@@ -10,7 +10,8 @@ homepage.workspace = true
 default = ["en"]
 
 en = []
-zh-cn = []
+zh-CN = []
+zh-TW = []
 
 [dependencies]
 anyhow = "1.0"

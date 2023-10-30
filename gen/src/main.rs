@@ -22,29 +22,36 @@ pub struct Section {
 
 type Navs = (Option<(String, String)>, Option<(String, String)>, String);
 
-#[cfg(all(feature = "en", not(feature = "zh-cn")))]
+#[cfg(feature = "en")]
 const NAV_TITLE: &str = "On this page";
-#[cfg(all(feature = "en", not(feature = "zh-cn")))]
+#[cfg(feature = "en")]
 const NAV_PREV: &str = "Previous";
-#[cfg(all(feature = "en", not(feature = "zh-cn")))]
+#[cfg(feature = "en")]
 const NAV_NEXT: &str = "Next";
 
-#[cfg(all(feature = "zh-cn", not(feature = "en")))]
+#[cfg(feature = "zh-CN")]
 const NAV_TITLE: &str = "本页目录";
-#[cfg(all(feature = "zh-cn", not(feature = "en")))]
+#[cfg(feature = "zh-CN")]
 const NAV_PREV: &str = "前一篇";
-#[cfg(all(feature = "zh-cn", not(feature = "en")))]
+#[cfg(feature = "zh-CN")]
 const NAV_NEXT: &str = "下一篇";
+
+#[cfg(feature = "zh-TW")]
+const NAV_TITLE: &str = "本業目錄";
+#[cfg(feature = "zh-TW")]
+const NAV_PREV: &str = "前一篇";
+#[cfg(feature = "zh-TW")]
+const NAV_NEXT: &str = "後一篇";
 
 const SYMBOLS: [char; 4] = ['?', '!', '？', '！'];
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Cli {
-    /// en,zh
+    /// en,zh-CN,zh-TW
     #[arg(short, long, default_value = "en")]
     i18n: String,
-    /// en,zh
+    /// en,zh-CN,zh-TW
     #[arg(short, long)]
     output: String,
 }
@@ -169,7 +176,7 @@ fn main() -> Result<()> {
     minify_cfg_js.minify_js = true;
 
     // let root = Path::new("..").join(i18n);
-    let root = i18n;
+    let root = i18n.clone();
     let dist = Path::new(&output);
 
     let glob = GlobBuilder::new("**/*.{json,md,png,jpg}")
@@ -223,6 +230,7 @@ fn main() -> Result<()> {
                 let components: Vec<_> = parent.split('/').collect();
                 let navs = find_prev_and_next(
                     toc.as_ref().unwrap(),
+                    &i18n,
                     components[0],
                     components[1],
                     fp.file_name().and_then(std::ffi::OsStr::to_str).unwrap(),
@@ -433,7 +441,13 @@ fn parse(languages: &Languages, navs: Navs, raw: &str) -> Document {
     Document { html }
 }
 
-fn find_prev_and_next(toc: &Vec<Section>, version: &str, dir: &str, current: &str) -> Navs {
+fn find_prev_and_next(
+    toc: &Vec<Section>,
+    lang: &str,
+    version: &str,
+    dir: &str,
+    current: &str,
+) -> Navs {
     let mut prev = None;
     let mut next = None;
 
@@ -446,27 +460,37 @@ fn find_prev_and_next(toc: &Vec<Section>, version: &str, dir: &str, current: &st
                 .find_map(|(i, e)| if e.1 == current { Some(i) } else { None })
         {
             if index > 0 {
-                prev =
-                    section.items.get(index - 1).cloned().map(|(name, link)| {
-                        (name, format!("{}/{}/{}", version, section.prefix, link))
-                    });
+                prev = section.items.get(index - 1).cloned().map(|(name, link)| {
+                    (
+                        name,
+                        format!("{}/{}/{}/{}", lang, version, section.prefix, link),
+                    )
+                });
             } else if pos > 0 {
                 prev = toc.get(pos - 1).and_then(|section| {
                     section.items.last().cloned().map(|(name, link)| {
-                        (name, format!("{}/{}/{}", version, section.prefix, link))
+                        (
+                            name,
+                            format!("{}/{}/{}/{}", lang, version, section.prefix, link),
+                        )
                     })
                 });
             }
 
             if index + 1 < section.items.len() {
-                next =
-                    section.items.get(index + 1).cloned().map(|(name, link)| {
-                        (name, format!("{}/{}/{}", version, section.prefix, link))
-                    });
+                next = section.items.get(index + 1).cloned().map(|(name, link)| {
+                    (
+                        name,
+                        format!("{}/{}/{}/{}", lang, version, section.prefix, link),
+                    )
+                });
             } else if pos + 1 < toc.len() {
                 next = toc.get(pos + 1).and_then(|section| {
                     section.items.first().cloned().map(|(name, link)| {
-                        (name, format!("{}/{}/{}", version, section.prefix, link))
+                        (
+                            name,
+                            format!("{}/{}/{}/{}", lang, version, section.prefix, link),
+                        )
                     })
                 });
             }
