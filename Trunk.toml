@@ -16,7 +16,7 @@ command_arguments = [
 ]
 
 [watch]
-watch = ["app/index.scss", "app/src", "app/locales", "en", "zh-cn"]
+watch = ["app/index.scss", "app/src", "app/locales", "en", "zh-CN", "zh-TW"]
 
 [tools]
 wasm_bindgen = "0.2.87"

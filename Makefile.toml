@@ -5,22 +5,26 @@ default_to_workspace = false
 
 [tasks.init]
 command = "mkdir"
-args = ["-p", "dist/en/", "dist/zh-cn/"]
+args = ["-p", "dist/en/", "dist/zh-CN/", "dist/zh-TW/"]
 
 [tasks.doc-en]
 command = "cargo"
 args = ["run", "--bin", "gen", "--", "-i", "en", "-o", "app/docs/en"]
 
-[tasks.doc-zh-cn]
+[tasks.doc-zh-CN]
 command = "cargo"
-args = ["run", "--bin", "gen", "--", "-i", "zh-cn", "-o", "app/docs/zh-cn"]
+args = ["run", "--bin", "gen", "--", "-i", "zh-CN", "-o", "app/docs/zh-CN"]
+
+[tasks.doc-zh-TW]
+command = "cargo"
+args = ["run", "--bin", "gen", "--", "-i", "zh-TW", "-o", "app/docs/zh-TW"]
 
 [tasks.dev]
-dependencies = ["init", "doc-en", "doc-zh-cn"]
+dependencies = ["init", "doc-en", "doc-zh-CN", "doc-zh-TW"]
 command = "trunk"
 args = ["--config", "Trunk.toml", "serve", "--features", "github", "--open"]
 
 [tasks.build]
-dependencies = ["init", "doc-en", "doc-zh-cn"]
+dependencies = ["init", "doc-en", "doc-zh-CN", "doc-zh-TW"]
 command = "trunk"
 args = ["--config", "Trunk.toml", "build", "--features", "github", "--release"]
