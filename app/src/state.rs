@@ -6,7 +6,9 @@ pub const LANGS: [[&str; 2]; 3] = [
     ["zh-CN", "简体中文"],
     ["zh-TW", "繁體中文"],
 ];
-pub const VERSIONS: [&str; 2] = ["0.4.x", "0.5.x"];
+pub const VERSIONS: [&str; 2] = ["0.5.x", "0.4.x"];
+pub const LATEST: usize = 1;
+pub const UNPUBLISHED: usize = 0;
 
 #[derive(Copy, Clone, Debug)]
 pub struct GlobalState {
@@ -24,7 +26,7 @@ impl GlobalState {
             home: create_rw_signal(true),
             sidebar: create_rw_signal(false),
             // lang: create_rw_signal(LANGS[0][0].to_string()),
-            version: create_rw_signal(VERSIONS[0].to_string()),
+            version: create_rw_signal(VERSIONS[LATEST].to_string()),
         }
     }
 }
@@ -34,4 +36,12 @@ pub struct DocumentParams {
     pub lang: Option<String>,
     pub version: Option<String>,
     pub tail: Option<String>,
+}
+
+pub fn langs_contains(lang: &str) -> bool {
+    LANGS.map(|l| l[0]).contains(&lang)
+}
+
+pub fn versions_contains(version: &str) -> bool {
+    VERSIONS.contains(&version)
 }

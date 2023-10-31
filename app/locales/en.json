@@ -4,5 +4,11 @@
   "get_started": "Get Started",
 
   "builds_with": "Builds with",
-  "deploys_in": "Deploys in"
+  "deploys_in": "Deploys in",
+
+  "not_found": "PAGE NOT FOUND",
+  "go_home": "Take me home",
+
+  "coming_soon": "Coming Soon",
+  "go_latest": "Take latest version"
 }

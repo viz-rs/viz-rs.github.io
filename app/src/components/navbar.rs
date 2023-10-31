@@ -6,7 +6,7 @@ use web_sys::{HtmlAnchorElement, HtmlElement};
 
 use crate::i18n::{self, use_i18n};
 use crate::GlobalState;
-use crate::{LANGS, VERSIONS};
+use crate::{langs_contains, versions_contains, LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar() -> impl IntoView {
@@ -14,34 +14,6 @@ pub fn Navbar() -> impl IntoView {
     let navigate = store_value(use_navigate());
     let location = use_location();
     let i18n = use_i18n();
-
-    create_effect(move |_| {
-        let path = location.pathname.get();
-        let home = path.len() <= 1;
-        log::debug!("home: {}", home);
-
-        state.home.update(|v| *v = home);
-
-        if !home {
-            if let Some((lang, next)) = path.trim_start_matches("/").split_once("/") {
-                if LANGS.map(|l| l[0]).contains(&lang) {
-                    if lang != i18n.get_locale().as_str() {
-                        i18n.set_locale(i18n::Locale::from_str(lang).expect(""));
-                        log::debug!("set lang");
-                    }
-
-                    if let Some((version, _)) = next.trim_start_matches("/").split_once("/") {
-                        if VERSIONS.contains(&version) {
-                            if version != state.version.get() {
-                                state.version.update(|v| *v = version.to_string());
-                                log::debug!("set version");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
 
     let on_switch_version = move |e: ev::MouseEvent| {
         let current_version = state.version.get();
@@ -118,6 +90,40 @@ pub fn Navbar() -> impl IntoView {
             "i-lucide-sidebar-close"
         }
     };
+
+    create_effect(move |_| {
+        let path = location.pathname.get();
+        let home = path.len() <= 1;
+        log::debug!("home: {} {}", home, path.len());
+
+        state.home.update(|v| *v = home);
+
+        if !home {
+            log::debug!(
+                "state: {} {} - {}",
+                state.version.get(),
+                state.home.get(),
+                &path
+            );
+            if let Some((lang, next)) = path.trim_start_matches("/").split_once("/") {
+                if langs_contains(&lang) {
+                    if lang != i18n.get_locale().as_str() {
+                        i18n.set_locale(i18n::Locale::from_str(lang).expect(""));
+                        log::debug!("set lang");
+                    }
+
+                    if let Some((version, _)) = next.trim_start_matches("/").split_once("/") {
+                        if versions_contains(&version) {
+                            if version != state.version.get() {
+                                state.version.update(|v| *v = version.to_string());
+                                log::debug!("set version");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
 
     view! {
         <header class="w-full fixed top-0 z-36 flex flex-row px-5 py-3.75 items-center justify-between text-5 b-b b-b-neutral-900 b-b-op-5 dark:b-b-neutral-100 dark:b-b-op-5 navbar">

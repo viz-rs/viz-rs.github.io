@@ -235,7 +235,7 @@ fn main() -> Result<()> {
                     components[1],
                     fp.file_name().and_then(std::ffi::OsStr::to_str).unwrap(),
                 );
-                let document = parse(&languages, navs, &raw);
+                let document = parse(&root, &languages, navs, &raw);
                 fp.set_extension("html");
                 fs::write(
                     &fp,
@@ -249,7 +249,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn parse(languages: &Languages, navs: Navs, raw: &str) -> Document {
+fn parse(lang: &str, languages: &Languages, navs: Navs, raw: &str) -> Document {
     let options = Options::all();
     let mut toc = Vec::new();
     let mut heading = None;
@@ -356,6 +356,8 @@ fn parse(languages: &Languages, navs: Navs, raw: &str) -> Document {
                     if src.starts_with("..") {
                         let mut prefix = String::new();
                         prefix.push_str("/docs/");
+                        prefix.push_str(lang);
+                        prefix.push('/');
                         prefix.push_str(navs.2.as_str());
                         src.replace_range(0..2, &prefix);
                     }

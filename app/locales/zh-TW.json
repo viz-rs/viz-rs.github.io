@@ -4,5 +4,11 @@
   "get_started": "快速上手",
 
   "builds_with": "構建與",
-  "deploys_in": "部署在"
+  "deploys_in": "部署在",
+
+  "not_found": "頁面沒找到",
+  "go_home": "回到首頁",
+
+  "coming_soon": "即將到來",
+  "go_latest": "瀏覽最新版本"
 }

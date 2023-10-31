@@ -27,5 +27,14 @@ pub async fn fetch_doc(lang: &str, version: &str, tail: &str) -> Option<String> 
     url.push('/');
     url.push_str(tail);
     url.push_str(".html");
-    Request::get(&url).send().await.ok()?.text().await.ok()
+    let req = Request::get(&url).send().await.ok()?;
+
+    if !req.ok() {
+        return None;
+    }
+
+    req.text()
+        .await
+        .ok()
+        .filter(|body| body.starts_with("<article"))
 }
