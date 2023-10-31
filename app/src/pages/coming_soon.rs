@@ -6,15 +6,26 @@ use crate::{i18n::*, GlobalState, LATEST, VERSIONS};
 
 #[component]
 pub fn ComingSoon() -> impl IntoView {
-    let state = expect_context::<GlobalState>();
+    let GlobalState { version, .. } = expect_context::<GlobalState>();
     let navigate = use_navigate();
     let i18n = use_i18n();
 
     let click = move |_| {
+        // wtf?
+        // version.update(|v| *v = VERSIONS[LATEST].to_string());
+        // navigate(
+        //     "/",
+        //     NavigateOptions {
+        //         resolve: true,
+        //         replace: true,
+        //         ..Default::default()
+        //     },
+        // );
+
         location_pathname()
             .map(|path| {
                 navigate(
-                    &path.replace(&state.version.get(), VERSIONS[LATEST]),
+                    &path.replace(&version.get(), VERSIONS[LATEST]),
                     NavigateOptions {
                         resolve: false,
                         replace: true,

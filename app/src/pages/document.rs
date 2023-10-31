@@ -15,7 +15,7 @@ use crate::{DocumentParams, GlobalState};
 
 #[component]
 pub fn Document() -> impl IntoView {
-    let state = expect_context::<GlobalState>();
+    let GlobalState { version, .. } = expect_context();
     let disable = RwSignal::new(false);
     let container = create_node_ref::<Div>();
     let current_params = use_params::<DocumentParams>();
@@ -101,7 +101,7 @@ pub fn Document() -> impl IntoView {
                 on:click=click
             >
                 {move || resource.get().map(|resource| match resource {
-                    None => if VERSIONS[UNPUBLISHED] == state.version.get() {
+                    None => if VERSIONS[UNPUBLISHED] == version.get() {
                         view! { <ComingSoon />  }.into_view()
                     } else {
                         view! { <NotFound /> }.into_view()

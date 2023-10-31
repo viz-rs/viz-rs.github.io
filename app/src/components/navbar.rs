@@ -10,21 +10,26 @@ use crate::{langs_contains, versions_contains, LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar() -> impl IntoView {
-    let state = expect_context::<GlobalState>();
+    let GlobalState {
+        version,
+        home,
+        dark,
+        sidebar,
+    } = expect_context();
     let navigate = store_value(use_navigate());
     let location = use_location();
     let i18n = use_i18n();
 
     let on_switch_version = move |e: ev::MouseEvent| {
-        let current_version = state.version.get();
+        let current_version = version.get();
         let element = e.target().unwrap().unchecked_into::<HtmlAnchorElement>();
         JsCast::dyn_ref::<HtmlElement>(&element)
             .and_then(|el| el.get_attribute("data-version"))
-            .filter(|version| version != &current_version)
-            .map(|version| {
-                if state.home.get() {
-                    log::debug!("version: {}", &version);
-                    state.version.update(|v| *v = version.clone());
+            .filter(|ver| ver != &current_version)
+            .map(|ver| {
+                if home.get() {
+                    log::debug!("version: {}", &ver);
+                    version.update(|v| *v = ver.clone());
                 } else {
                     let current_lang = i18n.get_locale().as_str();
                     let prefix = format!("/{}", current_lang);
@@ -37,7 +42,7 @@ pub fn Navbar() -> impl IntoView {
                         .map(|tail| {
                             navigate.with_value(|n| {
                                 n(
-                                    &format!("{}{}{}", prefix, format!("/{}", version), tail),
+                                    &format!("{}{}{}", prefix, format!("/{}", ver), tail),
                                     Default::default(),
                                 )
                             });
@@ -55,7 +60,7 @@ pub fn Navbar() -> impl IntoView {
             .as_deref()
             .and_then(i18n::Locale::from_str)
             .map(|lang| {
-                if state.home.get() {
+                if home.get() {
                     log::debug!("lang: {:?}", &lang);
                     i18n.set_locale(lang);
                 } else {
@@ -75,16 +80,16 @@ pub fn Navbar() -> impl IntoView {
     let on_switch_color_scheme = move |e: ev::MouseEvent| {
         e.prevent_default();
         e.stop_propagation();
-        log::debug!("color scheme: {}", !state.dark.get());
-        state.dark.update(|v| *v = !*v);
+        log::debug!("color scheme: {}", !dark.get());
+        dark.update(|v| *v = !*v);
     };
 
     let on_switch_sidebar = move |_| {
-        state.sidebar.update(|v| *v = !*v);
+        sidebar.update(|v| *v = !*v);
     };
 
     let toggle_class_sidebar = move || {
-        if state.sidebar.get() {
+        if sidebar.get() {
             "i-lucide-sidebar-open"
         } else {
             "i-lucide-sidebar-close"
@@ -93,18 +98,13 @@ pub fn Navbar() -> impl IntoView {
 
     create_effect(move |_| {
         let path = location.pathname.get();
-        let home = path.len() <= 1;
-        log::debug!("home: {} {}", home, path.len());
+        let root = path.len() <= 1;
+        log::debug!("home: {} {}", root, path.len());
 
-        state.home.update(|v| *v = home);
+        home.update(|v| *v = root);
 
-        if !home {
-            log::debug!(
-                "state: {} {} - {}",
-                state.version.get(),
-                state.home.get(),
-                &path
-            );
+        if !root {
+            log::debug!("state: {} {} - {}", version.get(), home.get(), &path);
             if let Some((lang, next)) = path.trim_start_matches("/").split_once("/") {
                 if langs_contains(&lang) {
                     if lang != i18n.get_locale().as_str() {
@@ -112,10 +112,10 @@ pub fn Navbar() -> impl IntoView {
                         log::debug!("set lang");
                     }
 
-                    if let Some((version, _)) = next.trim_start_matches("/").split_once("/") {
-                        if versions_contains(&version) {
-                            if version != state.version.get() {
-                                state.version.update(|v| *v = version.to_string());
+                    if let Some((ver, _)) = next.trim_start_matches("/").split_once("/") {
+                        if versions_contains(&ver) {
+                            if ver != version.get() {
+                                version.update(|v| *v = ver.to_string());
                                 log::debug!("set version");
                             }
                         }
@@ -135,7 +135,7 @@ pub fn Navbar() -> impl IntoView {
                 <div id="versions" class="dropdown-menu cursor-pointer h-7.5 flex justify-center items-end relative transition-colors op75 hover:op100">
                     <button title="" class="flex items-center button text-2.5 mb-1">
                         <span class="inline-block i-lucide-milestone" />
-                        <span class="h-4 text-yellow-600">"v"{state.version}</span>
+                        <span class="h-4 text-yellow-600">"v"{version}</span>
                     </button>
                     <ul class="dropdown-list absolute text-3.5">
                         {
@@ -146,7 +146,7 @@ pub fn Navbar() -> impl IntoView {
                                             <a
                                                 data-version=v
                                                 class="flex hover:text-yellow-600"
-                                                class=("text-yellow-600", move || v == state.version.get())
+                                                class=("text-yellow-600", move || v == version.get())
                                                 on:click=on_switch_version
                                             >{v}</a>
                                         </li>
@@ -158,10 +158,10 @@ pub fn Navbar() -> impl IntoView {
                 </div>
             </div>
             <div class="flex flex-row items-center gap-5 font-medium text-15px">
-                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/{}/guide/introduction", i18n.get_locale().as_str(), state.version.get())>
-                    <span class=move || if state.home.get() { "i-lucide-book block" } else { "i-lucide-book-open block" } />
+                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/{}/guide/introduction", i18n.get_locale().as_str(), version.get())>
+                    <span class=move || if home.get() { "i-lucide-book block" } else { "i-lucide-book-open block" } />
                 </A>
-                <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", state.version.get())>
+                <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", version.get())>
                     <span class="i-lucide-boxes block" />
                 </a>
                 <a rel="noreferrer" target="_blank" href="https://github.com/viz-rs/viz" class="transition-colors op75 hover:op100">
@@ -198,7 +198,7 @@ pub fn Navbar() -> impl IntoView {
             <button
                 id="toggle-sidebar"
                 class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100"
-                class=("!hidden", move || state.home.get())
+                class=("!hidden", move || home.get())
                 on:click=on_switch_sidebar>
                 <span class="block" class=toggle_class_sidebar />
             </button>

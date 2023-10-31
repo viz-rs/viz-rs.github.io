@@ -2,10 +2,11 @@ use leptos::*;
 use leptos_i18n::Locale;
 use leptos_router::A;
 
-use crate::i18n::*;
+use crate::{i18n::*, GlobalState};
 
 #[component]
-pub fn Home(version: RwSignal<String>) -> impl IntoView {
+pub fn Home() -> impl IntoView {
+    let GlobalState { version, .. } = expect_context();
     let i18n = use_i18n();
 
     view! {
