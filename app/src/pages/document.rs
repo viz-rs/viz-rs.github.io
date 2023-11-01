@@ -143,6 +143,8 @@ pub fn Document() -> impl IntoView {
 
         let idx = found.unwrap_or(0);
 
+        log::debug!("idx: {}", idx);
+
         disable.set(true);
 
         nodes
@@ -156,6 +158,7 @@ pub fn Document() -> impl IntoView {
                     node.scroll_into_view();
                 }
 
+                log::debug!("id: {}", node.id());
                 let _ = update_ul_style(container, None, Some(node.id()));
             });
 
@@ -214,9 +217,16 @@ fn update_ul_style(
         })
         .ok_or(JsValue::NULL)?;
 
-    let style = ul.style();
-    style.set_property("--top", &format!("{}px", a.offset_top()))?;
-    style.set_property("--height", &format!("{}px", a.offset_height() - 4))
+    log::debug!(
+        "a: {}, top: {}, height: {}",
+        a.get_attribute("href").unwrap(),
+        a.offset_top(),
+        (26.max(a.offset_height())) - 4
+    );
+
+    let (t, h) = (a.offset_top(), 26.max(a.offset_height()) - 4);
+    ul.style().set_property("--top", &format!("{}px", t))?;
+    ul.style().set_property("--height", &format!("{}px", h))
 }
 
 #[inline]
