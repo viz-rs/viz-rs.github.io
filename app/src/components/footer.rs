@@ -1,28 +1,18 @@
 use leptos::*;
 
+use crate::i18n::*;
+
 #[component]
 pub fn Footer() -> impl IntoView {
-    cfg_if::cfg_if! {
-        if #[cfg(feature = "en")] {
-            view! {
-                <footer class="footer text-center text-neutral-400 text-sm p-5">
-                    <p>
-                        "Built with "<a href="https://github.com/leptos-rs/leptos" target="_blank" class="text-neutral-500">"Leptos"</a>
-                        " · Deploys on "<a href="https://www.cloudflare.com/" target="_blank" class="text-neutral-500">"Cloudflare"</a>
-                    </p>
-                    <p>"MIT Licensed | Copyright © 2023 Fangdun Tsai"</p>
-                </footer>
-            }
-        } else {
-            view! {
-                <footer class="footer text-center text-neutral-400 text-sm p-5">
-                    <p>
-                        "构建于 "<a href="https://github.com/leptos-rs/leptos" target="_blank" class="text-neutral-500">"Leptos"</a>
-                        " · 部署在 "<a href="https://www.cloudflare.com/" target="_blank" class="text-neutral-500">"Cloudflare"</a>
-                    </p>
-                    <p>"MIT Licensed | Copyright © 2023 Fangdun Tsai"</p>
-                </footer>
-            }
-        }
+    let i18n = use_i18n();
+
+    view! {
+        <footer class="footer text-center text-neutral-400 text-sm p-5">
+            <p>
+            {t!(i18n, builds_with)}" "<a href="https://github.com/leptos-rs/leptos" target="_blank" class="text-neutral-500">"Leptos"</a>
+                " · "{t!(i18n, deploys_in)}" "<a href="https://www.cloudflare.com/" target="_blank" class="text-neutral-500">"Cloudflare"</a>
+            </p>
+            <p>"MIT Licensed | Copyright © 2023 Fangdun Tsai"</p>
+        </footer>
     }
 }

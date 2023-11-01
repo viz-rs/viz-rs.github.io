@@ -39,18 +39,6 @@ pub async fn copy(text: &str) {
     }
 }
 
-pub fn local_storage_get(key: &str) -> Option<String> {
-    window().local_storage().ok()??.get(key).ok()?
-}
-
-pub fn local_storage_set(key: &str, val: &str) -> Option<()> {
-    window().local_storage().ok()??.set(key, val).ok()
-}
-
-pub fn get_color_scheme() -> String {
-    local_storage_get("color-scheme").unwrap_or("auto".to_string())
-}
-
 pub fn toggle_dark(dark: bool) {
     let _ = document_element()
         .class_list()
@@ -66,4 +54,24 @@ where
     let _ = window
         .set_timeout_with_callback_and_timeout_and_arguments_0(cb.as_ref().unchecked_ref(), number);
     cb.forget();
+}
+
+pub mod local_storage {
+    use super::window;
+
+    pub fn get(key: &str) -> Option<String> {
+        window().local_storage().ok()??.get(key).ok()?
+    }
+
+    pub fn set(key: &str, val: &str) -> Option<()> {
+        window().local_storage().ok()??.set(key, val).ok()
+    }
+
+    pub fn get_color_scheme() -> Option<String> {
+        get("color-scheme")
+    }
+
+    pub fn set_color_scheme(val: &str) -> Option<()> {
+        set("color-scheme", val)
+    }
 }

@@ -1,16 +1,24 @@
 use leptos::*;
-use leptos_router::*;
+use leptos_i18n::Locale;
+use leptos_router::A;
 
 use crate::api::{fetch_toc, Section};
+use crate::{i18n::*, GlobalState};
 
 #[component]
-pub fn Sidebar(#[prop(into)] version: ReadSignal<String>) -> impl IntoView {
-    let sections = create_resource(move || version.get(), fetch_toc);
+pub fn Sidebar() -> impl IntoView {
+    let GlobalState { version, .. } = expect_context();
+    let i18n = use_i18n();
+
+    let sections = create_resource(
+        move || (i18n.get_locale().as_str().to_string(), version.get()),
+        fetch_toc,
+    );
 
     view! {
         <aside class="fixed z-35 flex flex-col p-5 gap-4 sidebar top-4.375rem bottom-0">
             <Suspense
-                fallback=move || view! {
+                fallback=|| view! {
                     <div class="i-lucide-loader w-6 h-6 animate-spin absolute" />
                 }
             >
@@ -34,7 +42,7 @@ pub fn Sidebar(#[prop(into)] version: ReadSignal<String>) -> impl IntoView {
                                                 view! {
                                                     <li>
                                                         <A
-                                                            href=move || format!("/{}/{}/{}", version.get(), prefix, path)
+                                                            href=move || format!("/{}/{}/{}/{}", i18n.get_locale().as_str(), version.get(), prefix, path)
                                                             class="inline-block py-1 font-normal transition-colors hover:op100 op61.8"
                                                         >
                                                             {text}

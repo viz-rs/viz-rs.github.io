@@ -259,6 +259,10 @@ flex-240 {
     ul {
       margin: 1rem 0;
       line-height: 1.7;
+
+      > ol, ul {
+        margin: 0.125rem 0 0;
+      }
     }
 
     ul {
@@ -576,7 +580,8 @@ pre[class*="language"] {
 
 .dropdown-menu {
   .dropdown-list {
-    min-width: 8rem;
+    min-width: 4rem;
+    max-width: 8rem;
     background-color: #ffffff;
     border-width: 1px;
     border-style: solid;
@@ -585,8 +590,8 @@ pre[class*="language"] {
     padding: 12px;
     line-height: 32px;
 
+    word-break: keep-all;
     top: 30px;
-    right: 0;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-4px);
@@ -601,6 +606,18 @@ pre[class*="language"] {
       pointer-events: all;
       transform: translateY(-1px);
       visibility: visible;
+    }
+  }
+
+  &#versions {
+    .dropdown-list {
+      left: 0;
+    }
+  }
+
+  &#langs {
+    .dropdown-list {
+      right: 0;
     }
   }
 }

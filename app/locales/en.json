@@ -1,0 +1,14 @@
+{
+  "description": "Fast, robust, flexible, lightweight web framework for Rust",
+  "builts_on": "<strong class=\"font-normal\">Viz</strong> builts on top of <a href=\"https://tokio.rs/\" target=\"_bank\" class=\"text-yellow-600 font-normal\">Tokio</a> and <a href=\"https://hyper.rs/\" target=\"_bank\" class=\"text-yellow-600 font-normal\">Hyper</a>.",
+  "get_started": "Get Started",
+
+  "builds_with": "Builds with",
+  "deploys_in": "Deploys in",
+
+  "not_found": "PAGE NOT FOUND",
+  "go_home": "Take me home",
+
+  "coming_soon": "Coming Soon",
+  "go_latest": "Take latest version"
+}

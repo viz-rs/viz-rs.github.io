@@ -1,6 +1,6 @@
 [build]
 target = "app/index.html"
-dist = "dist/en"
+dist = "dist"
 
 [[hooks]]
 stage = "post_build"
@@ -12,8 +12,11 @@ command_arguments = [
   "app/src/**/*.rs",
   "gen/src/*.rs",
   "-o",
-  "dist/en/.stage/uno.css",
+  "dist/.stage/uno.css",
 ]
 
 [watch]
-watch = ["app/index.scss", "app/src", "en"]
+watch = ["app/index.scss", "app/src", "app/locales", "en", "zh-CN", "zh-TW"]
+
+[tools]
+wasm_bindgen = "0.2.87"

@@ -60,12 +60,12 @@ jobs:
         run: cargo install trunk cargo-make
 
       - name: Build Pages
-        run: cargo make build-en
+        run: cargo make build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
-          path: ./dist/en
+          path: ./dist
 
   # Deployment job
   deploy:
