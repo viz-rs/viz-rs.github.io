@@ -16,6 +16,7 @@ pub fn Layout() -> impl IntoView {
         ..
     } = expect_context();
     let dark_matched = RwSignal::new(false);
+    let opened = create_memo(move |_| !home.get() && sidebar.get());
 
     {
         let min_width_media_query =
@@ -55,11 +56,11 @@ pub fn Layout() -> impl IntoView {
     });
 
     view! {
-        <div id="app" class="tracking-0.2px">
-            <Router>
+        <Router>
+            <div id="app" class="tracking-0.2px">
                 <Navbar />
 
-                <div class="page-container pt-4.375rem" class:opened=sidebar>
+                <div class="page-container pt-4.375rem" class:opened=opened>
                     <div id="backdrop" on:pointerdown=move |_| sidebar.update(|v| *v = false) />
 
                     <Show when=move || !home.get()>
@@ -79,7 +80,7 @@ pub fn Layout() -> impl IntoView {
                 </div>
 
                 <Footer />
-            </Router>
-        </div>
+            </div>
+        </Router>
     }
 }
