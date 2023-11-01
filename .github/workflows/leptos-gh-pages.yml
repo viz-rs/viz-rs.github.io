@@ -54,8 +54,13 @@ jobs:
         with:
           target: wasm32-unknown-unknown
 
-      - name: Install tools
-        run: cargo install trunk cargo-make
+      - name: Install binstall & make
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-binstall,cargo-make
+
+      - name: Install trunk
+        run: cargo binstall trunk
 
       - uses: Swatinem/rust-cache@v2
 
