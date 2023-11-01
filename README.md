@@ -2,36 +2,24 @@
 
 Built with [Leptos] · Deploys on [Cloudflare].
 
-* English: https://viz.rs
-
-* 简体中文: https://zh-cn.viz.rs
-
 ## Development
 
 1. Install [`cargo-make`]
 
 ```bash
-$ cargo install --force cargo-make
+$ cargo install --force cargo-make trunk
 ```
 
-2. Install [`trunk`]
-
-> **Note**: The latest **master** branch includes the **copy-dir** feature.
+2. Serve `en`, `zh-CN`, `zh-TW` or other language
 
 ```bash
-$ cargo install --git https://github.com/thedodd/trunk
+$ cargo make dev
 ```
 
-3. Serve `en`, `zh-cn` or other language
+3. Build
 
 ```bash
-$ cargo make dev-en
-```
-
-4. Build
-
-```bash
-$ cargo make build-en
+$ cargo make build
 ```
 
 [Leptos]: https://github.com/leptos-rs/leptos
