@@ -38,8 +38,6 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - uses: Swatinem/rust-cache@v2
-
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
@@ -58,6 +56,8 @@ jobs:
 
       - name: Install tools
         run: cargo install trunk cargo-make
+
+      - uses: Swatinem/rust-cache@v2
 
       - name: Build Pages
         run: cargo make build
