@@ -1,10 +1,12 @@
 use leptos::*;
 use leptos_dom::html::Div;
+use leptos_i18n::Locale;
 use leptos_router::use_params;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{Element, HtmlAnchorElement, HtmlElement};
 
 use crate::api::fetch_doc;
+use crate::i18n::{self, use_i18n};
 use crate::pages::{ComingSoon, NotFound};
 use crate::{
     langs_contains,
@@ -16,27 +18,10 @@ use crate::{DocumentParams, GlobalState};
 #[component]
 pub fn Document() -> impl IntoView {
     let GlobalState { version, .. } = expect_context();
-    let disable = RwSignal::new(false);
-    let container = create_node_ref::<Div>();
     let current_params = use_params::<DocumentParams>();
-
-    let resource = create_resource(
-        move || current_params.get().ok(),
-        move |input| async move {
-            let DocumentParams {
-                lang,
-                version,
-                tail,
-            } = input?;
-            let l = lang.filter(|v| langs_contains(&v.as_str()))?;
-            let v = version.filter(|v| versions_contains(&v.as_str()))?;
-            let t = tail.filter(|v| !v.is_empty())?;
-
-            log::debug!("lang: {}, version: {}, tail: {}", l, v, t);
-
-            fetch_doc(&l, &v, &t).await
-        },
-    );
+    let container = create_node_ref::<Div>();
+    let disable = RwSignal::new(false);
+    let i18n = use_i18n();
 
     let click = move |e: ev::MouseEvent| {
         if let Some(target) = e
@@ -85,6 +70,28 @@ pub fn Document() -> impl IntoView {
         let id = scroll(container);
         let _ = update_ul_style(container, None, id);
     });
+
+    let resource = create_resource(
+        move || current_params.get().ok(),
+        move |input| async move {
+            let DocumentParams {
+                lang,
+                tail,
+                version: ver,
+            } = input?;
+            let l = lang.filter(|v| langs_contains(&v.as_str()))?;
+            let v = ver.filter(|v| versions_contains(&v.as_str()))?;
+            let t = tail.filter(|v| !v.is_empty())?;
+
+            log::debug!("fetch resource");
+            log::debug!("lang: {}, version: {}, tail: {}", l, v, t);
+
+            i18n.set_locale(i18n::Locale::from_str(&l)?);
+            version.update(|n| *n = v.clone());
+
+            fetch_doc(&l, &v, &t).await
+        },
+    );
 
     on_cleanup(move || drop(listener));
 

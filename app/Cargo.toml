@@ -14,10 +14,10 @@ serde.workspace = true
 
 console_log = "1"
 log = "0.4"
-leptos = "0.5.1"
-leptos_dom = "0.5.1"
-leptos_router = { version = "0.5.1", features = ["csr"] }
-leptos_meta = { version = "0.5.1", features = ["csr"] }
+leptos = "0.5.2"
+leptos_dom = "0.5.2"
+leptos_router = { version = "0.5.2", features = ["csr"] }
+leptos_meta = { version = "0.5.2", features = ["csr"] }
 leptos_i18n = "0.2"
 futures = "0.3"
 console_error_panic_hook = "0.1"

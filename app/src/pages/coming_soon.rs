@@ -1,6 +1,5 @@
 use leptos::*;
-use leptos_dom::helpers::location_pathname;
-use leptos_router::{use_navigate, NavigateOptions};
+use leptos_router::use_navigate;
 
 use crate::{i18n::*, GlobalState, LATEST, VERSIONS};
 
@@ -11,29 +10,8 @@ pub fn ComingSoon() -> impl IntoView {
     let i18n = use_i18n();
 
     let click = move |_| {
-        // wtf?
-        // version.update(|v| *v = VERSIONS[LATEST].to_string());
-        // navigate(
-        //     "/",
-        //     NavigateOptions {
-        //         resolve: true,
-        //         replace: true,
-        //         ..Default::default()
-        //     },
-        // );
-
-        location_pathname()
-            .map(|path| {
-                navigate(
-                    &path.replace(&version.get(), VERSIONS[LATEST]),
-                    NavigateOptions {
-                        resolve: false,
-                        replace: true,
-                        ..Default::default()
-                    },
-                )
-            })
-            .unwrap();
+        version.update(|v| *v = VERSIONS[LATEST].to_string());
+        navigate("/", Default::default());
     };
 
     view! {

@@ -55,8 +55,8 @@ pub fn Layout() -> impl IntoView {
     });
 
     view! {
-        <Router>
-            <div id="app" class="tracking-0.2px">
+        <div id="app" class="tracking-0.2px">
+            <Router>
                 <Navbar />
 
                 <div class="page-container pt-4.375rem" class:opened=sidebar>
@@ -68,24 +68,18 @@ pub fn Layout() -> impl IntoView {
 
                     <main id="page" class="flex flex-row flex-1 py-5">
                         <Routes>
+                            <Route path="/" view=Home />
+                            <Route path=":lang/:version/*tail" view=Document />
                             <Route
-                                path=""
-                                view=move || view! { <Home /> }
-                            />
-                            <Route
-                                path=":lang/:version/*tail"
-                                view=move || view! { <Document /> }
-                            />
-                            <Route
-                                path="*"
-                                view=move || view! { <Redirect path="/"/> }
+                                path="*any"
+                                view=|| view! { <Redirect path="/"/> }
                             />
                         </Routes>
                     </main>
                 </div>
 
                 <Footer />
-            </div>
-        </Router>
+            </Router>
+        </div>
     }
 }

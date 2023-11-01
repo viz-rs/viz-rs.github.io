@@ -1,4 +1,5 @@
 use leptos::*;
+use leptos_dom::helpers::location_pathname;
 use leptos_i18n::Locale;
 use leptos_router::{use_location, use_navigate, A};
 use wasm_bindgen::prelude::*;
@@ -6,7 +7,7 @@ use web_sys::{HtmlAnchorElement, HtmlElement};
 
 use crate::i18n::{self, use_i18n};
 use crate::GlobalState;
-use crate::{langs_contains, versions_contains, LANGS, VERSIONS};
+use crate::{LANGS, VERSIONS};
 
 #[component]
 pub fn Navbar() -> impl IntoView {
@@ -34,9 +35,8 @@ pub fn Navbar() -> impl IntoView {
                     let current_lang = i18n.get_locale().as_str();
                     let prefix = format!("/{}", current_lang);
                     let middle = format!("/{}", current_version);
-                    location
-                        .pathname
-                        .get()
+                    location_pathname()
+                        .unwrap_or("/".to_string())
                         .strip_prefix(&prefix)
                         .and_then(|path| path.strip_prefix(&middle))
                         .map(|tail| {
@@ -64,9 +64,8 @@ pub fn Navbar() -> impl IntoView {
                     log::debug!("lang: {:?}", &lang);
                     i18n.set_locale(lang);
                 } else {
-                    location
-                        .pathname
-                        .get()
+                    location_pathname()
+                        .unwrap_or("/".to_string())
                         .strip_prefix(&format!("/{}", current_lang))
                         .map(|tail| {
                             navigate.with_value(|n| {
@@ -99,30 +98,9 @@ pub fn Navbar() -> impl IntoView {
     create_effect(move |_| {
         let path = location.pathname.get();
         let root = path.len() <= 1;
-        log::debug!("home: {} {}", root, path.len());
+        log::debug!("home: {} {} {:?}", root, &path, location_pathname());
 
-        home.update(|v| *v = root);
-
-        if !root {
-            log::debug!("state: {} {} - {}", version.get(), home.get(), &path);
-            if let Some((lang, next)) = path.trim_start_matches("/").split_once("/") {
-                if langs_contains(&lang) {
-                    if lang != i18n.get_locale().as_str() {
-                        i18n.set_locale(i18n::Locale::from_str(lang).expect(""));
-                        log::debug!("set lang");
-                    }
-
-                    if let Some((ver, _)) = next.trim_start_matches("/").split_once("/") {
-                        if versions_contains(&ver) {
-                            if ver != version.get() {
-                                version.update(|v| *v = ver.to_string());
-                                log::debug!("set version");
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        home.update(move |v| *v = root);
     });
 
     view! {
