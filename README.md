@@ -4,13 +4,13 @@ Built with [Leptos] · Deploys on [Cloudflare].
 
 ## Development
 
-1. Install [`cargo-make`]
+1. Install [`cargo-make`], [`trunk`]
 
 ```bash
 $ cargo install --force cargo-make trunk
 ```
 
-2. Serve `en`, `zh-CN`, `zh-TW` or other language
+2. Serve `en`, `zh-CN`, `zh-TW` or other languages
 
 ```bash
 $ cargo make dev
