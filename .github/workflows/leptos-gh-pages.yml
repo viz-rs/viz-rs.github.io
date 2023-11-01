@@ -60,7 +60,7 @@ jobs:
           tool: cargo-binstall,cargo-make
 
       - name: Install trunk
-        run: cargo binstall trunk
+        run: cargo binstall --no-confirm trunk
 
       - uses: Swatinem/rust-cache@v2
 
