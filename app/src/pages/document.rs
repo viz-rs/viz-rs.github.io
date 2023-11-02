@@ -27,7 +27,7 @@ pub fn Document() -> impl IntoView {
     let loading = RwSignal::new(false);
     let i18n = use_i18n();
 
-    let click = move |e: ev::MouseEvent| {
+    let click = move |e: ev::PointerEvent| {
         if let Some(target) = e
             .target()
             .and_then(|target| target.dyn_into::<HtmlElement>().ok())
@@ -187,7 +187,7 @@ pub fn Document() -> impl IntoView {
             // </Suspense>
 
             <div id="loader" class="i-lucide-loader w-6 h-6 animate-spin absolute" class:hidden=move || !loading.get() />
-            <div class="flex flex-row flex-1" _ref=container on:click=click>
+            <div class="flex flex-row flex-1" _ref=container on:pointerdown=click>
             </div>
         </div>
     }

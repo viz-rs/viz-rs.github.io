@@ -19,7 +19,7 @@ pub fn ComingSoon() -> impl IntoView {
             <h1 class="text-8 sm:text-10 font-medium">{t!(i18n, coming_soon)}</h1>
             <button
                 class="inline-block bg-neutral-900 text-neutral-100 dark:bg-neutral-100 dark:text-neutral-900 shadow py-2 px-4.5 border-rounded font-medium text-4 cursor-pointer"
-                on:click=click
+                on:pointerdown=click
             >
                 {t!(i18n, go_latest)}" - v"{VERSIONS[LATEST]}
             </button>

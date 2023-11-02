@@ -21,7 +21,8 @@ pub fn Navbar() -> impl IntoView {
     let location = use_location();
     let i18n = use_i18n();
 
-    let on_switch_version = move |e: ev::MouseEvent| {
+    let on_switch_version = move |e: ev::PointerEvent| {
+        e.stop_propagation();
         let current_version = version.get();
         let element = e.target().unwrap().unchecked_into::<HtmlAnchorElement>();
         JsCast::dyn_ref::<HtmlElement>(&element)
@@ -51,7 +52,8 @@ pub fn Navbar() -> impl IntoView {
             });
     };
 
-    let on_switch_lang = move |e: ev::MouseEvent| {
+    let on_switch_lang = move |e: ev::PointerEvent| {
+        e.stop_propagation();
         let current_lang = i18n.get_locale().as_str();
         let element = e.target().unwrap().unchecked_into::<HtmlAnchorElement>();
         JsCast::dyn_ref::<HtmlElement>(&element)
@@ -125,7 +127,7 @@ pub fn Navbar() -> impl IntoView {
                                                 data-version=v
                                                 class="flex hover:text-yellow-600"
                                                 class=("text-yellow-600", move || v == version.get())
-                                                on:click=on_switch_version
+                                                on:pointerdown=on_switch_version
                                             >{v}</a>
                                         </li>
                                     }
@@ -160,7 +162,7 @@ pub fn Navbar() -> impl IntoView {
                                                 data-lang=l[0]
                                                 class="flex hover:text-yellow-600"
                                                 class=("text-yellow-600", move || l[0] == i18n.get_locale().as_str())
-                                                on:click=on_switch_lang
+                                                on:pointerdown=on_switch_lang
                                             >{l[1]}</a>
                                         </li>
                                     }
@@ -177,7 +179,7 @@ pub fn Navbar() -> impl IntoView {
                 id="toggle-sidebar"
                 class="absolute w-8 h-8 items-center justify-center left-0 bottom--8 transition-colors op75 hover:op100"
                 class=("!hidden", move || home.get())
-                on:click=on_switch_sidebar>
+                on:pointerdown=on_switch_sidebar>
                 <span class="block" class=toggle_class_sidebar />
             </button>
         </header>

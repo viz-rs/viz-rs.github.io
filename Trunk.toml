@@ -20,3 +20,6 @@ watch = ["app/index.scss", "app/src", "app/locales", "en", "zh-CN", "zh-TW"]
 
 [tools]
 wasm_bindgen = "0.2.87"
+
+[serve]
+address = "0.0.0.0"
