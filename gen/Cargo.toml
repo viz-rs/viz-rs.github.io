@@ -6,13 +6,6 @@ version.workspace = true
 license.workspace = true
 homepage.workspace = true
 
-[features]
-default = ["en"]
-
-en = []
-zh-CN = []
-zh-TW = []
-
 [dependencies]
 anyhow = "1.0"
 globset = "0.4"
@@ -33,6 +26,7 @@ highlighting = "0.1"
 clap = { version = "4.4", features = ["derive"] }
 serde_json.workspace = true
 serde.workspace = true
+toml = "0.8"
 
 [build-dependencies]
 cc = "1.0"

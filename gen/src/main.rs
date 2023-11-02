@@ -1,6 +1,6 @@
 #![allow(clippy::too_many_lines)]
 
-use std::{cmp::Ordering, fs, path::Path};
+use std::{cmp::Ordering, env::current_dir, fs, path::Path};
 
 use anyhow::Result;
 use clap::Parser;
@@ -20,28 +20,16 @@ pub struct Section {
     items: Vec<(String, String)>,
 }
 
+#[derive(Clone, Debug, PartialEq, Deserialize)]
+pub struct Config {
+    #[serde(skip)]
+    pub locale: String,
+    pub title: String,
+    pub prev: String,
+    pub next: String,
+}
+
 type Navs = (Option<(String, String)>, Option<(String, String)>, String);
-
-#[cfg(feature = "en")]
-const NAV_TITLE: &str = "On this page";
-#[cfg(feature = "en")]
-const NAV_PREV: &str = "Previous";
-#[cfg(feature = "en")]
-const NAV_NEXT: &str = "Next";
-
-#[cfg(feature = "zh-CN")]
-const NAV_TITLE: &str = "本页目录";
-#[cfg(feature = "zh-CN")]
-const NAV_PREV: &str = "前一篇";
-#[cfg(feature = "zh-CN")]
-const NAV_NEXT: &str = "下一篇";
-
-#[cfg(feature = "zh-TW")]
-const NAV_TITLE: &str = "本業目錄";
-#[cfg(feature = "zh-TW")]
-const NAV_PREV: &str = "前一篇";
-#[cfg(feature = "zh-TW")]
-const NAV_NEXT: &str = "後一篇";
 
 const SYMBOLS: [char; 4] = ['?', '!', '？', '！'];
 
@@ -67,6 +55,13 @@ fn main() -> Result<()> {
     let i18n = cli.i18n;
     let output = cli.output;
 
+    let mut config = toml::from_str::<Config>(&fs::read_to_string(format!(
+        "{}/gen/locales/{}.toml",
+        current_dir()?.to_string_lossy(),
+        &i18n
+    ))?)?;
+    config.locale = i18n.clone();
+    dbg!(&config);
     let mut languages = Languages::new();
 
     languages.insert(
@@ -235,7 +230,7 @@ fn main() -> Result<()> {
                     components[1],
                     fp.file_name().and_then(std::ffi::OsStr::to_str).unwrap(),
                 );
-                let document = parse(&root, &languages, navs, &raw);
+                let document = parse(&config, &languages, navs, &raw);
                 fp.set_extension("html");
                 fs::write(
                     &fp,
@@ -249,7 +244,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn parse(lang: &str, languages: &Languages, navs: Navs, raw: &str) -> Document {
+fn parse(config: &Config, languages: &Languages, navs: Navs, raw: &str) -> Document {
     let options = Options::all();
     let mut toc = Vec::new();
     let mut heading = None;
@@ -356,7 +351,7 @@ fn parse(lang: &str, languages: &Languages, navs: Navs, raw: &str) -> Document {
                     if src.starts_with("..") {
                         let mut prefix = String::new();
                         prefix.push_str("/docs/");
-                        prefix.push_str(lang);
+                        prefix.push_str(&config.locale);
                         prefix.push('/');
                         prefix.push_str(navs.2.as_str());
                         src.replace_range(0..2, &prefix);
@@ -386,7 +381,7 @@ fn parse(lang: &str, languages: &Languages, navs: Navs, raw: &str) -> Document {
             html.push_str("'>");
             html.push_str("<span class='desc'><i class='block i-lucide-chevron-left w-3 h-3'></i>");
             html.push(' ');
-            html.push_str(NAV_PREV);
+            html.push_str(&config.prev);
             html.push_str("</span>");
             html.push_str("<span class='title'>");
             html.push_str(&name);
@@ -402,7 +397,7 @@ fn parse(lang: &str, languages: &Languages, navs: Navs, raw: &str) -> Document {
             html.push_str(&link);
             html.push_str("'>");
             html.push_str("<span class='desc'>");
-            html.push_str(NAV_NEXT);
+            html.push_str(&config.next);
             html.push(' ');
             html.push_str("<i class='block i-lucide-chevron-right w-3 h-3'></i></span>");
             html.push_str("<span class='title'>");
@@ -420,7 +415,7 @@ fn parse(lang: &str, languages: &Languages, navs: Navs, raw: &str) -> Document {
     if !toc.is_empty() {
         html.push_str("<nav class='flex-col gap-5 hidden lg:flex'>");
         html.push_str("<div class='py-1 text-2 uppercase'>");
-        html.push_str(NAV_TITLE);
+        html.push_str(&config.title);
         html.push_str("</div><ul class='text-3'>");
         for (name, anchor) in &toc {
             let temp = anchor
