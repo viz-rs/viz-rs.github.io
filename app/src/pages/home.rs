@@ -22,7 +22,7 @@ pub fn Home() -> impl IntoView {
     view! {
         <section class="w-full hero text-center p-5 sm:py-19">
             <h1 class="text-8 sm:text-10 font-medium">{t!(i18n, description)}</h1>
-            <p class="text-4 sm:text-5 mt-4.5 mb-7.5 sm:mt-6 sm:mb-8 op-61.8 font-light" inner_html={t!(i18n, builts_on)}></p>
+            <p class="text-4 sm:text-5 mt-4.5 mb-7.5 sm:mt-6 sm:mb-8 op-61.8 font-light" inner_html={t!(i18n, built_on)}></p>
             <A
                 class="inline-block bg-neutral-900 text-neutral-100 dark:bg-neutral-100 dark:text-neutral-900 shadow py-2 px-4.5 border-rounded font-medium text-4 cursor-pointer"
                 href=move || format!("/{}/{}/guide/introduction", i18n.get_locale().as_str(), version.get())
