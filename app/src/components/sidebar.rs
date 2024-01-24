@@ -1,17 +1,25 @@
 use leptos::*;
-use leptos_i18n::Locale;
+// use leptos_i18n::Locale;
 use leptos_router::A;
 
 use crate::api::{fetch_toc, Section};
-use crate::{i18n::*, GlobalState};
+use crate::{
+    // i18n::*,
+    GlobalState,
+};
 
 #[component]
 pub fn Sidebar() -> impl IntoView {
     let GlobalState { version, .. } = expect_context();
-    let i18n = use_i18n();
+    // let i18n = use_i18n();
 
     let sections = create_resource(
-        move || (i18n.get_locale().as_str().to_string(), version.get()),
+        move || {
+            (
+                "en".to_string(), // i18n.get_locale().as_str().to_string()
+                version.get(),
+            )
+        },
         fetch_toc,
     );
 
@@ -42,7 +50,7 @@ pub fn Sidebar() -> impl IntoView {
                                                 view! {
                                                     <li>
                                                         <A
-                                                            href=move || format!("/{}/{}/{}/{}", i18n.get_locale().as_str(), version.get(), prefix, path)
+                                                            href=move || format!("/{}/{}/{}/{}", "en", version.get(), prefix, path)
                                                             class="inline-block py-1 font-normal transition-colors hover:op100 op61.8"
                                                         >
                                                             {text}

@@ -12,16 +12,17 @@ github = []
 [dependencies]
 serde.workspace = true
 
+leptos = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f" }
+leptos_dom = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f" }
+leptos_router = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f", features = ["csr"] }
+leptos_meta = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f", features = ["csr"] }
+# leptos_i18n = "0.2"
+
 console_log = "1"
 log = "0.4"
-leptos = "0.5.2"
-leptos_dom = "0.5.2"
-leptos_router = { version = "0.5.2", features = ["csr"] }
-leptos_meta = { version = "0.5.2", features = ["csr"] }
-leptos_i18n = "0.2"
 futures = "0.3"
 console_error_panic_hook = "0.1"
-web-sys = { version = "0.3", features = [
+web-sys = { version = "=0.3.64", features = [
   "Clipboard",
   "CssStyleDeclaration",
   "DomRect",
@@ -42,13 +43,13 @@ web-sys = { version = "0.3", features = [
   # "IntersectionObserverInit",
 ] }
 wasm-bindgen = "=0.2.87"
-wasm-bindgen-futures = "0.4"
+wasm-bindgen-futures = "=0.4.37"
 cfg-if = "1.0"
-gloo-net = "0.4"
+gloo-net = "0.5"
 gloo-events = "0.2"
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3"
+wasm-bindgen-test = "=0.3.37"
 
 [profile.release]
 codegen-units = 1

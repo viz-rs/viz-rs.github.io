@@ -3,13 +3,13 @@ use std::ops::Deref;
 use leptos::*;
 use leptos_dom::helpers::location_hash;
 use leptos_dom::{html::Div, IntoView};
-use leptos_i18n::Locale;
+// use leptos_i18n::Locale;
 use leptos_router::use_params;
 use wasm_bindgen::{prelude::*, JsCast};
 use web_sys::{Element, HtmlAnchorElement, HtmlElement};
 
 use crate::api::fetch_doc;
-use crate::i18n::{self, use_i18n};
+// use crate::i18n::{self, use_i18n};
 use crate::pages::{ComingSoon, NotFound};
 use crate::{
     langs_contains,
@@ -25,7 +25,7 @@ pub fn Document() -> impl IntoView {
     let container = create_node_ref::<Div>();
     let disable = RwSignal::new(false);
     let loading = RwSignal::new(false);
-    let i18n = use_i18n();
+    // let i18n = use_i18n();
 
     let click = move |e: ev::PointerEvent| {
         if let Some(target) = e
@@ -90,7 +90,7 @@ pub fn Document() -> impl IntoView {
 
             log::debug!("lang: {}, version: {}, tail: {}", l, v, t);
 
-            i18n.set_locale(i18n::Locale::from_str(&l)?);
+            // i18n.set_locale(i18n::Locale::from_str(&l)?);
             version.update(|n| *n = v.clone());
 
             if VERSIONS[UNPUBLISHED] == v {

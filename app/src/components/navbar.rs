@@ -1,11 +1,11 @@
 use leptos::*;
 use leptos_dom::helpers::location_pathname;
-use leptos_i18n::Locale;
+// use leptos_i18n::Locale;
 use leptos_router::{use_location, use_navigate, A};
 use wasm_bindgen::prelude::*;
 use web_sys::{HtmlAnchorElement, HtmlElement};
 
-use crate::i18n::{self, use_i18n};
+// use crate::i18n::{self, use_i18n};
 use crate::GlobalState;
 use crate::{LANGS, VERSIONS};
 
@@ -19,7 +19,7 @@ pub fn Navbar() -> impl IntoView {
     } = expect_context();
     let navigate = store_value(use_navigate());
     let location = use_location();
-    let i18n = use_i18n();
+    // let i18n = use_i18n();
 
     let on_switch_version = move |e: ev::PointerEvent| {
         e.stop_propagation();
@@ -33,8 +33,8 @@ pub fn Navbar() -> impl IntoView {
                     log::debug!("version: {}", &ver);
                     version.update(|v| *v = ver.clone());
                 } else {
-                    let current_lang = i18n.get_locale().as_str();
-                    let prefix = format!("/{}", current_lang);
+                    // let current_lang = i18n.get_locale().as_str();
+                    let prefix = format!("/{}", "");
                     let middle = format!("/{}", current_version);
                     location_pathname()
                         .unwrap_or("/".to_string())
@@ -54,24 +54,25 @@ pub fn Navbar() -> impl IntoView {
 
     let on_switch_lang = move |e: ev::PointerEvent| {
         e.stop_propagation();
-        let current_lang = i18n.get_locale().as_str();
+        // let current_lang = i18n.get_locale().as_str();
+        let current_lang = "en";
         let element = e.target().unwrap().unchecked_into::<HtmlAnchorElement>();
         JsCast::dyn_ref::<HtmlElement>(&element)
             .and_then(|el| el.get_attribute("data-lang"))
             .filter(|lang| lang != current_lang)
             .as_deref()
-            .and_then(i18n::Locale::from_str)
+            // .and_then(i18n::Locale::from_str)
             .map(|lang| {
                 if home.get() {
                     log::debug!("lang: {:?}", &lang);
-                    i18n.set_locale(lang);
+                    // i18n.set_locale(lang);
                 } else {
                     location_pathname()
                         .unwrap_or("/".to_string())
                         .strip_prefix(&format!("/{}", current_lang))
                         .map(|tail| {
                             navigate.with_value(|n| {
-                                n(&format!("/{}{}", lang.as_str(), tail), Default::default())
+                                n(&format!("/{}{}", lang, tail), Default::default())
                             });
                         });
                 }
@@ -138,7 +139,7 @@ pub fn Navbar() -> impl IntoView {
                 </div>
             </div>
             <div class="flex flex-row items-center gap-5 font-medium text-15px">
-                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/{}/guide/introduction", i18n.get_locale().as_str(), version.get())>
+                <A class="transition-colors op75 hover:op100" href=move || format!("/{}/{}/guide/introduction", "en", version.get())>
                     <span class=move || if home.get() { "i-lucide-book block" } else { "i-lucide-book-open block" } />
                 </A>
                 <a rel="noreferrer" target="_blank" class="transition-colors op75 hover:op100" href=move || format!("https://docs.rs/viz/{}", version.get())>
@@ -161,7 +162,7 @@ pub fn Navbar() -> impl IntoView {
                                             <a
                                                 data-lang=l[0]
                                                 class="flex hover:text-yellow-600"
-                                                class=("text-yellow-600", move || l[0] == i18n.get_locale().as_str())
+                                                class=("text-yellow-600", move || l[0] == "en")
                                                 on:pointerdown=on_switch_lang
                                             >{l[1]}</a>
                                         </li>

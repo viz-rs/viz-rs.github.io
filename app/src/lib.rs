@@ -1,4 +1,4 @@
-leptos_i18n::load_locales!();
+// leptos_i18n::load_locales!();
 
 mod app;
 mod layout;

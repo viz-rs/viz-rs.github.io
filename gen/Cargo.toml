@@ -21,7 +21,7 @@ tree-sitter-rust = { git = "https://github.com/tree-sitter/tree-sitter-rust.git"
 tree-sitter-toml = "0.20"
 tree-sitter-zig = { git = "https://github.com/maxxnino/tree-sitter-zig.git", branch = "main" }
 walkdir = { version = "2.4" }
-minify-html = "0.11"
+minify-html = "0.15"
 highlighting = "0.1"
 clap = { version = "4.4", features = ["derive"] }
 serde_json.workspace = true
