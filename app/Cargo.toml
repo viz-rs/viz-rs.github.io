@@ -12,10 +12,10 @@ github = []
 [dependencies]
 serde.workspace = true
 
-leptos = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f" }
-leptos_dom = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f" }
-leptos_router = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f", features = ["csr"] }
-leptos_meta = { git = "https://github.com/leptos-rs/leptos.git", rev = "b450f0f", features = ["csr"] }
+leptos = "0.6.5"
+leptos_dom = "0.6.5"
+leptos_router = { version = "0.6.5", features = ["csr"] }
+leptos_meta = { version = "0.6.5", features = ["csr"] }
 # leptos_i18n = "0.2"
 
 console_log = "1"

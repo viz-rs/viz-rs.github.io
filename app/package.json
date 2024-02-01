@@ -7,9 +7,9 @@
   "license": "MIT",
   "publish": false,
   "devDependencies": {
-    "@iconify-json/lucide": "1.1.132",
-    "@unocss/cli": "0.56.5",
-    "inter-ui": "3.19.3",
-    "unocss": "0.56.5"
+    "@iconify-json/lucide": "1.1.161",
+    "@unocss/cli": "0.58.4",
+    "inter-ui": "4.0.1",
+    "unocss": "0.58.4"
   }
 }
