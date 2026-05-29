@@ -56,7 +56,7 @@ features = [
 
 # ── Color palettes (light/dark) ───────────────────────────────────────────
 [[project.theme.palette]]
-scheme = "heiwa-light"
+scheme = "light"
 primary = "custom"
 accent = "custom"
 toggle.icon = "lucide/sun"
@@ -64,7 +64,7 @@ toggle.name = "Switch to dark mode"
 media = "(prefers-color-scheme: light)"
 
 [[project.theme.palette]]
-scheme = "heiwa-dark"
+scheme = "dark"
 primary = "custom"
 accent = "custom"
 toggle.icon = "lucide/moon"
