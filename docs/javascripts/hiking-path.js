@@ -133,15 +133,6 @@
     trailPath.setAttribute('mask', 'url(#' + mask.getAttribute('id') + ')');
     svg.appendChild(trailPath);
 
-    // Glow
-    const glow = document.createElementNS(svgNS, 'circle');
-    glow.setAttribute('cx', '-20');
-    glow.setAttribute('cy', '520');
-    glow.setAttribute('r', '2.5');
-    glow.setAttribute('fill', '#a09d98');
-    glow.setAttribute('opacity', '0.35');
-    svg.appendChild(glow);
-
     // Fish group
     const dotGroup = document.createElementNS(svgNS, 'g');
     dotGroup.setAttribute('transform', 'translate(-20,520)');
@@ -218,8 +209,6 @@
           'transform',
           `translate(${cx},${cy}) scale(${flipX},1)`
         );
-        glow.setAttribute('cx', cx);
-        glow.setAttribute('cy', cy);
         label.setAttribute('x', cx);
         label.setAttribute(
           'y',
