@@ -12,7 +12,11 @@ extra_javascript = ["javascripts/hiking-path.js", "javascripts/tide.js"]
 
 [[project.extra.social]]
 icon = "fontawesome/brands/github"
-link = "https://github.com/viz-rs/"
+link = "https://github.com/viz-rs"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/x-twitter"
+link = "https://x.com/_fundon"
 
 # Navigation with tab sections
 nav = [
