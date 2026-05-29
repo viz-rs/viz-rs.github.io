@@ -16,3 +16,6 @@ __pycache__/
 
 # Pi
 .pi
+
+# Zensical internal
+.zensical
