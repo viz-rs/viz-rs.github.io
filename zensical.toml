@@ -1,0 +1,104 @@
+[project]
+site_name = "Viz"
+site_description = "Viz is a visual creative space."
+site_author = "Viz"
+site_url = "https://viz.rs"
+repo_url = "https://github.com/viz-rs/"
+repo_name = "viz-rs/viz"
+copyright = "&copy; 2026 Viz · A visual creative space"
+
+extra_css = ["stylesheets/extra.css"]
+extra_javascript = ["javascripts/hiking-path.js", "javascripts/tide.js"]
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/viz-rs/"
+
+# Navigation with tab sections
+nav = [
+  { "Home" = "index.md" },
+]
+
+[project.plugins]
+  [project.plugins.search]
+  [project.plugins.sitemap]
+  changefreq = "daily"
+
+# ── Theme ──────────────────────────────────────────────────────────────────
+[project.theme]
+language = "en"
+favicon = "assets/favicon.svg"
+
+logo = "assets/logo.svg"
+
+features = [
+  "announce.dismiss",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.code.select",
+  "content.footnote.tooltips",
+  "content.tabs.link",
+  "content.tooltips",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  "navigation.path",
+  "navigation.sections",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+]
+
+# ── Color palettes (light/dark) ───────────────────────────────────────────
+[[project.theme.palette]]
+scheme = "heiwa-light"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+media = "(prefers-color-scheme: light)"
+
+[[project.theme.palette]]
+scheme = "heiwa-dark"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+media = "(prefers-color-scheme: dark)"
+
+# ── Markdown extensions ────────────────────────────────────────────────────
+[project.markdown_extensions.abbr]
+[project.markdown_extensions.admonition]
+[project.markdown_extensions.attr_list]
+[project.markdown_extensions.def_list]
+[project.markdown_extensions.footnotes]
+[project.markdown_extensions.md_in_html]
+[project.markdown_extensions.toc]
+[project.markdown_extensions.pymdownx.arithmatex]
+generic = true
+[project.markdown_extensions.pymdownx.betterem]
+[project.markdown_extensions.pymdownx.caret]
+[project.markdown_extensions.pymdownx.details]
+[project.markdown_extensions.pymdownx.emoji]
+emoji_generator = "zensical.extensions.emoji.to_svg"
+emoji_index = "zensical.extensions.emoji.twemoji"
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+line_spans = "__span"
+pygments_lang_class = true
+[project.markdown_extensions.pymdownx.inlinehilite]
+[project.markdown_extensions.pymdownx.keys]
+[project.markdown_extensions.pymdownx.magiclink]
+[project.markdown_extensions.pymdownx.mark]
+[project.markdown_extensions.pymdownx.smartsymbols]
+[project.markdown_extensions.pymdownx.superfences]
+custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" }
+]
+[project.markdown_extensions.pymdownx.tabbed]
+alternate_style = true
+combine_header_slug = true
+[project.markdown_extensions.pymdownx.tasklist]
+custom_checkbox = true
+[project.markdown_extensions.pymdownx.tilde]

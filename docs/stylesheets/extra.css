@@ -1,0 +1,451 @@
+/* ── Viz · Custom Color Schemes ────────────────────────────────────────── */
+
+/* ── Zensical CSS variable reference ────────────────────────────────────
+   --md-primary-fg-color        primary foreground
+   --md-primary-fg-color--light lighter primary
+   --md-primary-fg-color--dark  darker primary
+   --md-primary-bg-color        text on primary
+   --md-accent-fg-color         accent foreground
+   --md-accent-bg-color         accent background
+   --md-default-fg-color        body text
+   --md-default-fg-color--light lighter body text
+   --md-default-bg-color        body background
+   --md-typeset-color           typeset text
+   --md-typeset-a-color         link color
+   --md-code-bg-color           code block background
+   --md-footer-fg-color         footer text
+   --md-footer-bg-color         footer background
+   ───────────────────────────────────────────────────────────────────── */
+
+/* ── Heiwa Light ────────────────────────────────────────────────────────── */
+[data-md-color-scheme="heiwa-light"] {
+  --md-primary-fg-color:        #2d2b29;
+  --md-primary-fg-color--light: #5a5855;
+  --md-primary-fg-color--dark:  #0d0c0c;
+  --md-primary-bg-color:        #fbfaf8;
+
+  --md-accent-fg-color:             #3a3836;
+  --md-accent-fg-color--transparent: rgba(58, 56, 54, 0.08);
+  --md-accent-bg-color:             #f5f4f2;
+
+  --md-default-fg-color:        #2d2b29;
+  --md-default-fg-color--light: #8a8783;
+  --md-default-bg-color:        #ffffff;
+
+  --md-typeset-color:           #2d2b29;
+  --md-typeset-a-color:         #3a3836;
+
+  --md-code-bg-color:           #f5f4f2;
+
+  --md-footer-fg-color:         #8a8783;
+  --md-footer-bg-color:         #f5f4f2;
+}
+
+/* ── Heiwa Dark ─────────────────────────────────────────────────────────── */
+[data-md-color-scheme="heiwa-dark"] {
+  --md-primary-fg-color:        #eeedea;
+  --md-primary-fg-color--light: #c0bdb8;
+  --md-primary-fg-color--dark:  #f9f8f6;
+  --md-primary-bg-color:        #0d0c0c;
+
+  --md-accent-fg-color:             #c0bdb8;
+  --md-accent-fg-color--transparent: rgba(192, 189, 184, 0.08);
+  --md-accent-bg-color:             #141312;
+
+  --md-default-fg-color:        #eeedea;
+  --md-default-fg-color--light: #8a8783;
+  --md-default-bg-color:        #0d0c0c;
+
+  --md-typeset-color:           #eeedea;
+  --md-typeset-a-color:         #c0bdb8;
+
+  --md-code-bg-color:           #141312;
+
+  --md-footer-fg-color:         #5a5855;
+  --md-footer-bg-color:         #141312;
+}
+
+/* ── Typography ────────────────────────────────────────────────────────── */
+
+:root {
+  --md-text-font: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --md-code-font: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+/* ── Header ────────────────────────────────────────────────────────────── */
+.md-header {
+  background-color: transparent;
+  color: var(--md-default-fg-color);
+  box-shadow: none;
+}
+
+.md-header--shadow {
+  background-color: var(--md-default-bg-color);
+  border-bottom: 1px solid rgba(128, 128, 128, 0.08);
+  box-shadow: 0 4px 30px rgba(45, 43, 41, 0.08);
+}
+
+.md-logo img {
+  color: var(--md-default-fg-color);
+}
+
+[data-md-color-scheme="heiwa-dark"] .md-logo img {
+  filter: invert(0.85);
+}
+
+/* Hide redundant site name — logo suffices */
+.md-header__topic:first-child {
+  display: none;
+}
+
+/* Hide empty source/repo link */
+.md-header__source {
+  display: none;
+}
+
+/* ── Navigation ────────────────────────────────────────────────────────── */
+.md-nav__title {
+  color: var(--md-default-fg-color);
+  font-weight: 600;
+}
+
+.md-nav__link {
+  color: var(--md-default-fg-color--light);
+  transition: color 0.15s;
+}
+
+.md-nav__link:hover {
+  color: var(--md-default-fg-color);
+}
+
+.md-nav__item--active > .md-nav__link {
+  color: var(--md-primary-fg-color);
+  font-weight: 500;
+  background: var(--md-accent-bg-color);
+  border-radius: 0.5rem;
+}
+
+.md-sidebar--primary {
+  border-right: 1px solid rgba(128, 128, 128, 0.06);
+}
+
+/* ── Hero section helpers ──────────────────────────────────────────────── */
+.hero-container {
+  text-align: center;
+  padding: 4rem 1rem 6rem;
+}
+
+.hero-container h1 {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.hero-container h1 em {
+  color: var(--md-default-fg-color--light);
+  font-style: italic;
+}
+
+@media (min-width: 960px) {
+  .hero-container h1 {
+    font-size: 4.5rem;
+  }
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--md-default-fg-color--light);
+  max-width: 36rem;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+}
+
+/* ── Grid cards ────────────────────────────────────────────────────────── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin: 2rem 0;
+}
+
+.card {
+  border: 1px solid rgba(128, 128, 128, 0.1);
+  border-radius: 0.75rem;
+  padding: 1.75rem;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(128, 128, 128, 0.2);
+  box-shadow: 0 8px 30px rgba(45, 43, 41, 0.05);
+  transform: translateY(-1px);
+}
+
+.card-featured {
+  background: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  border-color: var(--md-primary-fg-color--dark);
+  box-shadow: 0 12px 40px rgba(45, 43, 41, 0.12);
+}
+
+/* ── Stats row ─────────────────────────────────────────────────────────── */
+.stats {
+  display: flex;
+  gap: 2.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.stat-number {
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--md-default-fg-color--light);
+  margin-top: 0.25rem;
+}
+
+/* ── Blockquote / Testimonial ──────────────────────────────────────────── */
+.testimonial {
+  border-left: none;
+  padding: 1.5rem;
+  background: var(--md-accent-bg-color);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(128, 128, 128, 0.08);
+}
+
+.testimonial blockquote {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin: 0 0 1rem 0;
+  border: none;
+  padding: 0;
+}
+
+/* ── Newsletter ────────────────────────────────────────────────────────── */
+.newsletter-inverted {
+  background: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+  border-radius: 1rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+[data-md-color-scheme="heiwa-dark"] .newsletter-inverted {
+  background: #f5f4f2;
+  color: #2d2b29;
+}
+
+/* ── Footer ────────────────────────────────────────────────────────────── */
+.md-footer {
+  border-top: 1px solid rgba(128, 128, 128, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Tide background — fill the entire footer */
+.md-footer .tide-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.md-footer-meta {
+  background-color: transparent;
+}
+
+/* ── Tide waves ──────────────────────────────────────────────────────────── */
+/* 23 sumi-e ink contours · barely-there paper grain, deeper ink at night */
+.tide-0  { fill: #edeae6; opacity: 0.20; }
+.tide-1  { fill: #edeae6; opacity: 0.185; }
+.tide-2  { fill: #edeae6; opacity: 0.17; }
+.tide-3  { fill: #edeae6; opacity: 0.155; }
+.tide-4  { fill: #edeae6; opacity: 0.14; }
+.tide-5  { fill: #edeae6; opacity: 0.13; }
+.tide-6  { fill: #edeae6; opacity: 0.12; }
+.tide-7  { fill: #edeae6; opacity: 0.11; }
+.tide-8  { fill: #edeae6; opacity: 0.10; }
+.tide-9  { fill: #edeae6; opacity: 0.092; }
+.tide-10 { fill: #edeae6; opacity: 0.084; }
+.tide-11 { fill: #edeae6; opacity: 0.076; }
+.tide-12 { fill: #edeae6; opacity: 0.069; }
+.tide-13 { fill: #edeae6; opacity: 0.063; }
+.tide-14 { fill: #edeae6; opacity: 0.057; }
+.tide-15 { fill: #edeae6; opacity: 0.052; }
+.tide-16 { fill: #edeae6; opacity: 0.047; }
+.tide-17 { fill: #edeae6; opacity: 0.043; }
+.tide-18 { fill: #edeae6; opacity: 0.039; }
+.tide-19 { fill: #edeae6; opacity: 0.035; }
+.tide-20 { fill: #edeae6; opacity: 0.031; }
+.tide-21 { fill: #edeae6; opacity: 0.027; }
+.tide-22 { fill: #edeae6; opacity: 0.023; }
+
+[data-md-color-scheme="heiwa-dark"] .tide-0  { fill: #1b1918; opacity: 0.18; }
+[data-md-color-scheme="heiwa-dark"] .tide-1  { fill: #1b1918; opacity: 0.165; }
+[data-md-color-scheme="heiwa-dark"] .tide-2  { fill: #1b1918; opacity: 0.15; }
+[data-md-color-scheme="heiwa-dark"] .tide-3  { fill: #1b1918; opacity: 0.14; }
+[data-md-color-scheme="heiwa-dark"] .tide-4  { fill: #1b1918; opacity: 0.13; }
+[data-md-color-scheme="heiwa-dark"] .tide-5  { fill: #1b1918; opacity: 0.12; }
+[data-md-color-scheme="heiwa-dark"] .tide-6  { fill: #1b1918; opacity: 0.11; }
+[data-md-color-scheme="heiwa-dark"] .tide-7  { fill: #1b1918; opacity: 0.10; }
+[data-md-color-scheme="heiwa-dark"] .tide-8  { fill: #1b1918; opacity: 0.092; }
+[data-md-color-scheme="heiwa-dark"] .tide-9  { fill: #1b1918; opacity: 0.084; }
+[data-md-color-scheme="heiwa-dark"] .tide-10 { fill: #1b1918; opacity: 0.076; }
+[data-md-color-scheme="heiwa-dark"] .tide-11 { fill: #1b1918; opacity: 0.069; }
+[data-md-color-scheme="heiwa-dark"] .tide-12 { fill: #1b1918; opacity: 0.063; }
+[data-md-color-scheme="heiwa-dark"] .tide-13 { fill: #1b1918; opacity: 0.057; }
+[data-md-color-scheme="heiwa-dark"] .tide-14 { fill: #1b1918; opacity: 0.052; }
+[data-md-color-scheme="heiwa-dark"] .tide-15 { fill: #1b1918; opacity: 0.047; }
+[data-md-color-scheme="heiwa-dark"] .tide-16 { fill: #1b1918; opacity: 0.043; }
+[data-md-color-scheme="heiwa-dark"] .tide-17 { fill: #1b1918; opacity: 0.039; }
+[data-md-color-scheme="heiwa-dark"] .tide-18 { fill: #1b1918; opacity: 0.035; }
+[data-md-color-scheme="heiwa-dark"] .tide-19 { fill: #1b1918; opacity: 0.031; }
+[data-md-color-scheme="heiwa-dark"] .tide-20 { fill: #1b1918; opacity: 0.028; }
+[data-md-color-scheme="heiwa-dark"] .tide-21 { fill: #1b1918; opacity: 0.024; }
+[data-md-color-scheme="heiwa-dark"] .tide-22 { fill: #1b1918; opacity: 0.020; }
+
+/* ── Section headings ──────────────────────────────────────────────────── */
+.section-label {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--md-default-fg-color--light);
+  margin-bottom: 0.75rem;
+}
+
+/* ── Button styles ─────────────────────────────────────────────────────── */
+.md-button {
+  border-radius: 999px;
+}
+
+.md-button--primary {
+  background: var(--md-primary-fg-color);
+  border-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+}
+
+.md-button--primary:hover {
+  background: var(--md-primary-fg-color--dark);
+  border-color: var(--md-primary-fg-color--dark);
+}
+
+/* ── Smoother transitions ──────────────────────────────────────────────── */
+.md-header,
+.md-tabs,
+.md-sidebar,
+.md-main {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── Fish swim keyframes ──────────────────────────────────────────────── */
+/* Natural fish motion: gentle cruising + occasional jump with body undulation */
+@keyframes fish-swim {
+  /* Cruise: gentle side-to-side sway */
+  0%   { transform: rotate(0deg)    translateY(0px)  scale(1, 1); }
+  2%   { transform: rotate(-6deg)   translateY(-1px) scale(1.02, 0.98); }
+  4%   { transform: rotate(-3deg)   translateY(-2px) scale(1.03, 0.97); }
+  6%   { transform: rotate(2deg)    translateY(-1px) scale(1.01, 0.99); }
+  8%   { transform: rotate(7deg)    translateY(0px)  scale(1, 1); }
+  10%  { transform: rotate(4deg)    translateY(1px)  scale(1.02, 0.98); }
+  12%  { transform: rotate(-1deg)   translateY(2px)  scale(1.03, 0.97); }
+  14%  { transform: rotate(-5deg)   translateY(1px)  scale(1.01, 0.99); }
+  16%  { transform: rotate(0deg)    translateY(0px)  scale(1, 1); }
+  /* Speed burst: quick wiggles */
+  18%  { transform: rotate(-8deg)   translateY(-1px) scale(1.04, 0.96); }
+  20%  { transform: rotate(3deg)    translateY(-2px) scale(1.05, 0.95); }
+  22%  { transform: rotate(9deg)    translateY(-1px) scale(1.04, 0.96); }
+  24%  { transform: rotate(1deg)    translateY(0px)  scale(1, 1); }
+  26%  { transform: rotate(-4deg)   translateY(1px)  scale(1.03, 0.97); }
+  /* Settle before jump */
+  28%  { transform: rotate(0deg)    translateY(0px)  scale(1, 1); }
+  /* Crouch — compress before leap */
+  30%  { transform: rotate(-12deg)  translateY(4px)  scale(0.88, 0.92); }
+  32%  { transform: rotate(-15deg)  translateY(6px)  scale(0.85, 0.90); }
+  /* Launch! */
+  34%  { transform: rotate(-22deg)  translateY(-10px) scale(1.06, 0.94); }
+  36%  { transform: rotate(-18deg)  translateY(-22px) scale(1.08, 0.92); }
+  /* Apex — hang time */
+  40%  { transform: rotate(-5deg)   translateY(-30px) scale(1.02, 1.02); }
+  44%  { transform: rotate(8deg)    translateY(-28px) scale(1, 1); }
+  /* Descend — gentle arc down */
+  48%  { transform: rotate(18deg)   translateY(-18px) scale(1.04, 0.96); }
+  52%  { transform: rotate(25deg)   translateY(-6px)  scale(1.06, 0.94); }
+  /* Splash! — compress on landing */
+  56%  { transform: rotate(10deg)   translateY(6px)   scale(0.84, 0.94); }
+  58%  { transform: rotate(3deg)    translateY(4px)   scale(0.90, 0.97); }
+  /* Bounce recovery */
+  60%  { transform: rotate(-2deg)   translateY(2px)   scale(1.02, 0.98); }
+  62%  { transform: rotate(0deg)    translateY(0px)   scale(1, 1); }
+  /* Resume cruise */
+  64%  { transform: rotate(-5deg)   translateY(-1px)  scale(1.02, 0.98); }
+  66%  { transform: rotate(3deg)    translateY(-2px)  scale(1.03, 0.97); }
+  68%  { transform: rotate(8deg)    translateY(-1px)  scale(1.01, 0.99); }
+  70%  { transform: rotate(0deg)    translateY(0px)   scale(1, 1); }
+  72%  { transform: rotate(-4deg)   translateY(1px)   scale(1.02, 0.98); }
+  74%  { transform: rotate(5deg)    translateY(2px)   scale(1.03, 0.97); }
+  76%  { transform: rotate(0deg)    translateY(1px)   scale(1, 1); }
+  78%  { transform: rotate(-6deg)   translateY(0px)   scale(1.02, 0.98); }
+  80%  { transform: rotate(-2deg)   translateY(-1px)  scale(1.01, 0.99); }
+  82%  { transform: rotate(4deg)    translateY(0px)   scale(1, 1); }
+  /* Another burst */
+  84%  { transform: rotate(-7deg)   translateY(-1px)  scale(1.04, 0.96); }
+  86%  { transform: rotate(2deg)    translateY(-2px)  scale(1.05, 0.95); }
+  88%  { transform: rotate(8deg)    translateY(-1px)  scale(1.03, 0.97); }
+  90%  { transform: rotate(0deg)    translateY(0px)   scale(1, 1); }
+  /* Gentle cruise to end */
+  92%  { transform: rotate(-3deg)   translateY(1px)   scale(1.01, 0.99); }
+  94%  { transform: rotate(4deg)    translateY(2px)   scale(1.02, 0.98); }
+  96%  { transform: rotate(0deg)    translateY(1px)   scale(1, 1); }
+  98%  { transform: rotate(-2deg)   translateY(0px)   scale(1, 1); }
+  100% { transform: rotate(0deg)    translateY(0px)   scale(1, 1); }
+}
+
+.hiking-fish {
+  animation: fish-swim 6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center center;
+  will-change: transform;
+}
+
+.hiking-fish .fish-lines path {
+  opacity: 0.7;
+}
+
+.hiking-fish .fish-stone-filled {
+  opacity: 0.7;
+}
+
+.hiking-fish .fish-stones circle {
+  opacity: 0.7;
+}
+
+/* ── Hiking Path Container ─────────────────────────────────────────────── */
+.hero-container {
+  position: relative;
+}
+
+#hiking-path-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  color: var(--md-primary-fg-color);
+  opacity: 0.6;
+  overflow: hidden;
+}
+
+/* ── Selection ─────────────────────────────────────────────────────────── */
+::selection {
+  background: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color);
+}

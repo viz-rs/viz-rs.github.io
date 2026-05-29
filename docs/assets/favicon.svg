@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360">
+  <defs>
+    <radialGradient id="b" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#fdfcfb"/>
+      <stop offset="100%" stop-color="#f0ede8"/>
+    </radialGradient>
+  </defs>
+  <rect width="360" height="360" rx="24" fill="url(#b)"/>
+  <rect x="10" y="10" width="340" height="340" rx="16" fill="none" stroke="#2d2b29" stroke-width="2.5" opacity=".15"/>
+  <g transform="translate(180,180) scale(-.80,.80) translate(-152,-180)" fill="none" stroke="#2d2b29">
+    <g stroke-width="2.5" stroke-linecap="round">
+      <path d="M206.6 97.8 L258.5 150.7"/>
+      <path d="M109.7 0.8 L180.5 71.6"/>
+      <path d="M14.2 96.2 L85.0 167.1"/>
+      <path d="M111.2 193.2 L180.6 262.5"/>
+      <path d="M180.9 98.6 L112.0 167.4"/>
+      <path d="M85.8 193.5 L15.5 263.8"/>
+      <path d="M260.4 211.0 L206.9 263.3"/>
+      <path d="M180.9 289.5 L110.9 359.3"/>
+    </g>
+    <g stroke-width="2">
+      <circle cx="98.4" cy="179.9" r="16" transform="rotate(-45 98.4 179.9)"/>
+      <circle cx="193.4" cy="275.9" r="16" transform="rotate(-45 193.4 275.9)"/>
+      <circle cx="193.4" cy="84.9" r="16" transform="rotate(-45 193.4 84.9)"/>
+    </g>
+  </g>
+  <g transform="translate(180,180) scale(-.80,.80) translate(-152,-180)" fill="#2d2b29">
+    <circle cx="289.4" cy="179.9" r="40" transform="rotate(-45 289.4 179.9)"/>
+  </g>
+</svg>
